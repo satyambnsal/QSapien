@@ -1,0 +1,58 @@
+#first-container{
+    margin:0px;
+    padding:0px;
+}
+#first-container .navbar{
+    border-radius:0;
+    margin-bottom:0;
+}
+#second-container{
+    margin:0;
+    padding:0;
+    width:100%;
+    min-height:100px;
+    background-color: maroon;
+    color:white;
+    text-align:center;
+
+}
+#second-container h3{
+    font-size: 37px;
+}
+#third-container{
+    width:100%;
+    margin:0;
+    padding:0;
+background-color: maroon;
+
+}
+#third-container .navbar{
+background-color: maroon;
+margin:0;
+padding:0;
+border-radius: 0;
+border-top:1px solid #555;
+border-left:0;
+border-right:0;
+}
+#third-container .navbar-nav li{
+padding:0 20px;
+}
+#third-container .navbar-nav li:first-child{
+    padding-left:300px;
+}
+#third-container .navbar-nav li a{
+font-size:16px;
+color:white;
+font-weight: 1em;
+}
+#mycarousel{
+    background-color:mintcream;
+    border:0 !important;
+}
+.carousel-inner{
+    width:70%;
+    height:420px;
+    margin:auto;
+    border:0 !important;
+}
