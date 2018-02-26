@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 let session=require('express-session');
 let MongoStore=require('connect-mongo')(session);
-
+let userRoute=require('./server/routes/user');
 
 var port = process.env.PORT || 3001;
 let MONGODB_URI=process.env.MONGODB_URI||"mongodb://localhost:27017/QSapien";
@@ -17,12 +17,12 @@ app.use(express.static('public'));
 
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGODB_URI,{ useMongoClient: true });
-let db=mongoose.Connection;
+let db=mongoose.connection;
 app.use(session({
     secret:process.env.SESSION_SECRET||'qsapien_session_secret',
     resave:false,
     saveUninitialized:true,
-    store:MongoStore({mongooseConnection:db})
+    store:new MongoStore({mongooseConnection:db})
 }));
 
 app.use(function (req, res, next) {
@@ -33,7 +33,7 @@ app.use(function (req, res, next) {
     res.setHeader('Cache-Control', 'no-cache');
     next();
 });
-
+app.use('/user',userRoute);
 app.listen(port, function () {
     chalk.green(console.log("server is listening at PORT: " + port));
 });

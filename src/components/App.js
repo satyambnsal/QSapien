@@ -5,11 +5,11 @@ import {connect} from 'react-redux';
 import Signup from './Signup/index.js';
 import Portal from './Portal/index.js';
 import {checkPortalAuthorization} from '../lib/check-auth';
-import logger from 'winston';
+//import logger from 'winston';
  class App extends Component{
     render(){
         const store=this.props.store;
-        logger.debug('store object::'+JSON.stringify(store));
+  //      logger.debug('store object::'+JSON.stringify(store));
         return(
             <Switch>
                 <Route exact path="/" component={Signup}/>

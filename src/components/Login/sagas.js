@@ -39,7 +39,7 @@ function* loginFlow(email_id, password) {
         yield put({ type: LOGIN_SUCCESS });
 
         localStorage.setItem('token', JSON.stringify(token));
-        //logger.info('login successful');
+        //  logger.info('login successful');
         yield call(history.push,'/portal');
 
     }

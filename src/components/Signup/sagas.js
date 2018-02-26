@@ -4,10 +4,11 @@ import history from '../../history.js';
 import {handleApiErrors} from '../../lib/api-errors';
 //import logger from 'winston';
 
-let REACT_APP_API_URL=process.env.REACT_APP_API_URL||'http://localhost:3001';
-const SIGNUP_URL=`${process.env.REACT_APP_API_URL}/api/register`;
-
+let REACT_APP_API_URL=process.env.REACT_APP_API_URL||'http://10.222.65.246:3001';
+const SIGNUP_URL=`${REACT_APP_API_URL}/user/signup`;
+console.log("SIGNUP_URL::"+SIGNUP_URL);
 function signupAPI(signup_fields){
+    console.log("SIGNUP FIELDS:: "+JSON.stringify(signup_fields));
 //logger.info('register API saga entry point');
     return fetch(SIGNUP_URL,{
         method:'POST',
@@ -16,7 +17,9 @@ function signupAPI(signup_fields){
     })
     .then(handleApiErrors)
     .then(response=>response.json())
-    .catch(errors=>{throw errors})
+    .catch(errors=>{
+        console.log(errors);
+        throw errors})
 }
 
 function* signupFlow(signup_fields){
