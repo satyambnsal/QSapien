@@ -8,7 +8,7 @@ let MongoStore=require('connect-mongo')(session);
 
 
 var port = process.env.PORT || 3001;
-
+let MONGODB_URI=process.env.MONGODB_URI||"mongodb://localhost:27017/QSapien";
 var app = express();
 
 app.use(bodyParser.json());
@@ -16,13 +16,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost:27017/QSapien", { useMongoClient: true });
+mongoose.connect(MONGODB_URI,{ useMongoClient: true });
 let db=mongoose.Connection;
 app.use(session({
     secret:process.env.SESSION_SECRET||'qsapien_session_secret',
     resave:false,
     saveUninitialized:true,
-    store:MongoStore({mongooseConnection:db});
+    store:MongoStore({mongooseConnection:db})
 }));
 
 app.use(function (req, res, next) {

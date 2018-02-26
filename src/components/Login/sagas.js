@@ -3,20 +3,21 @@ import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './constants';
 import { setClient, unsetClient } from '../Client/actions';
 import { CLIENT_UNSET } from '../Client/constants';
 import history from '../../history.js';
+//import logger from 'winston';
 //import {browserHistory} from 'react-router-dom';
+
 import { handleApiErrors } from '../../lib/api-errors';
+let REACT_APP_API_URL=process.env.REACT_APP_API_URL||'http://localhost:3001';
+const LOGIN_URL = `${process.env.REACT_APP_API_URL}/api/login`;
 
-//const loginURL = `${process.env.REACT_APP_API_URL}/api/login`;
-const loginURL = `http://localhost:3001/api/login`;
-
-console.log("===========login url: ==========" + loginURL);
-function loginAPI(username, password) {
-    return fetch(loginURL, {
+//logger.info('LOGIN URL:: '+LOGIN_URL);
+function loginAPI(email_id, password) {
+    return fetch(LOGIN_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({email_id, password })
     })
     .then(handleApiErrors)
     .then(response => response.json())
@@ -30,15 +31,15 @@ function* logout() {
     yield call(history.push,'/login');
 }
 
-function* loginFlow(username, password) {
+function* loginFlow(email_id, password) {
     let token;
     try {
-        token = yield call(loginAPI, username, password);
+        token = yield call(loginAPI,email_id, password);
         yield put(setClient(token));
         yield put({ type: LOGIN_SUCCESS });
 
         localStorage.setItem('token', JSON.stringify(token));
-        console.log("========login successful=======");
+        //logger.info('login successful');
         yield call(history.push,'/portal');
 
     }
@@ -55,8 +56,8 @@ function* loginFlow(username, password) {
 
 function* loginWatcher() {
     while (true) {
-        const { username, password } = yield take(LOGIN_REQUESTING);
-        const task = yield fork(loginFlow, username, password);
+        const { email_id, password } = yield take(LOGIN_REQUESTING);
+        const task = yield fork(loginFlow,email_id, password);
         const action = yield take([CLIENT_UNSET, LOGIN_ERROR]);
 
         if (action.type === CLIENT_UNSET)

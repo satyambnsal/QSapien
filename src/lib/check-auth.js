@@ -1,7 +1,7 @@
 import { setClient } from "../components/Client/actions";
-
+//import logger from 'winston';
 export function checkIndexAuthorization({ dispatch }) {
-    console.log("==========inside check index auth==========");
+  //  logger.info('check index authorization entry point');
     if (checkPortalAuthorization(dispatch)) {
         return true;
     }
@@ -9,9 +9,8 @@ export function checkIndexAuthorization({ dispatch }) {
 }
 
 export function checkPortalAuthorization({ dispatch,getState}) {
-    console.log("=======dispatch=======");
-    console.log(dispatch);
-    console.log("============inside check portal auth===========");
+   // logger.info('check portal authorization method entry point');
+   // logger.debug('dispatch object::'+JSON.stringify(dispatch));
         const client = getState().client;
         if (client && client.token)
             return true;
@@ -20,7 +19,7 @@ export function checkPortalAuthorization({ dispatch,getState}) {
             return false;
     }
 export function checkAuthorization(dispatch) {
-    console.log("============inside check auth========");
+   // logger.info('check authorization method entry point');
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
         const token = JSON.parse(storedToken);

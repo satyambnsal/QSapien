@@ -46,8 +46,8 @@ class Login extends Component {
                         <div className="panel-body">
                         <form className="login-form" onSubmit={handleSubmit(this.submit)}>
                         <div className="form-group">
-                            <label htmlFor="username">User Name</label>
-                            <Field name="username" type="text" id="username" component="input" className="form-control" />
+                            <label htmlFor="email id">Email Id</label>
+                            <Field name="email_id" type="email" id="email_id" component="input" className="form-control" />
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
@@ -67,7 +67,7 @@ class Login extends Component {
                         requesting && <div>Logging in...</div>
                     }
                     {
-                        !requesting && !successful && (<Link to="/register">Need to Register? click here >></Link>)
+                        !requesting && !successful && (<Link to="/signup">Need to Register? click here >></Link>)
                     }
                 </div>
                 </div>

@@ -21,7 +21,7 @@ export default class Login extends Component{
         var apiBaseURl="http://localhost:3001/api/";
         var self=this; 
         var payload={
-            "username":this.state.username,
+            "email_id":this.state.email_id,
             "password":this.state.password
         };
         console.log("======payload===");

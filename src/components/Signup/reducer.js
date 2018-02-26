@@ -1,5 +1,5 @@
-import {REGISTER_REQUESTING,REGISTER_SUCCESSFUL,REGISTER_ERROR} from './constants';
-
+import {SIGNUP_REQUESTING,SIGNUP_SUCCESSFUL,SIGNUP_ERROR} from './constants';
+//import logger from 'winston';
 let initialState={
     requesting:false,
     successful:false,
@@ -7,19 +7,20 @@ let initialState={
     messages:[]
 };
 const reducer=function(state=initialState,action){
+  //  logger.info('Register reducer method entry point');
     switch(action.type){
-        case REGISTER_REQUESTING:
+        case SIGNUP_REQUESTING:
         return {
             requesting:true,messages:[{body:"Register requesting...",time:new Date()}],...state
         };
-        case REGISTER_SUCCESSFUL:
+        case SIGNUP_SUCCESSFUL:
         return {
             successful:true,
             requesting:false,
             errors:[],
             messages:[]
         };
-        case REGISTER_ERROR:
+        case SIGNUP_ERROR:
         return {
             errors:state.errors.concat([
             {body:action.error.toString(),time:new Date()}]),...state

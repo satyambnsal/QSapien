@@ -24,10 +24,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
-
-// ReactDOM.render(
-//     <Router history={history}>
-//     <App />
-//     </Router>,
-//     document.getElementById('root')
-// );
