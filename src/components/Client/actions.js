@@ -7,7 +7,6 @@ export function setClient(token){
     }
 }
 export function unsetClient(){
-    console.log('inside unset client111');
     return{
         type:CLIENT_UNSET
     }

@@ -11,7 +11,6 @@ import IndexSaga from './index-saga.js';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 const sagaMiddleware = createSagaMiddleware();
-//const composeSetup = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__ :compose;
 
 const store = createStore(IndexReducer, composeWithDevTools(applyMiddleware(sagaMiddleware)));
 

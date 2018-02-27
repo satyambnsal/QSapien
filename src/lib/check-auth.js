@@ -24,7 +24,6 @@ export function checkAuthorization(dispatch) {
    console.log('inside check authorization');
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
-        console.log('inside if stored token');
         const token = JSON.parse(storedToken);
         const createdDate = new Date(token.created);
         const created = Math.round(createdDate.getTime() / 1000);

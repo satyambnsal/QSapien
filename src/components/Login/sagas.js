@@ -26,11 +26,9 @@ function loginAPI(email_id, password) {
 }
 
 export function* logout() {
-    console.log('inside logout function');
     yield put(unsetClient());
     localStorage.removeItem('token')
     yield call(history.push,'/login');
-    console.log('inside logout');
 }
 
 function* loginFlow(email_id, password) {
@@ -38,7 +36,6 @@ function* loginFlow(email_id, password) {
     try {
         resp = yield call(loginAPI,email_id, password);
         token=resp.token;
-        console.log("====token==="+token);
         yield put(setClient(token));
         yield put({ type: LOGIN_SUCCESS });
 
@@ -65,13 +62,10 @@ export function* loginWatcher() {
         const task = yield fork(loginFlow,email_id, password);
         const action = yield take([CLIENT_UNSET, LOGIN_ERROR]);
         console.log('action::'+action.type);
-        if (action.type===CLIENT_UNSET)
+        if (action.type===CLIENT_UNSET){
             yield cancel(task);
             yield call(logout);
+        }
     
     }
 }
-// export function* logoutWatcher(){
-//     console.log('inside logout wwatcher');
-// yield takeEvery(CLIENT_UNSET,logout);
-// }
