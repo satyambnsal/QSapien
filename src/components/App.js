@@ -12,7 +12,7 @@ import {checkPortalAuthorization} from '../lib/check-auth';
   //      logger.debug('store object::'+JSON.stringify(store));
         return(
             <Switch>
-                <Route exact path="/" component={Signup}/>
+                <Route exact path="/" render={()=><Redirect to='/portal' />}/>
                 <Route exact path="/portal" 
                 render={()=>(checkPortalAuthorization(store)?(<Portal />):(<Redirect to='/login' />))}/>
                 <Route exact path="/login"  

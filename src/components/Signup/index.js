@@ -59,11 +59,11 @@ class Signup extends Component {
                         </div>
                         <div className="form-group">
                             <label>Password</label>
-                            <Field type="text" name="passwod" placeholder="password" className="form-control" component="input" />
+                            <Field type="text" name="password" placeholder="password" className="form-control" component="input" />
                         </div>
                         <div className="form-group">
                             <label>Confirm Password</label>
-                            <Field type="text" name="confirm_passwod" placeholder="confirm password" className="form-control" component="input" />
+                            <Field type="text" name="confirm_password" placeholder="confirm password" className="form-control" component="input" />
                         </div>
                         <button type="submit" action="submit" className="btn btn-success btn-block">SignUp</button>
                     </form>

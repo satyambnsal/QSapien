@@ -17,9 +17,7 @@ function signupAPI(signup_fields){
     })
     .then(handleApiErrors)
     .then(response=>response.json())
-    .catch(errors=>{
-        console.log(errors);
-        throw errors})
+    .catch(errors=>{throw errors})
 }
 
 function* signupFlow(signup_fields){

@@ -11,7 +11,7 @@ const reducer=function(state=initialState,action){
     switch(action.type){
         case SIGNUP_REQUESTING:
         return {
-            requesting:true,messages:[{body:"Register requesting...",time:new Date()}],...state
+            requesting:true,messages:[{body:"Signup requesting...",time:new Date()}],...state
         };
         case SIGNUP_SUCCESSFUL:
         return {

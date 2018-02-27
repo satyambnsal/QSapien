@@ -1,9 +1,8 @@
 import React,{Component} from 'react';
-import Messages from '../Messages';
-import Tasks from '../Tasks';
-import Alerts from '../Alerts';
+// import Messages from '../Messages';
+// import Tasks from '../Tasks';
+// import Alerts from '../Alerts';
 import User from '../User';
-import Radium from 'radium';
 class TopHeader extends Component{
     render(){
         return(
@@ -14,12 +13,9 @@ class TopHeader extends Component{
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                 </button>
-                <a className="navbar-brand" href="/">Student Portal</a>
+                <a className="navbar-brand" href="/"></a>
             </div>
             <ul className="nav navbar-top-links navbar-right">
-            <Messages />
-            <Tasks />
-            <Alerts />
             <User />
             </ul>
         </nav>

@@ -1,8 +1,9 @@
-import LoginSaga from './components/Login/sagas.js';
+import {loginWatcher,logoutWatcher}from './components/Login/sagas.js';
 import SignupSaga from './components/Signup/sagas.js';
 export default function* IndexSaga(){
     yield [
-        LoginSaga(),
+        loginWatcher(),
+        logoutWatcher(),
         SignupSaga()
     ];
 }

@@ -13,7 +13,6 @@ var app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static('public'));
 
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGODB_URI,{ useMongoClient: true });
@@ -34,6 +33,8 @@ app.use(function (req, res, next) {
     next();
 });
 app.use('/user',userRoute);
+app.use(express.static('public'));
+
 app.listen(port, function () {
     chalk.green(console.log("server is listening at PORT: " + port));
 });
