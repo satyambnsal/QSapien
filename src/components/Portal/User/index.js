@@ -1,8 +1,18 @@
 import React,{Component} from 'react';
-import history from '../../../history';
+import {unsetClient} from '../../Client/actions';
+import {connect} from 'react-redux';
 class User extends Component{
+    constructor(props){
+        super(props);
+        this.handleLogout=this.handleLogout.bind(this);
+    }
+    handleLogout(e){
+        e.preventDefault();
+        console.log('logout success');
+        this.props.unsetClient();
+    }
     render(){
-        let unsetClient=this.props.unsetClient;
+   //     console.log(unsetClient);
         return(
             <li className="dropdown">
             <a className="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -22,13 +32,27 @@ class User extends Component{
                 </li>
                 <li className="divider"></li>
                 <li>
-                <a href="" onClick={unsetClient}>
+                <button type="button" onClick={(e)=>{this.handleLogout(e)}}>
                         <i className="fa fa-sign-out fa-fw">&nbsp;&nbsp;Logout</i>
-                    </a>
-                </li>
+                    </button>
+                  </li>
             </ul>
         </li>
         )
     }
 }
+let mapStateToProps=(state)=>{
+    return {}
+}
+// let mapDispathToProps=(dispatch)=>{
+//     return{
+//         unsetClient:()=>{
+//             dispatch({
+//                 type:'CLIENT_UNSET'
+//             })
+//         }
+//     }
+// }
+User=connect(mapStateToProps,{unsetClient})(User);
+
 export default User;

@@ -16,7 +16,7 @@ class TopHeader extends Component{
                 <a className="navbar-brand" href="/"></a>
             </div>
             <ul className="nav navbar-top-links navbar-right">
-            <User unsetClient={this.props.unsetClient}/>
+            <User/>
             </ul>
         </nav>
         )

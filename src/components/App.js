@@ -14,7 +14,9 @@ import {checkPortalAuthorization} from '../lib/check-auth';
             <Switch>
                 <Route exact path="/" render={()=><Redirect to='/portal' />}/>
                 <Route exact path="/portal" 
-                render={()=>(checkPortalAuthorization(store)?(<Portal />):(<Redirect to='/login' />))}/>
+                render={()=>{
+                    console.log('inside portal render');
+                    return (checkPortalAuthorization(store)?(<Portal />):(<Redirect to='/login' />))}}/>
                 <Route exact path="/login"  
                 render={()=>(checkPortalAuthorization(store)?(<Redirect to='/portal' />):(<Login />))}/>
                 <Route exact path="/signup" component={Signup} />

@@ -46,6 +46,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "chalk": "^2.3.0",
     "nodemon": "^1.15.1",
+    "redux-devtools-extension": "^2.13.2",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
   }

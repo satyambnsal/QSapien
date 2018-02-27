@@ -1,4 +1,4 @@
-import { setClient } from "../components/Client/actions";
+import {setClient} from "../components/Client/actions";
 //import logger from 'winston';
 export function checkIndexAuthorization({ dispatch }) {
   //  logger.info('check index authorization entry point');
@@ -21,8 +21,10 @@ export function checkPortalAuthorization({ dispatch,getState}) {
     }
 export function checkAuthorization(dispatch) {
    // logger.info('check authorization method entry point');
+   console.log('inside check authorization');
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
+        console.log('inside if stored token');
         const token = JSON.parse(storedToken);
         const createdDate = new Date(token.created);
         const created = Math.round(createdDate.getTime() / 1000);

@@ -51,6 +51,7 @@ function* loginFlow(email_id, password) {
         yield put({ type: LOGIN_ERROR, error })
     }
     finally {
+        console.log('inside finally block');
         if (yield cancelled()) {
             yield call(history.push,'/login');
         }
@@ -63,9 +64,14 @@ export function* loginWatcher() {
         const { email_id, password } = yield take(LOGIN_REQUESTING);
         const task = yield fork(loginFlow,email_id, password);
         const action = yield take([CLIENT_UNSET, LOGIN_ERROR]);
-
-        if (action.type === CLIENT_UNSET)
+        console.log('action::'+action.type);
+        if (action.type===CLIENT_UNSET)
             yield cancel(task);
-        yield call(logout);
+            yield call(logout);
+    
     }
 }
+// export function* logoutWatcher(){
+//     console.log('inside logout wwatcher');
+// yield takeEvery(CLIENT_UNSET,logout);
+// }

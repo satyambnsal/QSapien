@@ -5,9 +5,11 @@ const initialState={
     token:null
 };
 const reducer=function(state=initialState,action){
+    console.log('inside client reducer');
+    console.log("====action===="+JSON.stringify(action));
 switch(action.type){
     case CLIENT_SET:
-    return{
+    return {
         id:action.token.userid,
         token:action.token
     };
