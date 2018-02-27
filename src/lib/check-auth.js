@@ -11,6 +11,7 @@ export function checkIndexAuthorization({ dispatch }) {
 export function checkPortalAuthorization({ dispatch,getState}) {
    // logger.info('check portal authorization method entry point');
    // logger.debug('dispatch object::'+JSON.stringify(dispatch));
+   console.log('inside check portal authorization');
         const client = getState().client;
         if (client && client.token)
             return true;

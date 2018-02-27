@@ -39,7 +39,7 @@ class Login extends Component {
         return (
             <div className="container-fluid login-body">
                 <div className="login row">
-                <div class="col-md-4 col-md-offset-4">
+                <div className="col-md-4 col-md-offset-4">
                 <div className="panel-heading">
                             <h3 className="panel-title">Please Sign In</h3>
                         </div>

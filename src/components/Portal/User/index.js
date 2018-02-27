@@ -1,6 +1,8 @@
 import React,{Component} from 'react';
+import history from '../../../history';
 class User extends Component{
     render(){
+        let unsetClient=this.props.unsetClient;
         return(
             <li className="dropdown">
             <a className="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -20,7 +22,7 @@ class User extends Component{
                 </li>
                 <li className="divider"></li>
                 <li>
-                    <a href="#">
+                <a href="" onClick={unsetClient}>
                         <i className="fa fa-sign-out fa-fw">&nbsp;&nbsp;Logout</i>
                     </a>
                 </li>
