@@ -7,7 +7,7 @@ const initialState={
 const reducer=function(state=initialState,action){
 switch(action.type){
     case CLIENT_SET:
-    return{
+    return {
         id:action.token.userid,
         token:action.token
     };
