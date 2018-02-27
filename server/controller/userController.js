@@ -35,9 +35,9 @@ exports.user_signup_post = [
             return res.status(400).json({message:'error occured'});
         }
         else {
-            User.findOne({ email_id: req.body.email_id}, (err, result) => {
+            User.findOne({ email_id: req.body.signup_fields.email_id}, (err, result) => {
                 if (err) {
-                    logger.debug("finding record in admin database error::" + JSON.stringify(err));
+                    logger.debug("finding record in user database error::" + JSON.stringify(err));
                     return next(err);
                 }
                 else if (result) {
@@ -68,7 +68,7 @@ exports.user_login_post = [
     body('password', 'Invalid Password').isLength({ min: 6 }).matches(/\d/),
     (req, res, next) => {
         logger.info('login admin post method entry point');
-        if (req.session.locallibrarytoken) {
+        if (req.session.token) {
             jwt.verify(req.session.locallibrarytoken, jwtsecret, (err, decoded) => {
                 if (err) {
                     logger.debug("error occured while verifying token::" + JSON.stringify(err));
@@ -89,13 +89,17 @@ exports.user_login_post = [
         }
         else {
             User.findOne({ email: req.body.email }, (err, result) => {
+                logger.info('inside find user');
+                logger.debug('login method find method result::'+JSON.stringify(result));
                 if (err) {
                     next(err);
                 }
                 else if (!result) {
+                    logger.info('error occured');
                     res.status(400).json({message:'email id is not registered'});
                 }
                 else if (result.password !== req.body.password) {
+                    logger.info('error occured');
                     res.status(400).json({message:'Password does not match with given email address'});
                 }
                 else {

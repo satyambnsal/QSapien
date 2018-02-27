@@ -1,6 +1,4 @@
 import React,{Component} from 'react';
-import {unsetClient} from '../../Client/actions';
-import {logout} from '../../Login/sagas';
 class User extends Component{
     render(){
         return(

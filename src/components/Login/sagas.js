@@ -69,6 +69,3 @@ export function* loginWatcher() {
         yield call(logout);
     }
 }
-export function *logoutWatcher(){
-    yield takeEvery(CLIENT_UNSET,logout);
-}
