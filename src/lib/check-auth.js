@@ -14,8 +14,10 @@ export function checkPortalAuthorization({ dispatch,getState}) {
    // logger.debug('dispatch object::'+JSON.stringify(dispatch));
    console.log('inside check portal authorization');
         const client = getState().client;
-        if (client && client.token)
+        console.log('--------------client----------'+JSON.stringify(client));
+        if (client && client.token){
             return true;
+        }
         if (checkAuthorization(dispatch))
             return true;
             return false;

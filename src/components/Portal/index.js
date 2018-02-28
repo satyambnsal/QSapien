@@ -4,10 +4,17 @@ import TopHeader from './TopHeader';
 import PortalContent from './PortalContent';
 import {connect} from 'react-redux';
 import {unsetClient} from '../Client/actions';
+import {setUser} from './actions';
+
 import {getPublicContacts,addContactToFriendList} from './actions';
   class Portal extends Component {
     constructor(props) {
         super(props);
+        if(this.props.token){
+            console.log('----------constructor token------'+JSON.stringify(this.props.token));
+            this.props.setUser(this.props.token.userId);
+        }
+
         }
     render() {
         console.log('----inside render----userId--'+this.props.userId);
@@ -24,7 +31,8 @@ import {getPublicContacts,addContactToFriendList} from './actions';
 let mapStateToProps=(state)=>{
     return {
         publicContacts:state.portal.publicContacts,
-        userId:state.portal.userId
+        userId:state.portal.userId,
+        token:state.client.token
     }
 }
 let mapDispathToProps=(dispatch)=>{
@@ -37,6 +45,9 @@ let mapDispathToProps=(dispatch)=>{
         },
         addContactToFriendList:(userId,friendId)=>{
             dispatch(addContactToFriendList(userId,friendId))
+        },
+        setUser:(token)=>{
+            dispatch(setUser(token))
         }
     }
 }

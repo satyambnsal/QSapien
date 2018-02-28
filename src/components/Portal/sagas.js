@@ -30,6 +30,8 @@ function* getPublicContactsApi(userId){
 }
 function* addContactToFriendListApi(userId,friendId){
     console.log("-----inside api function-------");
+    console.log('------------user id----------'+userId);
+    console.log('-----------friend id------------'+friendId);
 try{
 yield fetch(ADD_CONTACT_TO_FRIEND_LIST_URL,{
     method:'POST',
