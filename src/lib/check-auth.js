@@ -1,4 +1,5 @@
 import {setClient} from "../components/Client/actions";
+import {setUser} from '../components/Portal/actions';
 //import logger from 'winston';
 export function checkIndexAuthorization({ dispatch }) {
   //  logger.info('check index authorization entry point');
@@ -32,6 +33,7 @@ export function checkAuthorization(dispatch) {
         if (created > expiry)
             return false;
         dispatch(setClient(token))
+        dispatch(setUser(token.userId));
         return true;
     }
     return false;

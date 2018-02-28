@@ -1,26 +1,42 @@
 import React, { Component } from 'react';
 import '../../stylesheets/style.css'
 import TopHeader from './TopHeader';
+import PortalContent from './PortalContent';
 import {connect} from 'react-redux';
 import {unsetClient} from '../Client/actions';
+import {getPublicContacts,addContactToFriendList} from './actions';
   class Portal extends Component {
     constructor(props) {
         super(props);
         }
     render() {
-        let unsetClient=this.props.unsetClient;
+        console.log('----inside render----userId--'+this.props.userId);
+        let {unsetClient,getPublicContacts,addContactToFriendList,userId}=this.props;
         return (
-            <TopHeader unsetClient={unsetClient}/>
+            <div>
+            <TopHeader unsetClient={unsetClient} userId={userId}/>
+            <PortalContent getPublicContacts={getPublicContacts} publicContacts={this.props.publicContacts} 
+            userId={userId} addContactToFriendList={addContactToFriendList}/>
+            </div>
         )
     }
 }
 let mapStateToProps=(state)=>{
-    return {}
+    return {
+        publicContacts:state.portal.publicContacts,
+        userId:state.portal.userId
+    }
 }
 let mapDispathToProps=(dispatch)=>{
     return{
         unsetClient:()=>{
             dispatch(unsetClient())
+        },
+        getPublicContacts:(userId)=>{
+            dispatch(getPublicContacts(userId))
+        },
+        addContactToFriendList:(userId,friendId)=>{
+            dispatch(addContactToFriendList(userId,friendId))
         }
     }
 }

@@ -1,3 +1,12 @@
+*{
+    box-sizing: border-box;
+}
+ul{
+    list-style-type: none
+}
+a:link,a:hover,a:active{
+    text-decoration: none;
+}
 #wrapper{
     width:100%;
 }
@@ -69,3 +78,32 @@
       color:green;
       text-align: center;
   }
+  .portalContent{
+    display:flex;
+    width:100%;
+}
+.portal-sub-content{
+flex:4;    
+}
+.contacts-panel{
+    width:300px;
+    flex:1;
+    min-height:93vh;
+    background-color:lightblue;
+}
+.contacts-panel .tabs{
+border:1px solid #ddd;
+display:flex;
+
+}
+.contacts-panel .tabs .tab{
+flex:1;
+text-align: center;
+padding:5px;
+color:#333;
+font-weight:bold;
+border-right:1px solid #ddd;
+}
+.contacts-panel .tabs .tab:hover{
+    background-color: rosybrown;
+}

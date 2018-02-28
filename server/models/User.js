@@ -8,6 +8,10 @@ let UserSchema=new Schema({
     profile_image:{data:Buffer,contentType:String},
     contact_no:{type:String,required:true},
     credit_points:Number,
+    contactList:[{type:Schema.Types.ObjectId,ref:'User'}],
     password:{type:String,required:true}
+});
+UserSchema.virtual('name').get(function(){
+    return this.first_name+' '+this.last_name
 });
 module.exports=mongoose.model('User',UserSchema);

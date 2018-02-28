@@ -30,9 +30,9 @@ class User extends Component {
                     </li>
                     <li className="divider"></li>
                     <li>
-                        <button onClick={(e) => { this.handleLogout(e) }}>
+                        <a href="" onClick={(e) => { this.handleLogout(e) }}>
                             <i className="fa fa-sign-out fa-fw">&nbsp;&nbsp;Logout</i>
-                        </button>
+                        </a>
                     </li>
                 </ul>
             </li>

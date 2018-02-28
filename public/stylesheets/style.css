@@ -63,3 +63,11 @@
   .login-panel button{
       margin-top: 15px;
   }
+  .portalContent{
+      display:flex;
+  }
+  .contacts-panel{
+      width:300px;
+      min-height:60vh;
+      background-color: lavenderblush;
+  }
