@@ -159,3 +159,36 @@ exports.public_contacts_post = [
 
     }
 ]
+exports.add_to_friend_list=[
+body('userId','userId is required to perform this operation'),
+body('friendId','friendId is required to perform this operation'),
+(req,res,next)=>{
+    logger.info('add to friend list method entry point');
+    const userId=req.body.userId;
+    const friendId=req.body.friendId;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let errorMsgs = [];
+        let tempErr = errors.mapped();
+        logger.debug("express validator validation error:: " + JSON.stringify(tempErr));
+        for (let prop in tempErr)
+            errorMsgs.push(tempErr[prop].msg);
+        return res.status(400).json({ message: 'error occured' });
+    }
+    else{
+    User.findById(userId).then(result=>{
+    console.log('=======result======');
+    result.contactList.push(friendId);
+    return result;
+}).then(result=>{
+    return User.findOneAndUpdate({_id:userId},result)
+}).then(result=>{
+    console.log("=========resp2======");
+    console.log(JSON.stringify(result));
+}).catch(err=>{
+        res.status(500).json({message:err.message});
+    })
+    }
+
+}
+]

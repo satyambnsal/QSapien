@@ -8,7 +8,7 @@ let UserSchema=new Schema({
     profile_image:{data:Buffer,contentType:String},
     contact_no:{type:String,required:true},
     credit_points:Number,
-    contactList:[{type:Schema.Types.ObjectId,ref:'User'}],
+    contactList:[{type:Schema.Types.ObjectId,ref:'User',unique:true}],
     password:{type:String,required:true}
 });
 UserSchema.virtual('name').get(function(){
