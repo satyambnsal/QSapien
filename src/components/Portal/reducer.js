@@ -1,10 +1,11 @@
-import {SET_PUBLIC_CONTACTS,SET_USER} from './constants';
+import {SET_PUBLIC_CONTACTS,SET_USER,SET_FRIEND_LIST} from './constants';
 let initialState={
     messages:[],
     tasks:[],
     notifications:[],
     publicContacts:[],
-    userId:null
+    userId:null,
+    friendList:[]
 };
 let reducer=(state=initialState,action)=>{
     console.log('inside reducer');
@@ -13,6 +14,8 @@ switch(action.type){
     return{...state,publicContacts:action.publicContacts};
     case SET_USER:
     return {...state,userId:action.userId};
+    case SET_FRIEND_LIST:
+    return {...state,friendList:action.friendList}
     default:
     return state;
 }    

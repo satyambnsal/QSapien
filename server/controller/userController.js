@@ -1,9 +1,10 @@
 import User from '../models/User';
+import FriendList from '../models/FriendList';
 import { body, validationResult } from 'express-validator/check';
 import { sanitizeBody } from 'express-validator/filter';
 import logger from 'winston';
 import jwt from 'jsonwebtoken';
-
+const ObjectId=require('mongoose').Types.ObjectId;
 let jwtsecret = process.env.JWT_SECRET || 'qsapiensecret';
 logger.level = 'debug';
 
@@ -113,18 +114,6 @@ exports.user_login_post = [
         }
     }
 ]
-// exports.logout_admin=(req,res)=>{
-//     logger.info('admin logout method entry');
-//    // logger.info('req session object::'+JSON.stringify(req.session));
-//     req.session.destroy(err=>{
-//         if(err){
-//             logger.info('error::'+err.toString());
-//         }
-//         else{
-//             logger.info('session destroyed successfully');
-//         }
-//         });
-// }
 exports.public_contacts_post = [
     body("userId", 'user id must be provided while fetching public contact list').exists(),
     (req, res, next) => {
@@ -179,14 +168,20 @@ exports.add_to_friend_list = [
             return res.status(400).json({ message: 'error occured' });
         }
         else {
-            User.findById(userId).then(result => {
-                console.log('=======result======');
-                if (!result.contactList.includes(friendId)) {
-                    result.contactList.push(friendId);
+            FriendList.findOne({ userId }).then(result => {
+                if (!result) {
+                    return {
+                        userId, friendList: [friendId]
+                    }
+                }
+                if (result.friendList.indexOf(friendId) == -1) {
+                    result.friendList.push(friendId);
                 }
                 return result;
             }).then(result => {
-                return User.findOneAndUpdate({ _id: userId }, result)
+                console.log("========182=========");
+                console.log(JSON.stringify(result));
+                return FriendList.findOneAndUpdate({userId:userId},result,{upsert:true})
             }).then(result => {
                 console.log("=========resp2======");
                 console.log(JSON.stringify(result));
@@ -198,5 +193,46 @@ exports.add_to_friend_list = [
             })
         }
 
+    }
+]
+async function getUserDetailFromId(contactList){
+    let result=[];
+        for(let contactId of contactList){
+            let res= await User.findOne({_id:contactId},'first_name last_name');
+            res={userId:res._id,name:res.first_name+' '+res.last_name}
+            result.push(res);        
+        }
+    console.log('-------res--255------'+JSON.stringify(result));
+    return result;
+
+}
+exports.friend_list_get = [
+    body('userId', 'User id is required to get list of friends'),
+    (req, res, next) => {
+        logger.info('friend list get method entry point');
+        logger.debug('--------------user id----------'+req.body.userId);
+        const userId = req.body.userId;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            let errorMsgs = [];
+            let tempErr = errors.mapped();
+            logger.debug("express validator validation error:: " + JSON.stringify(tempErr));
+            for (let prop in tempErr)
+                errorMsgs.push(tempErr[prop].msg);
+            return res.status(400).json({ message: 'error occured',errorMsgs});
+        }
+        else {
+        FriendList.findOne({userId}).then(result=>{
+            logger.debug('-------------friendList find one result--------'+JSON.stringify(result));
+            if(!result)
+            return res.status(200).json([]);
+            return getUserDetailFromId(result.friendList);
+        }).then(result=>{
+            logger.info('-----final result---------'+JSON.stringify(result));
+            res.status(200).json(result);
+        }).catch(error=>{
+            res.status(500).json({message:error.message});
+        })
+        }
     }
 ]
