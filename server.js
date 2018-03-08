@@ -6,10 +6,13 @@ var mongoose = require('mongoose');
 let session=require('express-session');
 let MongoStore=require('connect-mongo')(session);
 let userRoute=require('./server/routes/user');
+let io=require('socket.io');
+var app = express();
+let server=require('http').createServer(app);
+io=io.listen(server);
 
 var port = process.env.PORT || 3001;
 let MONGODB_URI=process.env.MONGODB_URI||"mongodb://localhost:27017/QSapien";
-var app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,6 +38,14 @@ app.use(function (req, res, next) {
 app.use('/user',userRoute);
 app.use(express.static('public'));
 
-app.listen(port, function () {
+io.on('connection',(socket)=>{
+    console.log('connection is open');
+socket.on('sendChallenge',values=>{
+    console.log('----------values-------------');
+    console.log(JSON.stringify(values));
+})
+})
+
+server.listen(port, function () {
     chalk.green(console.log("server is listening at PORT: " + port));
 });

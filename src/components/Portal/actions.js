@@ -1,4 +1,4 @@
-import {ADD_CONTACT_TO_FRIEND_LIST} from './constants';
+import {ADD_CONTACT_TO_FRIEND_LIST, SEND_CHALLENGE} from './constants';
 import {SET_PUBLIC_CONTACTS,GET_PUBLIC_CONTACTS} from './constants';
 import {SET_USER} from './constants';
 import {GET_FRIEND_LIST,SET_FRIEND_LIST} from './constants';
@@ -30,4 +30,8 @@ export const getFriendList=(userId)=>({
 export const setFriendList=(friendList)=>({
 type:SET_FRIEND_LIST,
 friendList
+});
+export const sendChallenge=(values)=>({
+    type:SEND_CHALLENGE,
+    values
 });
