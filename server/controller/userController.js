@@ -13,7 +13,7 @@ logger.level = 'debug';
 const storage=multer.diskStorage({
     destination:'./public/files',
     filename(req,file,cb){
-        cb(null,`${new Date()}-${file.originalname}`);
+        cb(null,`${file.originalname}`);
     }
 });
 const upload=multer({storage});

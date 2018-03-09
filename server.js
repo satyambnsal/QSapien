@@ -15,7 +15,7 @@ var port = process.env.PORT || 3001;
 let MONGODB_URI=process.env.MONGODB_URI||"mongodb://localhost:27017/QSapien";
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGODB_URI,{ useMongoClient: true });
