@@ -4,11 +4,19 @@ import { body, validationResult } from 'express-validator/check';
 import { sanitizeBody } from 'express-validator/filter';
 import logger from 'winston';
 import jwt from 'jsonwebtoken';
+import multer from 'multer';
 const ObjectId=require('mongoose').Types.ObjectId;
 let jwtsecret = process.env.JWT_SECRET || 'qsapiensecret';
 logger.level = 'debug';
 
 
+const storage=multer.diskStorage({
+    destination:'./public/files',
+    filename(req,file,cb){
+        cb(null,`${new Date()}-${file.originalname}`);
+    }
+});
+const upload=multer({storage});
 exports.user_signup_post = [
     body('signup_fields', 'Signup field body is required').exists(),
     body('signup_fields.first_name', 'Username is required').isLength({ min: 1 }).trim(),
@@ -202,7 +210,6 @@ async function getUserDetailFromId(contactList){
             res={userId:res._id,name:res.first_name+' '+res.last_name}
             result.push(res);        
         }
-    console.log('-------res--255------'+JSON.stringify(result));
     return result;
 
 }
@@ -236,3 +243,9 @@ exports.friend_list_get = [
         }
     }
 ]
+exports.user_file_upload=[upload.single('file'),(req,res)=>{
+    console.log('----file----'+req.file);
+    console.log('req body user file upload',JSON.stringify(req.body));
+    res.send('success');
+    res.end();
+    }]

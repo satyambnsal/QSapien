@@ -5,9 +5,9 @@ import PortalContent from './PortalContent';
 import {connect} from 'react-redux';
 import {unsetClient} from '../Client/actions';
 import {setUser, getFriendList} from './actions';
-
 import {getPublicContacts,addContactToFriendList} from './actions';
-  class Portal extends Component {
+
+class Portal extends Component {
     constructor(props) {
         super(props);
         if(this.props.token){
