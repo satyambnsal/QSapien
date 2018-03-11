@@ -15,7 +15,7 @@ let ChallengeSchema=new Schema({
     creditPoints:{type:Number,required:true},
     hint:String,
     referenceLinks:String,
-    active:{type:Boolean,default:false},
+    active:{type:Boolean,default:true},
     timestamp:{type:Date,default:new Date()}
 });
 module.exports=mongoose.model('Challenge',ChallengeSchema);
