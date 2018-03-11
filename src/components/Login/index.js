@@ -3,12 +3,10 @@ import { PropTypes } from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import loginRequest from './actions';
 import Errors from '../Notifications/Errors';
 import Messages from '../Notifications/Messages';
-import loginRequest from './actions';
 
-//import '../../stylesheets/style.css'
 class Login extends Component {
 
     static propTypes = {
@@ -67,7 +65,7 @@ class Login extends Component {
                         requesting && <div>Logging in...</div>
                     }
                     {
-                        !requesting && !successful && (<Link to="/signup">Need to Register? click here >></Link>)
+                        !requesting && !successful && (<Link to="/signup">Need to Register? click here ></Link>)
                     }
                 </div>
                 </div>

@@ -4,7 +4,7 @@ let initialState={
     tasks:[],
     notifications:[],
     publicContacts:[],
-    userId:null,
+    user:{},
     friendList:[]
 };
 let reducer=(state=initialState,action)=>{
@@ -13,7 +13,7 @@ switch(action.type){
     case SET_PUBLIC_CONTACTS:
     return{...state,publicContacts:action.publicContacts};
     case SET_USER:
-    return {...state,userId:action.userId};
+    return {...state,user:action.user};
     case SET_FRIEND_LIST:
     return {...state,friendList:action.friendList}
     default:

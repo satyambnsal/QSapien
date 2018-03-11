@@ -22,9 +22,11 @@ exports.user_signup_post = [
     body('signup_fields.first_name', 'Username is required').isLength({ min: 1 }).trim(),
     body('signup_fields.email_id', 'Invalid Email Address').isEmail().trim().normalizeEmail(),
     body('signup_fields.password', 'Password must be at least 6 characters long and must contain numeric digit').isLength({ min: 6 }).matches(/\d/),
+    upload.single('file'),
     (req, res, next) => {
         logger.info('user signup post method entry point');
         logger.debug("user signup request body::" + JSON.stringify(req.body));
+        logger.info('profile image::',req.file);
         let signupData = {};
         for (let prop in req.body.signup_fields) {
             if (req.body.signup_fields[prop] != '' && prop != 'confirm_password')
@@ -249,3 +251,36 @@ exports.user_file_upload=[upload.single('file'),(req,res)=>{
     res.send('success');
     res.end();
     }]
+exports.get_user_post=[
+    body("userId", 'user id must be provided while fetching user object').exists(),
+    (req,res,next)=>{
+        logger.info('get user object method entry point');
+        logger.debug('--------------user id----------'+req.body.userId);
+        const userId = req.body.userId;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            let errorMsgs = [];
+            let tempErr = errors.mapped();
+            logger.debug("express validator validation error:: " + JSON.stringify(tempErr));
+            for (let prop in tempErr)
+                errorMsgs.push(tempErr[prop].msg);
+            return res.status(400).json({ message: 'error occured',errorMsgs});
+        }
+        else {
+            User.findById(userId,(err,result)=>{
+                if(err){
+                    logger.info('error occured while fetching user object');
+                    return res.status(400).json({message:'error occured while fetching user object'})
+                }
+                logger.debug('user object::'+JSON.stringify(result));
+                let user={
+                    name:result.first_name+' '+result.last_name,
+                    contact_no:result.contact_no,
+                    userId:result._id,
+                    email_id:result.email_id
+                };
+                res.status(200).json(user);
+            })
+    }
+}
+]

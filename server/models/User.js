@@ -8,7 +8,12 @@ let UserSchema=new Schema({
     profile_image:{data:Buffer,contentType:String},
     contact_no:{type:String,required:true},
     credit_points:Number,
-    password:{type:String,required:true}
+    password:{type:String,required:true},
+    profile_image_url:String,
+    username:String,
+    location:String,
+    website:String,
+    bio:String 
 });
 UserSchema.virtual('name').get(function(){
     return this.first_name+' '+this.last_name

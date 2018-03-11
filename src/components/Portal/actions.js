@@ -1,6 +1,6 @@
 import {ADD_CONTACT_TO_FRIEND_LIST, SEND_CHALLENGE} from './constants';
 import {SET_PUBLIC_CONTACTS,GET_PUBLIC_CONTACTS} from './constants';
-import {SET_USER} from './constants';
+import {GET_USER,SET_USER} from './constants';
 import {GET_FRIEND_LIST,SET_FRIEND_LIST} from './constants';
 
 export const setPublicContacts=(publicContacts)=>({
@@ -9,13 +9,18 @@ export const setPublicContacts=(publicContacts)=>({
 });
 export const getPublicContacts=(userId)=>{
     console.log('--------inside get public contacts action');
+    console.log('user id::'+userId);
     return {
         type:GET_PUBLIC_CONTACTS,
         userId
     };
 }
-export const setUser=(userId)=>({
-    type:SET_USER,
+export const setUser=(user)=>({
+type:SET_USER,
+user
+})
+export const getUser=(userId)=>({
+    type:GET_USER,
     userId
 });
 export const addContactToFriendList=(userId,friendId)=>({

@@ -1,60 +1,79 @@
 import React, { Component } from 'react';
-import '../../stylesheets/style.css'
 import TopHeader from './TopHeader';
 import PortalContent from './PortalContent';
-import {connect} from 'react-redux';
-import {unsetClient} from '../Client/actions';
-import {setUser, getFriendList} from './actions';
-import {getPublicContacts,addContactToFriendList} from './actions';
-
+import { connect } from 'react-redux';
+import { unsetClient } from '../Client/actions';
+import { getUser, getFriendList ,getPublicContacts} from './actions';
+import {addContactToFriendList } from './actions';
+import { Layout,Menu} from 'antd';
+const { Header, Content, Footer,Sider} = Layout;
 class Portal extends Component {
     constructor(props) {
         super(props);
-        if(this.props.token){
-            console.log('----------constructor token------'+JSON.stringify(this.props.token));
-            this.props.setUser(this.props.token.userId);
-        }
-
-        }
+        if (this.props.token) {
+            this.props.getUser(this.props.token.userId);
+        } 
+        this.state={
+            collapsed:true
+        };
+    }
+    onCollapse=(collapsed)=>{
+        this.setState({collapsed});
+    }
     render() {
-        console.log('----inside render----userId--'+this.props.userId);
-        let {unsetClient,getPublicContacts,addContactToFriendList,getFriendList,userId,friendList}=this.props;
+        let { unsetClient,user} = this.props;
         return (
-            <div>
-            <TopHeader unsetClient={unsetClient} userId={userId}/>
-            <PortalContent getPublicContacts={getPublicContacts} publicContacts={this.props.publicContacts} 
-            userId={userId} addContactToFriendList={addContactToFriendList} getFriendList={getFriendList} 
-            friendList={friendList}/>
-            </div>
+            <Layout>
+                <Header style={{ padding: '0' }}>
+                    <TopHeader unsetClient={unsetClient} user={user} /></Header>
+                <Layout>
+                    <Sider style={{ minHeight: '100vh', width: '256px' }} collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+                        <Menu theme='dark' defaultSelectedKeys={['1']} mode='inline'>
+                            <Menu.Item key="1">Home</Menu.Item>
+                            <Menu.Item key="2">Home1</Menu.Item>
+                            <Menu.Item key="3">Home2</Menu.Item>
+                            <Menu.Item key="4">Home3</Menu.Item>
+                            <Menu.Item key="5">Home4</Menu.Item>
+                            <Menu.Item key="6">Home5</Menu.Item>
+
+                        </Menu>
+                    </Sider>
+                    <Content>
+                        <PortalContent {...this.props}/>
+                    </Content>
+                </Layout>
+                <Footer>
+                </Footer>
+            </Layout>
         )
     }
 }
-let mapStateToProps=(state)=>{
+let mapStateToProps = (state) => {
     return {
-        publicContacts:state.portal.publicContacts,
-        userId:state.portal.userId,
-        token:state.client.token,
-        friendList:state.portal.friendList
+        publicContacts: state.portal.publicContacts,
+        user: state.portal.user,
+        token: state.client.token,
+        friendList: state.portal.friendList
     }
 }
-let mapDispathToProps=(dispatch)=>{
-    return{
-        unsetClient:()=>{
+let mapDispathToProps = (dispatch) => {
+    return {
+        unsetClient: () => {
             dispatch(unsetClient())
+        },
+        addContactToFriendList: (userId, friendId) => {
+            dispatch(addContactToFriendList(userId, friendId))
+        },
+        getUser: (token) => {
+            dispatch(getUser(token))
+        },
+        getFriendList: (userId) => {
+            dispatch(getFriendList(userId))
         },
         getPublicContacts:(userId)=>{
             dispatch(getPublicContacts(userId))
-        },
-        addContactToFriendList:(userId,friendId)=>{
-            dispatch(addContactToFriendList(userId,friendId))
-        },
-        setUser:(token)=>{
-            dispatch(setUser(token))
-        },
-        getFriendList:(userId)=>{
-            dispatch(getFriendList(userId))
         }
     }
 }
-Portal=connect(mapStateToProps,mapDispathToProps)(Portal);
+Portal = connect(mapStateToProps, mapDispathToProps)(Portal);
 export default Portal;

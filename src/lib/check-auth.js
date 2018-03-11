@@ -1,32 +1,22 @@
-import {setClient} from "../components/Client/actions";
-import {setUser} from '../components/Portal/actions';
-//import logger from 'winston';
-export function checkIndexAuthorization({ dispatch }) {
-  //  logger.info('check index authorization entry point');
-    if (checkPortalAuthorization(dispatch)) {
+import { setClient } from "../components/Client/actions";
+
+export function checkPortalAuthorization({ dispatch, getState }) {
+    console.log('inside check portal authorization');
+    const client = getState().client;
+    console.log('--------------client----------' + JSON.stringify(client));
+    if (client && client.token) {
         return true;
     }
+    if (checkAuthorization(dispatch))
+        return true;
     return false;
 }
 
-export function checkPortalAuthorization({ dispatch,getState}) {
-   // logger.info('check portal authorization method entry point');
-   // logger.debug('dispatch object::'+JSON.stringify(dispatch));
-   console.log('inside check portal authorization');
-        const client = getState().client;
-        console.log('--------------client----------'+JSON.stringify(client));
-        if (client && client.token){
-            return true;
-        }
-        if (checkAuthorization(dispatch))
-            return true;
-            return false;
-    }
 export function checkAuthorization(dispatch) {
-   // logger.info('check authorization method entry point');
-   console.log('inside check authorization');
+    console.log('inside check authorization');
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
+        console.log('inside stored token if condition');
         const token = JSON.parse(storedToken);
         const createdDate = new Date(token.created);
         const created = Math.round(createdDate.getTime() / 1000);
@@ -35,7 +25,6 @@ export function checkAuthorization(dispatch) {
         if (created > expiry)
             return false;
         dispatch(setClient(token))
-        dispatch(setUser(token.userId));
         return true;
     }
     return false;

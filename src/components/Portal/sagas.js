@@ -1,13 +1,15 @@
-import { take, fork, cancel, call, put, cancelled,takeEvery,takeLatest} from 'redux-saga/effects';
-import {GET_PUBLIC_CONTACTS,SET_PUBLIC_CONTACTS, ADD_CONTACT_TO_FRIEND_LIST, GET_FRIEND_LIST,SEND_CHALLENGE} from './constants';
+import { take,call, put} from 'redux-saga/effects';
+import {GET_PUBLIC_CONTACTS, ADD_CONTACT_TO_FRIEND_LIST, GET_FRIEND_LIST,SEND_CHALLENGE, GET_USER} from './constants';
 
 import { handleApiErrors } from '../../lib/api-errors';
-import { getPublicContacts, setPublicContacts, setFriendList } from './actions';
+import { setPublicContacts, setFriendList,setUser} from './actions';
 import {sendChallengeSocketApi} from './socketapi';
 let REACT_APP_API_URL=process.env.REACT_APP_API_URL||'http://localhost:3001';
 const GET_PUBLIC_CONTACTS_URL = `${REACT_APP_API_URL}/user/publicContacts`;
 const ADD_CONTACT_TO_FRIEND_LIST_URL=`${REACT_APP_API_URL}/user/addToFriendList`
 const GET_FRIEND_LIST_URL=`${REACT_APP_API_URL}/user/getFriendList`;
+const GET_USER_URL=`${REACT_APP_API_URL}/user/getUser`;
+
 function* getPublicContactsApi(userId){
     console.log('-------inside get public contacts api------');
     console.log('-----user id---------'+userId);
@@ -29,6 +31,7 @@ function* getPublicContactsApi(userId){
         console.log('error occured in get public contacts api');
     }
 }
+
 function* addContactToFriendListApi(userId,friendId){
     console.log("-----inside api function-------");
     console.log('------------user id----------'+userId);
@@ -70,19 +73,39 @@ function* getFriendListApi(userId){
         console.log('error occured in get friend list api');
     }
 }
+function* getUserApi(userId){
+    console.log('inside get user api method');
+try{
+    let user=yield fetch(GET_USER_URL,{
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({userId})
+    }).then(handleApiErrors).then(response=>response.json());
+    console.log('-------user object-------'+JSON.stringify(user));
 
+    yield put(setUser(user));
+}
+catch(error){
+    console.log('error occured in get user api');
+}
+}
 export function* contactRequestWatcher(){
     while(true){
-        const action=yield take([GET_PUBLIC_CONTACTS,ADD_CONTACT_TO_FRIEND_LIST,GET_FRIEND_LIST,SEND_CHALLENGE]);
-        if(action.type==GET_PUBLIC_CONTACTS)
+        const action=yield take([GET_PUBLIC_CONTACTS,ADD_CONTACT_TO_FRIEND_LIST,GET_FRIEND_LIST,SEND_CHALLENGE,GET_USER]);
+        if(action.type===GET_PUBLIC_CONTACTS)
         yield call(getPublicContactsApi,action.userId);
-        if(action.type==ADD_CONTACT_TO_FRIEND_LIST)
+        if(action.type===ADD_CONTACT_TO_FRIEND_LIST)
         yield call(addContactToFriendListApi,action.userId,action.friendId);
-        if(action.type==GET_FRIEND_LIST)
+        if(action.type===GET_FRIEND_LIST)
         yield call(getFriendListApi,action.userId)
-        if(action.type==SEND_CHALLENGE){
+        if(action.type===SEND_CHALLENGE){
             console.log('inside action--84');
             yield call(sendChallengeSocketApi,action.values);
+        }
+        if(action.type===GET_USER){
+            yield call(getUserApi,action.userId)
         }
     }
 }

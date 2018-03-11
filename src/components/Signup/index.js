@@ -6,10 +6,8 @@ import { Link } from 'react-router-dom';
 import Errors from '../Notifications/Errors';
 import Messages from '../Notifications/Messages';
 
-
 import { signupRequesting } from './actions';
 //import '../../stylesheets/register.css';
-
 
 class Signup extends Component {
     static propTypes = {
@@ -22,7 +20,9 @@ class Signup extends Component {
             messages: PropTypes.array
         })
     };
-    submit = (values) => (this.props.signupRequesting(values))
+    submit = (values) =>{
+        return this.props.signupRequesting(values)
+    }
 
     render() {
         const { handleSubmit,

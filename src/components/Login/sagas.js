@@ -1,4 +1,4 @@
-import { take, fork, cancel, call, put, cancelled,takeEvery} from 'redux-saga/effects';
+import { take, fork, cancel, call, put, cancelled} from 'redux-saga/effects';
 import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './constants';
 import { setClient, unsetClient } from '../Client/actions';
 import { CLIENT_UNSET } from '../Client/constants';
@@ -20,7 +20,7 @@ function loginAPI(email_id, password) {
         body: JSON.stringify({email_id, password })
     })
     .then(handleApiErrors)
-    .then(response => response.json())
+    .then(response =>response.json())
     .then(json => json)
     .catch((errors) => { throw errors })
 }
@@ -33,18 +33,26 @@ export function* logout() {
 
 function* loginFlow(email_id, password) {
     let token,resp;
+    console.log('inside login flow saga');
     try {
         resp = yield call(loginAPI,email_id, password);
         token=resp.token;
-        yield put(setClient(token));
-        yield put({ type: LOGIN_SUCCESS });
-
-        localStorage.setItem('token', JSON.stringify(token));
-        //  logger.info('login successful');
-        yield call(history.push,'/portal');
+        console.log('token value:: '+token);
+        if(token){
+            yield put(setClient(token));
+            yield put({ type: LOGIN_SUCCESS });
+    
+            localStorage.setItem('token', JSON.stringify(token));
+            //  logger.info('login successful');
+            yield call(history.push,'/portal');    
+        }
+        else{
+            yield put({ type: LOGIN_ERROR,error:"empty token error"})         
+        }
 
     }
     catch (error) {
+        console.log('error occured:: '+JSON.stringify(error));
         yield put({ type: LOGIN_ERROR, error })
     }
     finally {
