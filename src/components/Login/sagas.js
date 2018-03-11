@@ -3,8 +3,6 @@ import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './constants';
 import { setClient, unsetClient } from '../Client/actions';
 import { CLIENT_UNSET } from '../Client/constants';
 import history from '../../history.js';
-//import logger from 'winston';
-//import {browserHistory} from 'react-router-dom';
 
 import { handleApiErrors } from '../../lib/api-errors';
 let REACT_APP_API_URL=process.env.REACT_APP_API_URL||'http://localhost:3001';

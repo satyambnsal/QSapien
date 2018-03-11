@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 let session=require('express-session');
 let MongoStore=require('connect-mongo')(session);
 let userRoute=require('./server/routes/user');
+let {challengeHandler}=require('./server/sockethandler');
 let io=require('socket.io');
 var app = express();
 let server=require('http').createServer(app);
@@ -40,9 +41,11 @@ app.use(express.static('public'));
 
 io.on('connection',(socket)=>{
     console.log('connection is open');
+    console.log('socket id::'+socket.id);
 socket.on('sendChallenge',values=>{
-    console.log('----------values-------------');
-    console.log(JSON.stringify(values));
+    challengeHandler(values,(response)=>{
+        console.log('response::'+response.message);
+    });
 })
 })
 
