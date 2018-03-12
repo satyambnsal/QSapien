@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
+import NewChallengesToSolve from './NewChallengesToSolve';
 export default class Home extends Component {
 
 
@@ -8,14 +9,10 @@ export default class Home extends Component {
     render() {
         return (
             <div>
-                <Row type='flex' justify='space-around' style={{ marginTop: '20px' }}>
-                    <Col span={8}>
-                        <Card title='New questions for you'>
-                            <Link to='/'>new questtion1</Link>
-                            <Link to='/'>new questtion2</Link>
-                            <Link to='/'>new questtion3</Link>
+                   <Card title='New challenges for you'>
+                        <NewChallengesToSolve {...this.props} />
                         </Card>
-                    </Col>
+                <Row type='flex' justify='space-around' style={{ marginTop: '20px' }}>
                     <Col span={6}>
                         <Card title='Current credit points'>
                             <p>23</p>

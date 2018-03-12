@@ -120,10 +120,9 @@ class ChallengeForm extends Component {
                     <FormItem label='Credit points'>
                         {
                             getFieldDecorator('creditPoints', {
-                                initialValue: '3'
-                            })
+                                initialValue: 3
+                            })(<InputNumber min={1} max={5} />)
                         }
-                        <InputNumber min={1} max={5} defaultValue={3} />
                     </FormItem>
                     <FormItem label='Hint(optional)'>
                         <Input />

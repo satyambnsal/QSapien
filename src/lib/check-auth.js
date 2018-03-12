@@ -7,9 +7,10 @@ export function checkPortalAuthorization({ dispatch, getState }) {
     if (client && client.token) {
         return true;
     }
-    if (checkAuthorization(dispatch))
+    else if (checkAuthorization(dispatch))
         return true;
-    return false;
+    else
+        return false;
 }
 
 export function checkAuthorization(dispatch) {

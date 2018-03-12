@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import { applyMiddleware, createStore} from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import {Router } from 'react-router-dom';
-import history from './history.js';
+import {BrowserRouter } from 'react-router-dom';
 import App from './components/App';
 import IndexReducer from './index-reducer.js';
 import IndexSaga from './index-saga.js';
@@ -18,9 +17,9 @@ const store = createStore(IndexReducer, composeWithDevTools(applyMiddleware(saga
 sagaMiddleware.run(IndexSaga);
 ReactDOM.render(
         <Provider store={store}>
-            <Router history={history}>
+            <BrowserRouter>
             <App store={store} />
-            </Router>    
+            </BrowserRouter>    
         </Provider>,
     document.getElementById('root')
 );

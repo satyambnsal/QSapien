@@ -8,7 +8,7 @@ let initialState={
     friendList:[]
 };
 let reducer=(state=initialState,action)=>{
-    console.log('inside reducer');
+    console.log('inside portal reducer: state:'+JSON.stringify(state)+":: action:"+JSON.stringify(action));
 switch(action.type){
     case SET_PUBLIC_CONTACTS:
     return{...state,publicContacts:action.publicContacts};

@@ -11,6 +11,7 @@ opponentName=values1.first_name+' '+values1.last_name;
 values1=await User.findById(values.senderId,'first_name last_name');
 senderName=values1.first_name+' '+values1.last_name;
 let challengeData={...values,opponentName,senderName};
+logger.debug('challenge data::'+JSON.stringify(challengeData));
 let result=await Challenge.findOne({question:values.question,opponentId:values.opponentId,senderId:values.senderId});
 if(!result){
  Challenge.create(challengeData,(err,data)=>{

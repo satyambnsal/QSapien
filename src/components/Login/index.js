@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import loginRequest from './actions';
 import Errors from '../Notifications/Errors';
 import Messages from '../Notifications/Messages';
-
+import {Redirect} from 'react-router-dom';
 class Login extends Component {
 
     static propTypes = {
@@ -66,6 +66,9 @@ class Login extends Component {
                     }
                     {
                         !requesting && !successful && (<Link to="/signup">Need to Register? click here ></Link>)
+                    }
+                    {
+                        !!successful&&(<Redirect to='/portal' />)
                     }
                 </div>
                 </div>

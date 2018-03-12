@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Errors from '../Notifications/Errors';
 import Messages from '../Notifications/Messages';
-
+import {Redirect} from 'react-router-dom';
 import { signupRequesting } from './actions';
 
 class Signup extends Component {
@@ -79,6 +79,8 @@ class Signup extends Component {
                     }
                     {
                         !requesting && !successful && (<Link to="/login">Already SignUp? click here to login >></Link>)
+                    }{
+                        !!successful&&(<Redirect to='/' />)
                     }
                 </div></div>
         )

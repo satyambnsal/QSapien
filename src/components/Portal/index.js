@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { unsetClient } from '../Client/actions';
 import { getUser, getFriendList ,getPublicContacts} from './actions';
 import {addContactToFriendList } from './actions';
-import { Layout,Menu} from 'antd';
+import { Layout,Menu,Icon} from 'antd';
 const { Header, Content, Footer,Sider} = Layout;
 class Portal extends Component {
     constructor(props) {
@@ -29,13 +29,7 @@ class Portal extends Component {
                 <Layout>
                     <Sider style={{ minHeight: '100vh', width: '256px' }} collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
                         <Menu theme='dark' defaultSelectedKeys={['1']} mode='inline'>
-                            <Menu.Item key="1">Home</Menu.Item>
-                            <Menu.Item key="2">Home1</Menu.Item>
-                            <Menu.Item key="3">Home2</Menu.Item>
-                            <Menu.Item key="4">Home3</Menu.Item>
-                            <Menu.Item key="5">Home4</Menu.Item>
-                            <Menu.Item key="6">Home5</Menu.Item>
-
+                            <Menu.Item key="1"><Icon type='home'/><span>Home</span></Menu.Item>
                         </Menu>
                     </Sider>
                     <Content>

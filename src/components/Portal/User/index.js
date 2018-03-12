@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import { Avatar, Menu, Icon, Dropdown } from 'antd';
-import { Link } from 'react-router-dom';
-import history from './../../../history';
+import { Link,Redirect} from 'react-router-dom';
 class User extends Component {
-    constructor(props) {
-        super(props);
-        this.handleLogout = this.handleLogout.bind(this);
-    }
-    handleLogout(e) {
+state={loggedIn:true}
+    handleLogout=(e)=>{
         e.preventDefault();
         localStorage.removeItem('token');
         this.props.unsetClient();
-        return false;
+        this.setState({loggedIn:false})
     }
     render() {
         const menu = (
@@ -36,11 +32,12 @@ class User extends Component {
             </Menu>
         );
         return (
-            <Dropdown overlay={menu} placement='bottomCenter'>
-                <Avatar src="http://localhost:3001/files/satyam_bansal.jpg" size="large" />
-            </Dropdown>
-        )
+            
+            this.state.loggedIn?(<Dropdown overlay={menu} placement='bottomCenter'>
+            <Avatar src="http://localhost:3001/files/satyam_bansal.jpg" size="large" />
+        </Dropdown>):(<Redirect to='/login'/>))          
     }
-}
+        
+    }
 
 export default User;

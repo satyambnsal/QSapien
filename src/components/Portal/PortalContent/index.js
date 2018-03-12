@@ -19,15 +19,15 @@ export default class PortalContent extends Component {
         this.openChallenge = this.openChallenge.bind(this);
         this.hideChallenge = this.hideChallenge.bind(this);
     }
-componentDidUpdate(){
-    if(this.props.user.userId&&this.props.publicContacts.length==0){
-        console.log('---------inside if condition 18 portal content::');
-        console.log('user object::',this.props.user);
-        this.props.getPublicContacts(this.props.user.userId);
-        console.log('public contacts:: portal content::'+JSON.stringify(this.props.publicContacts));
-    }
+// componentDidUpdate(){
+//     if(this.props.user.userId&&this.props.publicContacts.length==0){
+//         console.log('---------inside if condition 18 portal content::');
+//         console.log('user object::',this.props.user);
+//         this.props.getPublicContacts(this.props.user.userId);
+//         console.log('public contacts:: portal content::'+JSON.stringify(this.props.publicContacts));
+//     }
 
-}
+// }
     handlePublicContacts = (e, userId) => {
         e.preventDefault();
         this.setState({

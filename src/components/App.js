@@ -4,20 +4,15 @@ import Login from './Login/index.js';
 import { connect } from 'react-redux';
 import Signup from './Signup/index.js';
 import Portal from './Portal/index.js';
-import { checkPortalAuthorization } from '../lib/check-auth';
-
+import AuthorizeRoute from '../lib/AuthorizeRoute';
 class App extends Component {
     render() {
         const store = this.props.store;
         return (
             <Switch>
                 <Route exact path="/" render={() => <Redirect to='/portal' />} />
-                <Route path="/portal"
-                    render={() => {
-                        return (checkPortalAuthorization(store) ? (<Portal />) : (<Redirect to='/login' />))
-                    }} />
-                <Route exact path="/login"
-                    render={() => (checkPortalAuthorization(store) ? (<Redirect to='/portal' />) : (<Login />))} />
+                <AuthorizeRoute path='/portal' component={Portal} store={store} />
+                <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
             </Switch>
         )
