@@ -36,16 +36,16 @@ export default class AuthorizedRoute extends Component {
         const bool=this.checkPortalAuthorization(store);
         console.log('bool value::'+bool);
         return (
-            <Route exact={true} {...rest} render={props => {
-                return bool
-                    ? <Component {...this.props} />
-                    : <Login />
-            }} />
             // <Route exact={true} {...rest} render={props => {
             //     return bool
             //         ? <Component {...this.props} />
-            //         : <Redirect to='/login'/>
+            //         : <Login />
             // }} />
+            <Route exact={true} {...rest} render={props => {
+                return bool
+                    ? <Component {...this.props} />
+                    : <Redirect to='/login'/>
+            }} />
 
         )
     }
