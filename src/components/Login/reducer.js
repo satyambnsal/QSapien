@@ -6,6 +6,7 @@ const initialState = {
     errors: []
 };
 const reducer = function (state = initialState, action) {
+    console.log('inside login reducer:  state::'+JSON.stringify(state)+":::action::"+JSON.stringify(action));
     switch (action.type) {
         case LOGIN_REQUESTING:
             return {

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Form, Input, Row, Col, Button, InputNumber, Select, Tooltip, Icon, message } from 'antd';
 import { connect } from 'react-redux';
 import { sendChallenge } from '../../../actions';
-import history from '../../../../../history';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
@@ -21,7 +20,7 @@ class ChallengeForm extends Component {
                 console.log('form values::', values);
                 this.props.sendChallenge(values);
                 message.success('your challenge had sent successfully');
-                history.push('/portal');
+              
             }
         })
     }
@@ -110,10 +109,10 @@ class ChallengeForm extends Component {
                                     message: 'you need to provide valid nswer '
                                 }]
                             })(<Select >
-                                {(this.state.choiceA != '') && (<Option key="choiceA" value={this.state.choiceA}>{this.state.choiceA}</Option>)}
-                                {(this.state.choiceB != '') && (<Option key="choiceB" value={this.state.choiceB}>{this.state.choiceB}</Option>)}
-                                {(this.state.choiceC != '') && (<Option key="choiceC" value={this.state.choiceC}>{this.state.choiceC}</Option>)}
-                                {(this.state.choiceD != '') && (<Option key="choiceD" value={this.state.choiceD}>{this.state.choiceD}</Option>)}
+                                {(this.state.choiceA !=='') && (<Option key="choiceA" value={this.state.choiceA}>{this.state.choiceA}</Option>)}
+                                {(this.state.choiceB !=='') && (<Option key="choiceB" value={this.state.choiceB}>{this.state.choiceB}</Option>)}
+                                {(this.state.choiceC !=='') && (<Option key="choiceC" value={this.state.choiceC}>{this.state.choiceC}</Option>)}
+                                {(this.state.choiceD !=='') && (<Option key="choiceD" value={this.state.choiceD}>{this.state.choiceD}</Option>)}
                             </Select>)
                         }
                     </FormItem>

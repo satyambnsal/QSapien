@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { setClient } from "../components/Client/actions";
 import {Route,Redirect} from 'react-router-dom';
+import Login from '../components/Login';
 export default class AuthorizedRoute extends Component {
+
     checkPortalAuthorization = ({ dispatch, getState }) => {
         console.log('inside check portal authorization');
         const client = getState().client;
@@ -24,20 +26,27 @@ export default class AuthorizedRoute extends Component {
                 dispatch(setClient(token))
                 return true;
             }
-            else
-                return false;
+            return false;
         }
     }
 
     render() {
         const { store } = this.props;
         const { component: Component, ...rest } = this.props
+        const bool=this.checkPortalAuthorization(store);
+        console.log('bool value::'+bool);
         return (
-            <Route {...rest} render={props => {
-                return (this.checkPortalAuthorization(store))
+            <Route exact={true} {...rest} render={props => {
+                return bool
                     ? <Component {...this.props} />
-                    : <Redirect to="/login" />
+                    : <Login />
             }} />
+            // <Route exact={true} {...rest} render={props => {
+            //     return bool
+            //         ? <Component {...this.props} />
+            //         : <Redirect to='/login'/>
+            // }} />
+
         )
     }
 }

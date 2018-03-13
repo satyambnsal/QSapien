@@ -8,13 +8,19 @@ import AuthorizeRoute from '../lib/AuthorizeRoute';
 class App extends Component {
     render() {
         const store = this.props.store;
+        const match=this.props;
+
+        console.log('redering again::',match);
         return (
+            <div>
+
             <Switch>
-                <Route exact path="/" render={() => <Redirect to='/portal' />} />
-                <AuthorizeRoute path='/portal' component={Portal} store={store} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/signup" component={Signup} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            <AuthorizeRoute path='/portal' component={Portal} store={store} />
+            <Redirect to='/portal' />
             </Switch>
+            </div>
         )
     }
 }

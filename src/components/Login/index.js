@@ -1,39 +1,45 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import {Form,Input,Button} from 'antd';
 import loginRequest from './actions';
 import Errors from '../Notifications/Errors';
 import Messages from '../Notifications/Messages';
 import {Redirect} from 'react-router-dom';
+
+const FormItem=Form.Item;
+
 class Login extends Component {
-
-    static propTypes = {
-        handleSubmit: PropTypes.func,
-        loginRequest: PropTypes.func,
-        login: PropTypes.shape({
-            successful: PropTypes.bool,
-            requesting: PropTypes.bool,
-            errors: PropTypes.array,
-            messages: PropTypes.array
+    componentWillUpdate(){
+    console.log('inside component will update');    
+    }
+    componentDidUpdate(){
+console.log('inside component did update');
+    }
+    submit = (e) => {
+        e.preventDefault();
+        console.log('inside submit function');
+        this.props.form.validateFields((err,values)=>{
+            if(!err){
+                console.log('inside login submit ::',values);
+                this.props.loginRequest(values);        
+            }
+            else{
+                console.log('error occured while submitting login form:'+JSON.stringify(values));
+            }
         })
-    };
-
-
-    submit = (values) => {
-        this.props.loginRequest(values);
     }
     render() {
         const {
-            handleSubmit,
             login: {
                 successful,
                 requesting,
                 errors,
-                messages,
+                messages
             }
         } = this.props;
+        const {getFieldDecorator}=this.props.form;
         return (
             <div className="container-fluid login-body">
                 <div className="login row">
@@ -42,7 +48,7 @@ class Login extends Component {
                             <h3 className="panel-title">Please Sign In</h3>
                         </div>
                         <div className="panel-body">
-                        <form className="login-form" onSubmit={handleSubmit(this.submit)}>
+                        {/* <form className="login-form" onSubmit={handleSubmit(this.submit)}>
                         <div className="form-group">
                             <label htmlFor="email id">Email Id</label>
                             <Field name="email_id" type="email" id="email_id" component="input" className="form-control" />
@@ -52,7 +58,26 @@ class Login extends Component {
                             <Field type="text" name="password" id="password" component="input" className="form-control" />
                         </div>
                         <button action="submit" >Submit</button>
-                    </form>     
+                    </form>      */}
+                    <form className='login-form' onSubmit={this.submit}>
+                    <FormItem label="Email Id">
+                    {
+                        getFieldDecorator('email_id',{
+                            rules:[{required:true,message:'Email id is required to login'}]
+                        })(<Input type='email' />)
+                    }
+                    </FormItem>
+                    <FormItem label='Password'>
+                    {
+                        getFieldDecorator('password',{
+                            rules:[{
+                                required:true,message:'Password is required to login'
+                            }]
+                        })(<Input type='password' />)
+                    }
+                    </FormItem>
+                    <Button htmlType='submit'>Login</Button>
+                    </form>
                         </div>
                         <div className="auth-messages">
                     {
@@ -80,13 +105,10 @@ class Login extends Component {
         )
     }
 }
+
 const mapStateToProps = (state) => ({
     login: state.login
 });
 
-const connected = connect(mapStateToProps, { loginRequest })(Login);
-
-const formed = reduxForm({
-    form: 'login'
-})(connected);
-export default formed;
+const WrappedLogin=Form.create()(Login)
+export default connect(mapStateToProps, { loginRequest })(WrappedLogin);

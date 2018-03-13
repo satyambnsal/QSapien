@@ -7,6 +7,7 @@ let initialState={
     messages:[]
 };
 const reducer=function(state=initialState,action){
+    console.log('-------inside signup reducer-----state:'+JSON.stringify(state)+'::action::'+JSON.stringify(action));
     switch(action.type){
         case SIGNUP_REQUESTING:
         return {

@@ -39,6 +39,7 @@
     "redux": "^3.7.2",
     "redux-form": "^7.1.2",
     "redux-saga": "^0.16.0",
+    "s3": "^4.4.0",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
     "winston": "^2.4.0"

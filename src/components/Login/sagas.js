@@ -1,4 +1,4 @@
-import { take, fork, cancel, call, put, cancelled} from 'redux-saga/effects';
+import { take, fork, call, put} from 'redux-saga/effects';
 import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './constants';
 import { setClient} from '../Client/actions';
 
@@ -48,6 +48,6 @@ function* loginFlow(email_id, password) {
 export function* loginWatcher() {
     while (true) {
         const { email_id, password } = yield take(LOGIN_REQUESTING);
-        const task = yield fork(loginFlow,email_id, password);
+        yield fork(loginFlow,email_id, password);
     }
 }

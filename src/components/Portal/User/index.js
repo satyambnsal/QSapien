@@ -7,6 +7,7 @@ state={loggedIn:true}
         e.preventDefault();
         localStorage.removeItem('token');
         this.props.unsetClient();
+        console.log('inside handle logout function');
         this.setState({loggedIn:false})
     }
     render() {
