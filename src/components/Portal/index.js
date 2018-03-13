@@ -44,10 +44,10 @@ class Portal extends Component {
 }
 let mapStateToProps = (state) => {
     return {
-        publicContacts: state.portal.publicContacts,
-        user: state.portal.user,
+        publicContacts: state.portal.userState.publicContacts,
+        user: state.portal.userState.user,
         token: state.client.token,
-        friendList: state.portal.friendList
+        friendList: state.portal.userState.friendList
     }
 }
 let mapDispathToProps = (dispatch) => {

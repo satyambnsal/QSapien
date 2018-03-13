@@ -3,14 +3,15 @@ import { Switch, Route } from 'react-router-dom';
 import UserProfile from './UserProfile';
 import AccountSettings from './AccountSettings';
 import ChallengeForm from './Home/ChallengeForm';
+import SolveChallenge from './Home/NewChallengesToSolve/SolveChallenge';
 import Home from './Home';
+
 export default class PortalContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
             activeTab: 'public',
             opponentName: '',
-            showChallenge: false,
             opponentId: ''
         };
         this.handlePublicContacts = this.handlePublicContacts.bind(this);
@@ -19,15 +20,7 @@ export default class PortalContent extends Component {
         this.openChallenge = this.openChallenge.bind(this);
         this.hideChallenge = this.hideChallenge.bind(this);
     }
-// componentDidUpdate(){
-//     if(this.props.user.userId&&this.props.publicContacts.length==0){
-//         console.log('---------inside if condition 18 portal content::');
-//         console.log('user object::',this.props.user);
-//         this.props.getPublicContacts(this.props.user.userId);
-//         console.log('public contacts:: portal content::'+JSON.stringify(this.props.publicContacts));
-//     }
 
-// }
     handlePublicContacts = (e, userId) => {
         e.preventDefault();
         this.setState({
@@ -55,7 +48,6 @@ export default class PortalContent extends Component {
         this.setState({
             opponentId,
             opponentName,
-            showChallenge: true
         });
     }
     hideChallenge(e) {
@@ -64,7 +56,6 @@ export default class PortalContent extends Component {
     render() {
         let { publicContacts,friendList,user} = this.props;
         console.log('user object::67',user);
-        console.log('------------show challenge---------' + this.state.showChallenge);
 
         return (
             <Switch>
@@ -72,6 +63,7 @@ export default class PortalContent extends Component {
                 <Route  exact path='/portal/userprofile' render={()=>(<UserProfile user={this.props.user}/>)} />
                 <Route  exact path='/portal/accountsettings' render={()=>(<AccountSettings user={this.props.user}/>)} />
                 <Route exact path='/portal/challengeform' render={()=>(<ChallengeForm {...this.props}/>)} />
+                <Route exact path='/portal/solveChallenge/:challengeId' component={SolveChallenge}/>
             </Switch>
             // <div className="portalContent">
             //     <div className="portal-sub-content">

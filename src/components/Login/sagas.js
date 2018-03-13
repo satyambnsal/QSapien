@@ -45,8 +45,10 @@ function* loginFlow(email_id, password) {
     return token;
 }
 
-export function* loginWatcher() {
+export  function* loginWatcher() {
+    
     while (true) {
+        console.log('inside login watcher');
         const { email_id, password } = yield take(LOGIN_REQUESTING);
         yield fork(loginFlow,email_id, password);
     }
