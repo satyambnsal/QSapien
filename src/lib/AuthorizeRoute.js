@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
-import { setClient,initializeState} from "../components/Client/actions";
-import {Route,Redirect} from 'react-router-dom';
+import { setClient, initializeState } from "../components/Client/actions";
+import { Route, Redirect } from 'react-router-dom';
 import Login from '../components/Login';
 export default class AuthorizedRoute extends Component {
 
     checkPortalAuthorization = ({ dispatch, getState }) => {
-        console.log('inside check portal authorization');
         const client = getState().client;
-        console.log('--------------client----------' + JSON.stringify(client));
         if (client && client.token) {
-       //     dispatch(initializeState(client.token.userId))
+            //     dispatch(initializeState(client.token.userId))
             return true;
         }
         else {
             const storedToken = localStorage.getItem('token');
             if (storedToken) {
-                console.log('inside stored token if condition');
                 const token = JSON.parse(storedToken);
                 const createdDate = new Date(token.created);
                 const created = Math.round(createdDate.getTime() / 1000);
@@ -34,20 +31,20 @@ export default class AuthorizedRoute extends Component {
     render() {
         const { store } = this.props;
         const { component: Component, ...rest } = this.props
-        const bool=this.checkPortalAuthorization(store);
-        console.log('bool value::'+bool);
+        const bool = this.checkPortalAuthorization(store);
         return (
             <Route exact={true} {...rest} render={props => {
                 return bool
                     ? <Component {...this.props} />
                     : <Login />
             }} />
+            /* i will visit this issue later.i've just quick fixed it but its not the right way to to this*/
+
             // <Route exact={true} {...rest} render={props => {
             //     return bool
             //         ? <Component {...this.props} />
             //         : <Redirect to='/login'/>
             // }} />
-
         )
     }
 }

@@ -7,19 +7,15 @@ import Portal from './Portal/index.js';
 import AuthorizeRoute from '../lib/AuthorizeRoute';
 class App extends Component {
     render() {
-        const store = this.props.store;
-        const match=this.props;
-
-        console.log('redering again::',match);
+        const { store } = this.props;
         return (
             <div>
-
-            <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
-            <AuthorizeRoute path='/portal' component={Portal} store={store} />
-            <Redirect to='/portal' />
-            </Switch>
+                <Switch>
+                    <Route path="/login" component={Login} />
+                    <Route path="/signup" component={Signup} />
+                    <AuthorizeRoute path='/portal' component={Portal} store={store} />
+                    <Redirect to='/portal' />
+                </Switch>
             </div>
         )
     }

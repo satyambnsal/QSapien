@@ -17,7 +17,6 @@ class ChallengeForm extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 values = { ...values, senderId: this.props.user.userId };
-                console.log('form values::', values);
                 this.props.sendChallenge(values);
                 message.success('your challenge had sent successfully');
               
@@ -26,7 +25,6 @@ class ChallengeForm extends Component {
     }
     render() {
         const { publicContacts } = this.props;
-        console.log('public contacts::' + JSON.stringify(publicContacts));
         const { getFieldDecorator } = this.props.form;
         return (
             <div className='challenge-form'>

@@ -12,7 +12,6 @@ const GET_USER_URL = `${REACT_APP_API_URL}/user/getUser`;
 
 export function* getPublicContactsApi({ userId }) {
     console.log('-------inside get public contacts api------');
-    console.log('-----user id---------' + userId);
     try {
         let publicContacts = yield fetch(GET_PUBLIC_CONTACTS_URL, {
             method: 'POST',
@@ -24,7 +23,6 @@ export function* getPublicContactsApi({ userId }) {
             .then(handleApiErrors)
             .then(response => response.json())
             .then(json => json)
-        console.log('fetched records::' + JSON.stringify(publicContacts));
         yield put(setPublicContacts(publicContacts));
     }
     catch (error) {
@@ -33,9 +31,7 @@ export function* getPublicContactsApi({ userId }) {
 }
 
 function* addContactToFriendListApi({ userId, friendId }) {
-    console.log("-----inside api function-------");
-    console.log('------------user id----------' + userId);
-    console.log('-----------friend id------------' + friendId);
+    console.log("-----inside add contact to friend list api-------");
     try {
         yield fetch(ADD_CONTACT_TO_FRIEND_LIST_URL, {
             method: 'POST',
@@ -45,7 +41,6 @@ function* addContactToFriendListApi({ userId, friendId }) {
             body: JSON.stringify({ userId, friendId })
         }).then(handleApiErrors)
             .then(response => response.json())
-            .then(json => json)
     }
     catch (error) {
         console.log('error occured in add contact to friend list api');
@@ -54,7 +49,6 @@ function* addContactToFriendListApi({ userId, friendId }) {
 }
 function* getFriendListApi({ userId }) {
     console.log('-------inside get friend list api------');
-    console.log('-----user id---------' + userId);
     try {
         let friendList = yield fetch(GET_FRIEND_LIST_URL, {
             method: 'POST',
@@ -65,8 +59,6 @@ function* getFriendListApi({ userId }) {
         })
             .then(handleApiErrors)
             .then(response => response.json())
-            .then(json => json)
-        console.log('fetched records inside get friend list api::' + JSON.stringify(friendList));
         yield put(setFriendList(friendList));
     }
     catch (error) {
@@ -74,7 +66,6 @@ function* getFriendListApi({ userId }) {
     }
 }
 export function* getUserApi({ userId }) {
-    console.log('inside get user api method');
     try {
         let user = yield fetch(GET_USER_URL, {
             method: 'POST',
@@ -83,7 +74,6 @@ export function* getUserApi({ userId }) {
             },
             body: JSON.stringify({ userId })
         }).then(handleApiErrors).then(response => response.json());
-        console.log('-------user object-------' + JSON.stringify(user));
 
         yield put(setUser(user));
     }
@@ -101,7 +91,6 @@ export default function* contactRequestWatcher() {
         if (action.type === GET_FRIEND_LIST)
             yield call(getFriendListApi, action)
         if (action.type === SEND_CHALLENGE) {
-            console.log('inside action--84');
             yield call(sendChallengeSocketApi, action);
         }
         if (action.type === GET_USER) {

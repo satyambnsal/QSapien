@@ -35,7 +35,7 @@ exports.get_challenges_post=[
     }
 ]
 exports.solve_challenge_post=[
- body('answer','answer field is required to solve challenge').exists(),
+ body('selectedChoice','answer field is required to solve challenge').exists(),
  body('challengeId','challenge id is required to solve challenge').exists(),
  async (req,res)=>{
      logger.info('challenge solve method entry point');
@@ -45,17 +45,17 @@ exports.solve_challenge_post=[
         res.status(500).json({isCheckSuccess:false,message:'error occured while solving challenge'});
     }
     else{
-        const {answer,challengeId}=req.body;
+        const {selectedChoice,challengeId}=req.body;
         try{
         const challenge=await Challenge.findById(challengeId);
         logger.info('challenge details::'+JSON.stringify(challenge));
         if(challenge){
-        if(challenge.answer.toLowerCase()===answer.toLowerCase()){
+        if(challenge.answer.toLowerCase()===selectedChoice.toLowerCase()){
             logger.info('congrats! you have made the right choice');
-            res.status(200).json({isCheckSuccess:true,isMyAnswerCorrect:true,messgage:'congrats! you have made the right choice'});
+            res.status(200).json({isCheckSuccess:true,isChoiceCorrect:true,messgage:'congrats! you have made the right choice'});
         }
         else{
-            res.status(200).json({isCheckSuccess:true,isMyAnswerCorrect:false,messgage:'Oops you have made wrong choice.'});
+            res.status(200).json({isCheckSuccess:true,isChoiceCorrect:false,messgage:'Oops you have made wrong choice.'});
         }
         }
         else{

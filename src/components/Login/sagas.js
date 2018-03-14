@@ -1,4 +1,4 @@
-import { take, fork, call, put,takeLatest} from 'redux-saga/effects';
+import {call, put,takeLatest} from 'redux-saga/effects';
 import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './constants';
 import { setClient} from '../Client/actions';
 import {getUserApi,getPublicContactsApi} from '../Portal/sagas';
@@ -18,11 +18,9 @@ function loginAPI(email_id, password) {
     })
     .then(handleApiErrors)
     .then(response =>response.json())
-    .then(json => json)
     .catch((errors) => { throw errors })
 }
 function* initializeState({userId}){
-    console.log('inside initialize state::',userId);
     try{
         yield call(getUserApi,{userId});
         yield call(getPublicContactsApi,{userId});
@@ -34,13 +32,10 @@ function* initializeState({userId}){
 }
 function* loginFlow({email_id, password}) {
     let token,resp;
-    console.log('inside login flow saga');
     try {
         resp = yield call(loginAPI,email_id, password);
         token=resp.token;
-        console.log('token value:: '+token);
         if(token){
-            console.log('login flow in condition');
             yield put(setClient(token));
             localStorage.setItem('token', JSON.stringify(token));
             const initializeStateSuccess=yield call(initializeState,{userId:token.userId});
