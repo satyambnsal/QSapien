@@ -8,9 +8,9 @@ const Option = Select.Option;
 class NewChallengesToSolve extends Component {
 
     componentWillReceiveProps(props) {
-        if (props.user.userId&&!this.timer) {
-            this.timer=setInterval(props.getChallenges(props.user.userId),60000);
-        }
+        // if (props.user.userId&&!this.timer) {
+        //     this.timer=setInterval(props.getChallenges(props.user.userId),60000);
+        // }
     }
     componentWillUnmount() {
         clearInterval(this.timer);
@@ -39,7 +39,7 @@ class NewChallengesToSolve extends Component {
             let key = challengeId;
             return { question, creditPoints, senderName, key };
         });
-        console.log('user id:: new challenges to solve' + this.props.user.userId);
+     //   console.log('user id:: new challenges to solve' + this.props.user.userId);
         return (
             <div>
                 <Table columns={columns} dataSource={data} />

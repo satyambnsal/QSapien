@@ -1,8 +1,10 @@
-import { take, fork, call, put} from 'redux-saga/effects';
+import { take, fork, call, put,takeLatest} from 'redux-saga/effects';
 import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './constants';
 import { setClient} from '../Client/actions';
-
+import {getUserApi,getPublicContactsApi} from '../Portal/sagas';
+import {fetchChallengesApi} from '../Portal/PortalContent/Home/sagas';
 import { handleApiErrors } from '../../lib/api-errors';
+import { INITIALIZE_STATE } from '../Client/constants';
 let REACT_APP_API_URL=process.env.REACT_APP_API_URL||'http://localhost:3001';
 const LOGIN_URL = `${REACT_APP_API_URL}/user/login`;
 
@@ -19,8 +21,18 @@ function loginAPI(email_id, password) {
     .then(json => json)
     .catch((errors) => { throw errors })
 }
-
-function* loginFlow(email_id, password) {
+function* initializeState({userId}){
+    console.log('inside initialize state::',userId);
+    try{
+        yield call(getUserApi,{userId});
+        yield call(getPublicContactsApi,{userId});
+        yield call(fetchChallengesApi,{userId});
+    }
+    catch(error){
+    return error;
+    }
+}
+function* loginFlow({email_id, password}) {
     let token,resp;
     console.log('inside login flow saga');
     try {
@@ -28,10 +40,12 @@ function* loginFlow(email_id, password) {
         token=resp.token;
         console.log('token value:: '+token);
         if(token){
+            console.log('login flow in condition');
             yield put(setClient(token));
-            yield put({ type: LOGIN_SUCCESS });
-    
             localStorage.setItem('token', JSON.stringify(token));
+            const initializeStateSuccess=yield call(initializeState,{userId:token.userId});
+            if(initializeStateSuccess)
+            yield put({ type: LOGIN_SUCCESS });
         }
         else{
             yield put({ type: LOGIN_ERROR,error:"empty token error"})         
@@ -42,14 +56,9 @@ function* loginFlow(email_id, password) {
         console.log('error occured:: '+JSON.stringify(error));
         yield put({ type: LOGIN_ERROR, error })
     }
-    return token;
 }
 
 export  function* loginWatcher() {
-    
-    while (true) {
-        console.log('inside login watcher');
-        const { email_id, password } = yield take(LOGIN_REQUESTING);
-        yield fork(loginFlow,email_id, password);
-    }
+yield takeLatest(LOGIN_REQUESTING,loginFlow);
+yield takeLatest(INITIALIZE_STATE,initializeState);
 }

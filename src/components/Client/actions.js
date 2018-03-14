@@ -1,4 +1,4 @@
-import {CLIENT_SET,CLIENT_UNSET} from './constants';
+import {CLIENT_SET,CLIENT_UNSET,INITIALIZE_STATE} from './constants';
 
 export function setClient(token){
     return{
@@ -11,3 +11,6 @@ export function unsetClient(){
         type:CLIENT_UNSET
     }
 }
+export const initializeState=(userId)=>({
+    type:INITIALIZE_STATE,userId
+})

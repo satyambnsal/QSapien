@@ -3,25 +3,20 @@ import TopHeader from './TopHeader';
 import PortalContent from './PortalContent';
 import { connect } from 'react-redux';
 import { unsetClient } from '../Client/actions';
-import { getUser, getFriendList ,getPublicContacts} from './actions';
-import {addContactToFriendList } from './actions';
-import { Layout,Menu,Icon} from 'antd';
-const { Header, Content, Footer,Sider} = Layout;
+import { getUser, getFriendList, getPublicContacts } from './actions';
+import { addContactToFriendList } from './actions';
+import { Layout, Menu, Icon } from 'antd';
+const { Header, Content, Footer, Sider } = Layout;
+
 class Portal extends Component {
-    constructor(props) {
-        super(props);
-        if (this.props.token) {
-            this.props.getUser(this.props.token.userId);
-        } 
-        this.state={
-            collapsed:true
-        };
-    }
-    onCollapse=(collapsed)=>{
-        this.setState({collapsed});
+    state = {
+        collapsed: true
+    };
+    onCollapse = (collapsed) => {
+        this.setState({ collapsed });
     }
     render() {
-        let { unsetClient,user} = this.props;
+        let { unsetClient, user } = this.props;
         return (
             <Layout>
                 <Header style={{ padding: '0' }}>
@@ -29,11 +24,11 @@ class Portal extends Component {
                 <Layout>
                     <Sider style={{ minHeight: '100vh', width: '256px' }} collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
                         <Menu theme='dark' defaultSelectedKeys={['1']} mode='inline'>
-                            <Menu.Item key="1"><Icon type='home'/><span>Home</span></Menu.Item>
+                            <Menu.Item key="1"><Icon type='home' /><span>Home</span></Menu.Item>
                         </Menu>
                     </Sider>
                     <Content>
-                        <PortalContent {...this.props}/>
+                        <PortalContent {...this.props} />
                     </Content>
                 </Layout>
                 <Footer>
@@ -64,7 +59,7 @@ let mapDispathToProps = (dispatch) => {
         getFriendList: (userId) => {
             dispatch(getFriendList(userId))
         },
-        getPublicContacts:(userId)=>{
+        getPublicContacts: (userId) => {
             dispatch(getPublicContacts(userId))
         }
     }

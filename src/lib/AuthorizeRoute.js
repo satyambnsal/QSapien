@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { setClient } from "../components/Client/actions";
+import { setClient,initializeState} from "../components/Client/actions";
 import {Route,Redirect} from 'react-router-dom';
 import Login from '../components/Login';
 export default class AuthorizedRoute extends Component {
@@ -9,7 +9,7 @@ export default class AuthorizedRoute extends Component {
         const client = getState().client;
         console.log('--------------client----------' + JSON.stringify(client));
         if (client && client.token) {
-            console.log('client token');
+       //     dispatch(initializeState(client.token.userId))
             return true;
         }
         else {
@@ -24,6 +24,7 @@ export default class AuthorizedRoute extends Component {
                 if (created > expiry)
                     return false;
                 dispatch(setClient(token))
+                dispatch(initializeState(token.userId));
                 return true;
             }
             return false;
@@ -36,16 +37,16 @@ export default class AuthorizedRoute extends Component {
         const bool=this.checkPortalAuthorization(store);
         console.log('bool value::'+bool);
         return (
-            // <Route exact={true} {...rest} render={props => {
-            //     return bool
-            //         ? <Component {...this.props} />
-            //         : <Login />
-            // }} />
             <Route exact={true} {...rest} render={props => {
                 return bool
                     ? <Component {...this.props} />
-                    : <Redirect to='/login'/>
+                    : <Login />
             }} />
+            // <Route exact={true} {...rest} render={props => {
+            //     return bool
+            //         ? <Component {...this.props} />
+            //         : <Redirect to='/login'/>
+            // }} />
 
         )
     }

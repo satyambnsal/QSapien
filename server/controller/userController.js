@@ -18,19 +18,18 @@ const storage=multer.diskStorage({
 });
 const upload=multer({storage});
 exports.user_signup_post = [
-    body('signup_fields', 'Signup field body is required').exists(),
-    body('signup_fields.first_name', 'Username is required').isLength({ min: 1 }).trim(),
-    body('signup_fields.email_id', 'Invalid Email Address').isEmail().trim().normalizeEmail(),
-    body('signup_fields.password', 'Password must be at least 6 characters long and must contain numeric digit').isLength({ min: 6 }).matches(/\d/),
+    body('first_name', 'Username is required').isLength({ min: 1 }).trim(),
+    body('email_id', 'Invalid Email Address').isEmail().trim().normalizeEmail(),
+    body('password', 'Password must be at least 6 characters long and must contain numeric digit').isLength({ min: 6 }).matches(/\d/),
     upload.single('file'),
     (req, res, next) => {
         logger.info('user signup post method entry point');
         logger.debug("user signup request body::" + JSON.stringify(req.body));
         logger.info('profile image::',req.file);
         let signupData = {};
-        for (let prop in req.body.signup_fields) {
-            if (req.body.signup_fields[prop] != '' && prop != 'confirm_password')
-                signupData[prop] = req.body.signup_fields[prop];
+        for (let prop in req.body) {
+            if (req.body[prop] != '' && prop != 'confirm_password')
+                signupData[prop] = req.body[prop];
         }
         let user = new User(signupData);
 
@@ -46,7 +45,7 @@ exports.user_signup_post = [
             return res.status(400).json({ message: 'error occured' });
         }
         else {
-            User.findOne({ email_id: req.body.signup_fields.email_id }, (err, result) => {
+            User.findOne({ email_id: req.body.email_id }, (err, result) => {
                 if (err) {
                     logger.debug("finding record in user database error::" + JSON.stringify(err));
                     return next(err);
