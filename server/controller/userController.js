@@ -245,11 +245,21 @@ exports.friend_list_get = [
     }
 ]
 exports.user_file_upload=[upload.single('file'),(req,res)=>{
-    console.log('----file----'+req.file);
-    console.log('req body user file upload',JSON.stringify(req.body));
+    console.log('----file----');
+  //  console.log('--------request body------'+JSON.stringify(req));
+    console.log('req body user file upload',JSON.stringify(req.file));
+    uploadFileToS3(req.file.path,req.file.filename,function(err,data){
+        if(err){
+            logger.info('error occured while uploading file to s3 bucket');
+            console.log(JSON.stringify(err));
+        }
+        else{
+            console.log('received data::'+JSON.stringify(data));
+            logger.info('file uploaded successfully to s3 bucket');
+        }
+    });
     res.send('success');
-    res.end();
-    }]
+    res.end();    }]
 exports.get_user_post=[
     body("userId", 'user id must be provided while fetching user object').exists(),
     (req,res,next)=>{

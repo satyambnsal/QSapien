@@ -59,7 +59,7 @@ exports.solve_challenge_post=[
                 else
                 logger.info('user credit points updated success fully');
             })
-            res.status(200).json({isCheckSuccess:true,isChoiceCorrect:true,messgage:'congrats! you have made the right choice'});
+            res.status(200).json({isCheckSuccess:true,isChoiceCorrect:true,message:'congrats! you have made the right choice'});
         }
         else{
             User.findOneAndUpdate({_id:challenge.opponentId},{$inc:{credit_points:-1}},(err,data)=>{
@@ -68,11 +68,11 @@ exports.solve_challenge_post=[
                 else
                 logger.info('user credit points updated success fully');
             })
-            res.status(200).json({isCheckSuccess:true,isChoiceCorrect:false,messgage:'Oops you have made wrong choice.'});
+            res.status(200).json({isCheckSuccess:true,isChoiceCorrect:false,message:'Oops you have made wrong choice.'});
         }
         }
         else{
-        res.status(404).json({isCheckSuccess:false,messgae:'challenge with specified challenge Id not found'});
+        res.status(404).json({isCheckSuccess:false,message:'challenge with specified challenge Id not found'});
         }
         }
         catch(error){

@@ -142,3 +142,12 @@ border-right:1px solid #ddd;
     margin: 16px 28px 16px 0;
     float: left;
   }
+  .solve-challenge-card{
+      text-align: center;
+  }
+  .solve-challenge-card button{
+      width:480px;
+      margin-top: 200px;
+      margin-bottom: 0;
+      padding-bottom: 0;
+  }
