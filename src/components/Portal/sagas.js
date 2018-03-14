@@ -91,7 +91,7 @@ catch(error){
     console.log('error occured in get user api');
 }
 }
-export function* contactRequestWatcher(){
+export default function* contactRequestWatcher(){
     while(true){
         const action=yield take([GET_PUBLIC_CONTACTS,ADD_CONTACT_TO_FRIEND_LIST,GET_FRIEND_LIST,SEND_CHALLENGE,GET_USER]);
         if(action.type===GET_PUBLIC_CONTACTS)
