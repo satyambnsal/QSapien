@@ -276,7 +276,8 @@ exports.get_user_post=[
                     name:result.first_name+' '+result.last_name,
                     contact_no:result.contact_no,
                     userId:result._id,
-                    email_id:result.email_id
+                    email_id:result.email_id,
+                    creditPoints:result.credit_points||0
                 };
                 res.status(200).json(user);
             })

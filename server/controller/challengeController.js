@@ -1,4 +1,5 @@
 import Challenge from '../models/Challenge';
+import User from '../models/User';
 import logger from 'winston';
 import { body, validationResult } from 'express-validator/check';
 import { sanitizeBody } from 'express-validator/filter';
@@ -52,9 +53,21 @@ exports.solve_challenge_post=[
         if(challenge){
         if(challenge.answer.toLowerCase()===selectedChoice.toLowerCase()){
             logger.info('congrats! you have made the right choice');
+            User.findOneAndUpdate({_id:challenge.opponentId},{$inc:{credit_points:challenge.creditPoints}},(err,data)=>{
+                if(err)
+                logger.info('error occured while updating credit points of user');
+                else
+                logger.info('user credit points updated success fully');
+            })
             res.status(200).json({isCheckSuccess:true,isChoiceCorrect:true,messgage:'congrats! you have made the right choice'});
         }
         else{
+            User.findOneAndUpdate({_id:challenge.opponentId},{$inc:{credit_points:-1}},(err,data)=>{
+                if(err)
+                logger.info('error occured while updating credit points of user');
+                else
+                logger.info('user credit points updated success fully');
+            })
             res.status(200).json({isCheckSuccess:true,isChoiceCorrect:false,messgage:'Oops you have made wrong choice.'});
         }
         }

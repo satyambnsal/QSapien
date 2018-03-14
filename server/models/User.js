@@ -7,7 +7,7 @@ let UserSchema=new Schema({
     email_id:{type:String,required:true},
     profile_image:{data:Buffer,contentType:String},
     contact_no:{type:String,required:true},
-    credit_points:Number,
+    credit_points:{type:Number,default:0},
     password:{type:String,required:true},
     profile_image_url:String,
     username:String,
