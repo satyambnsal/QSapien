@@ -5,21 +5,21 @@ import { sanitizeBody } from 'express-validator/filter';
 import logger from 'winston';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
-import {uploadFileToS3} from '../utils/s3buckethandler';
-const ObjectId=require('mongoose').Types.ObjectId;
+import { uploadFileToS3 } from '../utils/s3buckethandler';
+const ObjectId = require('mongoose').Types.ObjectId;
 let jwtsecret = process.env.JWT_SECRET || 'qsapiensecret';
 logger.level = 'debug';
 
 
-const storage=multer.diskStorage({
-    destination:'./public/files',
-    filename(req,file,cb){
-        console.log('file',file);
-        console.log('file name::',file.originalname);
-        cb(null,`${file.originalname}`);
+const storage = multer.diskStorage({
+    destination: './public/files',
+    filename(req, file, cb) {
+        console.log('file', file);
+        console.log('file name::', file.originalname);
+        cb(null, `${file.originalname}`);
     }
 });
-const upload=multer({storage});
+const upload = multer({ storage });
 exports.user_signup_post = [
     body('first_name', 'Username is required').isLength({ min: 1 }).trim(),
     body('email_id', 'Invalid Email Address').isEmail().trim().normalizeEmail(),
@@ -28,7 +28,7 @@ exports.user_signup_post = [
     (req, res, next) => {
         logger.info('user signup post method entry point');
         logger.debug("user signup request body::" + JSON.stringify(req.body));
-        logger.info('profile image::',req.file);
+        logger.info('profile image::', req.file);
         let signupData = {};
         for (let prop in req.body) {
             if (req.body[prop] != '' && prop != 'confirm_password')
@@ -193,7 +193,7 @@ exports.add_to_friend_list = [
             }).then(result => {
                 console.log("========182=========");
                 console.log(JSON.stringify(result));
-                return FriendList.findOneAndUpdate({userId:userId},result,{upsert:true})
+                return FriendList.findOneAndUpdate({ userId: userId }, result, { upsert: true })
             }).then(result => {
                 console.log("=========resp2======");
                 console.log(JSON.stringify(result));
@@ -207,13 +207,13 @@ exports.add_to_friend_list = [
 
     }
 ]
-async function getUserDetailFromId(contactList){
-    let result=[];
-        for(let contactId of contactList){
-            let res= await User.findOne({_id:contactId},'first_name last_name');
-            res={userId:res._id,name:res.first_name+' '+res.last_name}
-            result.push(res);        
-        }
+async function getUserDetailFromId(contactList) {
+    let result = [];
+    for (let contactId of contactList) {
+        let res = await User.findOne({ _id: contactId }, 'first_name last_name');
+        res = { userId: res._id, name: res.first_name + ' ' + res.last_name }
+        result.push(res);
+    }
     return result;
 
 }
@@ -221,7 +221,7 @@ exports.friend_list_get = [
     body('userId', 'User id is required to get list of friends'),
     (req, res, next) => {
         logger.info('friend list get method entry point');
-        logger.debug('--------------user id----------'+req.body.userId);
+        logger.debug('--------------user id----------' + req.body.userId);
         const userId = req.body.userId;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -230,26 +230,26 @@ exports.friend_list_get = [
             logger.debug("express validator validation error:: " + JSON.stringify(tempErr));
             for (let prop in tempErr)
                 errorMsgs.push(tempErr[prop].msg);
-            return res.status(400).json({ message: 'error occured',errorMsgs});
+            return res.status(400).json({ message: 'error occured', errorMsgs });
         }
         else {
-        FriendList.findOne({userId}).then(result=>{
-            logger.debug('-------------friendList find one result--------'+JSON.stringify(result));
-            if(!result)
-            return res.status(200).json([]);
-            return getUserDetailFromId(result.friendList);
-        }).then(result=>{
-            logger.info('-----final result---------'+JSON.stringify(result));
-            res.status(200).json(result);
-        }).catch(error=>{
-            res.status(500).json({message:error.message});
-        })
+            FriendList.findOne({ userId }).then(result => {
+                logger.debug('-------------friendList find one result--------' + JSON.stringify(result));
+                if (!result)
+                    return res.status(200).json([]);
+                return getUserDetailFromId(result.friendList);
+            }).then(result => {
+                logger.info('-----final result---------' + JSON.stringify(result));
+                res.status(200).json(result);
+            }).catch(error => {
+                res.status(500).json({ message: error.message });
+            })
         }
     }
 ]
-exports.user_file_upload=[upload.single('file'),(req,res)=>{
+exports.user_file_upload = [upload.single('file'), (req, res) => {
     console.log(JSON.stringify(req.body));
-    console.log('req body user file upload',JSON.stringify(req.file));
+    console.log('req body user file upload', JSON.stringify(req.file));
     // uploadFileToS3(req.body.file,req.body.file.filename,function(err,data){
     //     if(err){
     //         logger.info('error occured while uploading file to s3 bucket');
@@ -261,12 +261,13 @@ exports.user_file_upload=[upload.single('file'),(req,res)=>{
     //     }
     // });
     res.send('success');
-    res.end();    }]
-exports.get_user_post=[
+    res.end();
+}]
+exports.get_user_post = [
     body("userId", 'user id must be provided while fetching user object').exists(),
-    (req,res,next)=>{
+    (req, res, next) => {
         logger.info('get user object method entry point');
-        logger.debug('--------------user id----------'+req.body.userId);
+        logger.debug('--------------user id----------' + req.body.userId);
         const userId = req.body.userId;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -275,24 +276,28 @@ exports.get_user_post=[
             logger.debug("express validator validation error:: " + JSON.stringify(tempErr));
             for (let prop in tempErr)
                 errorMsgs.push(tempErr[prop].msg);
-            return res.status(400).json({ message: 'error occured',errorMsgs});
+            return res.status(400).json({ message: 'error occured', errorMsgs });
         }
         else {
-            User.findById(userId,(err,result)=>{
-                if(err){
+            User.findById(userId, (err, result) => {
+                if (err) {
                     logger.info('error occured while fetching user object');
-                    return res.status(400).json({message:'error occured while fetching user object'})
+                    return res.status(400).json({ message: 'error occured while fetching user object' })
                 }
-                logger.debug('user object::'+JSON.stringify(result));
-                let user={
-                    name:result.first_name+' '+result.last_name,
-                    contact_no:result.contact_no,
-                    userId:result._id,
-                    email_id:result.email_id,
-                    creditPoints:result.credit_points||0
+                logger.debug('user object::' + JSON.stringify(result));
+                let user = {
+                    name: result.first_name + ' ' + result.last_name,
+                    first_name: result.first_name,
+                    last_name: result.last_name,
+                    location: result.location,
+                    bio: result.bio,
+                    contact_no: result.contact_no,
+                    userId: result._id,
+                    email_id: result.email_id,
+                    creditPoints: result.credit_points || 0
                 };
                 res.status(200).json(user);
             })
+        }
     }
-}
 ]
