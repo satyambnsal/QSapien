@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import { Avatar, Menu, Icon, Dropdown } from 'antd';
 import { Link,Redirect} from 'react-router-dom';
+const PROFILE_BASE_URL=`${process.env.REACT_APP_API_URL}/files/`
+
 class User extends Component {
-state={loggedIn:true}
+state={loggedIn:true,
+    profileLoaded:false,
+    profileImageUrl: `${PROFILE_BASE_URL}default_profile.jpg`
+}
+componentDidUpdate(){
+    if(this.props.user.userId&&!this.state.profileLoaded){
+        this.setState({profileImageUrl:`${PROFILE_BASE_URL}${this.props.user.userId}.jpg`,profileLoaded:true});
+    }
+}
     handleLogout=(e)=>{
         e.preventDefault();
         localStorage.removeItem('token');
@@ -35,7 +45,7 @@ state={loggedIn:true}
         return (
             
             this.state.loggedIn?(<Dropdown overlay={menu} placement='bottomCenter'>
-            <Avatar src="http://localhost:3001/files/satyam_bansal.jpg" size="large" />
+            <Avatar src={this.state.profileImageUrl} size="large" />
         </Dropdown>):(<Redirect to='/login'/>))          
     }
         

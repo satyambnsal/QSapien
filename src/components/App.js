@@ -14,7 +14,7 @@ class App extends Component {
                     <Route path="/login" component={Login} />
                     <Route path="/signup" component={Signup} />
                     <AuthorizeRoute path='/portal' component={Portal} store={store} />
-                    <Redirect to='/portal' />
+                    <Redirect to='/portal' />                    
                 </Switch>
             </div>
         )

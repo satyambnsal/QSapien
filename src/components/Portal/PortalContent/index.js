@@ -13,7 +13,7 @@ export default class PortalContent extends Component {
             <Switch>
                 <Route exact path='/portal' render={()=>(<Home user={this.props.user}/>)}/>)} />
                 <Route  exact path='/portal/userprofile' component={UserProfile} />
-                <Route  exact path='/portal/accountsettings' component={AccountSettings}/>)} />
+                <Route  exact path='/portal/accountsettings' render={()=>(<AccountSettings user={this.props.user}/>)}/>)} />
                 <Route exact path='/portal/challengeform' render={()=>(<ChallengeForm {...this.props}/>)} />
                 <Route exact path='/portal/solveChallenge/:challengeId' component={SolveChallenge}/>
             </Switch>

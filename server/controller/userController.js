@@ -5,6 +5,7 @@ import { sanitizeBody } from 'express-validator/filter';
 import logger from 'winston';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
+import {uploadFileToS3} from '../utils/s3buckethandler';
 const ObjectId=require('mongoose').Types.ObjectId;
 let jwtsecret = process.env.JWT_SECRET || 'qsapiensecret';
 logger.level = 'debug';
@@ -13,6 +14,8 @@ logger.level = 'debug';
 const storage=multer.diskStorage({
     destination:'./public/files',
     filename(req,file,cb){
+        console.log('file',file);
+        console.log('file name::',file.originalname);
         cb(null,`${file.originalname}`);
     }
 });
@@ -245,19 +248,18 @@ exports.friend_list_get = [
     }
 ]
 exports.user_file_upload=[upload.single('file'),(req,res)=>{
-    console.log('----file----');
-  //  console.log('--------request body------'+JSON.stringify(req));
+    console.log(JSON.stringify(req.body));
     console.log('req body user file upload',JSON.stringify(req.file));
-    uploadFileToS3(req.file.path,req.file.filename,function(err,data){
-        if(err){
-            logger.info('error occured while uploading file to s3 bucket');
-            console.log(JSON.stringify(err));
-        }
-        else{
-            console.log('received data::'+JSON.stringify(data));
-            logger.info('file uploaded successfully to s3 bucket');
-        }
-    });
+    // uploadFileToS3(req.body.file,req.body.file.filename,function(err,data){
+    //     if(err){
+    //         logger.info('error occured while uploading file to s3 bucket');
+    //         console.log(JSON.stringify(err));
+    //     }
+    //     else{
+    //         console.log('received data::'+JSON.stringify(data));
+    //         logger.info('file uploaded successfully to s3 bucket');
+    //     }
+    // });
     res.send('success');
     res.end();    }]
 exports.get_user_post=[
