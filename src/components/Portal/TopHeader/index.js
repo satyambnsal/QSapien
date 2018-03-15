@@ -1,13 +1,14 @@
 import React,{Component} from 'react';
-import {Menu}from 'antd';
+import {Menu,Layout}from 'antd';
 import {Link} from 'react-router-dom';
 import User from '../User';
-
+const {Header} =Layout;
 
 class TopHeader extends Component{
     render(){
         return(
-            <div>
+            <Layout>
+                <Header>
                 <div className="logo">QSapien</div>
                 <Menu theme='dark' mode='horizontal' defaultSelectedKeys={['home']}
                 style={{lineHeight:'64px'}}>
@@ -17,8 +18,8 @@ class TopHeader extends Component{
                 <Menu.Item key='knowledgeCenter'>Knowledge Center</Menu.Item>
                 <Menu.Item key='user' style={{float:'right'}}> <User {...this.props}/></Menu.Item>
                 </Menu>
-            </div>
-           
+                </Header>
+            </Layout>
         )
     }
 };

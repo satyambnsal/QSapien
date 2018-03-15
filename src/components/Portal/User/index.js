@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { Avatar, Menu, Icon, Dropdown } from 'antd';
 import { Link,Redirect} from 'react-router-dom';
-const PROFILE_BASE_URL=`${process.env.REACT_APP_API_URL}/files/`
-
+const PROFILE_FALLBACK_URL=`${process.env.REACT_APP_API_URL}/profileImages/default_profile.jpg`
 class User extends Component {
 state={loggedIn:true,
     profileLoaded:false,
-    profileImageUrl: `${PROFILE_BASE_URL}default_profile.jpg`
+    profileImageUrl:this.props.user.profile_image_url||PROFILE_FALLBACK_URL
 }
 componentDidUpdate(){
-    if(this.props.user.userId&&!this.state.profileLoaded){
-        this.setState({profileImageUrl:`${PROFILE_BASE_URL}${this.props.user.userId}.jpg`,profileLoaded:true});
+    if(this.props.user.profile_image_url&&!this.state.profileLoaded){
+        this.setState({profileImageUrl:this.props.user.profile_image_url,profileLoaded:true});
     }
 }
     handleLogout=(e)=>{

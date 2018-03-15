@@ -25,9 +25,11 @@ function* initializeState({userId}){
         yield call(getUserApi,{userId});
         yield call(getPublicContactsApi,{userId});
         yield call(fetchChallengesApi,{userId});
+        return true;
     }
     catch(error){
-    return error;
+        yield put({ type: LOGIN_ERROR,error:"empty token error"});
+        return false;
     }
 }
 function* loginFlow({email_id, password}) {

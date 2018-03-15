@@ -5,15 +5,14 @@ let UserSchema=new Schema({
     first_name:{type:String,required:true},
     last_name:String,
     email_id:{type:String,required:true},
-    profile_image:{data:Buffer,contentType:String},
-    contact_no:{type:String,required:true},
+    contact_no:{type:String},
     credit_points:{type:Number,default:0},
     password:{type:String,required:true},
-    profile_image_url:String,
-    username:String,
-    location:String,
+    profile_image_url:{type:String,default:"http://localhost:3001/profileImages/default_profile.jpg"},
+    username:{type:String,required:true},
+    location:{type:String,default:'India'},
     website:String,
-    bio:String 
+    bio:{type:String,default:'A wise sapien and decent human being'}
 });
 UserSchema.virtual('name').get(function(){
     return this.first_name+' '+this.last_name

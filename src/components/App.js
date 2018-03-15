@@ -11,8 +11,8 @@ class App extends Component {
         return (
             <div>
                 <Switch>
-                    <Route path="/login" component={Login} />
-                    <Route path="/signup" component={Signup} />
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/signup" component={Signup} />
                     <AuthorizeRoute path='/portal' component={Portal} store={store} />
                     <Redirect to='/portal' />                    
                 </Switch>

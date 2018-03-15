@@ -1,84 +1,68 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {Form,Input,Button} from 'antd';
+import { Form, Input, Button, Icon, Card, Checkbox, message } from 'antd';
 import loginRequest from './actions';
 import Errors from '../Notifications/Errors';
 import Messages from '../Notifications/Messages';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
-const FormItem=Form.Item;
+const FormItem = Form.Item;
 
 class Login extends Component {
-    componentWillUpdate(){
-    console.log('inside component will update');    
-    }
-    componentDidUpdate(){
-console.log('inside component did update');
-    }
+
     submit = (e) => {
         e.preventDefault();
-        console.log('inside submit function');
-        this.props.form.validateFields((err,values)=>{
-            if(!err){
-                console.log('inside login submit ::',values);
-                this.props.loginRequest(values);        
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                this.props.loginRequest(values);
             }
-            else{
-                console.log('error occured while submitting login form:'+JSON.stringify(values));
+            else {
+                message.error('error occured.contact administrator');
             }
         })
     }
     render() {
         const {
             login: {
-                successful,
-                requesting,
-                errors,
-                messages
+            successful,
+            requesting,
+            errors,
+            messages
             }
         } = this.props;
-        const {getFieldDecorator}=this.props.form;
+        const { getFieldDecorator } = this.props.form;
         return (
-            <div className="container-fluid login-body">
-                <div className="login row">
-                <div className="col-md-4 col-md-offset-4">
-                <div className="panel-heading">
-                            <h3 className="panel-title">Please Sign In</h3>
-                        </div>
-                        <div className="panel-body">
-                        {/* <form className="login-form" onSubmit={handleSubmit(this.submit)}>
-                        <div className="form-group">
-                            <label htmlFor="email id">Email Id</label>
-                            <Field name="email_id" type="email" id="email_id" component="input" className="form-control" />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">Password</label>
-                            <Field type="text" name="password" id="password" component="input" className="form-control" />
-                        </div>
-                        <button action="submit" >Submit</button>
-                    </form>      */}
-                    <form className='login-form' onSubmit={this.submit}>
-                    <FormItem label="Email Id">
-                    {
-                        getFieldDecorator('email_id',{
-                            rules:[{required:true,message:'Email id is required to login'}]
-                        })(<Input type='email' />)
-                    }
+            <Card title='QSapien Login' className='login-card'>
+                <Form onSubmit={this.submit} className="login-form">
+                    <FormItem>
+                        {getFieldDecorator('email_id', {
+                            rules: [{ required: true, message: 'Username or email address is required for login' }],
+                        })(
+                            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username or Email" />
+                            )}
                     </FormItem>
-                    <FormItem label='Password'>
-                    {
-                        getFieldDecorator('password',{
-                            rules:[{
-                                required:true,message:'Password is required to login'
-                            }]
-                        })(<Input type='password' />)
-                    }
+                    <FormItem>
+                        {getFieldDecorator('password', {
+                            rules: [{ required: true, message: 'Please input your Password!' }],
+                        })(
+                            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+                            )}
                     </FormItem>
-                    <Button htmlType='submit'>Login</Button>
-                    </form>
-                        </div>
-                        <div className="auth-messages">
+                    <FormItem>
+                        {getFieldDecorator('remember', {
+                            valuePropName: 'checked',
+                            initialValue: true,
+                        })(
+                            <Checkbox>Remember me</Checkbox>
+                            )}
+                        <a className="login-card-forgot" href="">Forgot password</a>
+                        <Button type="primary" htmlType="submit" className="login-card-button">
+                            Log in
+                        </Button>
+                    </FormItem>
+                </Form>
+                <div className="auth-messages">
                     {
                         !requesting && !!errors.length && (<Errors message="Failure to login due to..." errors={errors} />)
                     }
@@ -92,15 +76,10 @@ console.log('inside component did update');
                         !requesting && !successful && (<Link to="/signup">Need to Register? click here ></Link>)
                     }
                     {
-                        !!successful&&(<Redirect to='/portal' />)
+                        !!successful && (<Redirect to='/portal' />)
                     }
                 </div>
-                </div>
-                
-                </div>
-                
-            </div>
-
+            </Card>
         )
     }
 }
@@ -109,5 +88,5 @@ const mapStateToProps = (state) => ({
     login: state.login
 });
 
-const WrappedLogin=Form.create()(Login)
+const WrappedLogin = Form.create()(Login)
 export default connect(mapStateToProps, { loginRequest })(WrappedLogin);
