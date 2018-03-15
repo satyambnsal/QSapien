@@ -9,7 +9,6 @@ const GET_CHALLENGES_URL = `${REACT_APP_API_URL}/user/getChallenges`;
 const SOLVE_CHALLENGE_URL = `${REACT_APP_API_URL}/user/solveChallenge`;
 
 export function* solveChallengeApi({ challengeId, selectedChoice }) {
-    console.log('solve challenge api entry point');
     const result = yield fetch(SOLVE_CHALLENGE_URL, {
         method: 'POST',
         headers: {
@@ -20,11 +19,9 @@ export function* solveChallengeApi({ challengeId, selectedChoice }) {
         .then(response => response.json())
         .catch((errors) => {
         });
-        console.log('result::',result);
         yield put(setSolveChallengeResult(result));
 }
 export function* fetchChallengesApi({ userId }) {
-    console.log('fetch challenges api entry point');
     const challenges = yield fetch(GET_CHALLENGES_URL, {
         method: 'POST',
         headers: {

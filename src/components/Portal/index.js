@@ -19,7 +19,7 @@ class Portal extends Component {
         let { unsetClient, user } = this.props;
         return (
             <Layout>
-                <Header style={{ padding: '0' }}>
+                <Header style={{ padding: '0'}}>
                     <TopHeader unsetClient={unsetClient} user={user} /></Header>
                 <Layout>
                     <Sider style={{ minHeight: '100vh', width: '256px' }} collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>

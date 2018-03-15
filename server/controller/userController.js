@@ -6,29 +6,30 @@ import logger from 'winston';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import { uploadFileToS3 } from '../utils/s3buckethandler';
-const ObjectId = require('mongoose').Types.ObjectId;
-let jwtsecret = process.env.JWT_SECRET || 'qsapiensecret';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'qsapiensecret';
+const PROFILE_IMAGES_DEST = process.env.PROFILE_IMAGES_DEST || './public/profileImages';
 logger.level = 'debug';
 
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
 const storage = multer.diskStorage({
-    destination: './public/files',
+    destination: PROFILE_IMAGES_DEST,
     filename(req, file, cb) {
-        console.log('file', file);
-        console.log('file name::', file.originalname);
         cb(null, `${file.originalname}`);
     }
 });
+
 const upload = multer({ storage });
+
 exports.user_signup_post = [
-    body('first_name', 'Username is required').isLength({ min: 1 }).trim(),
+    body('first_name', 'first name is required').isLength({ min: 1 }).trim(),
     body('email_id', 'Invalid Email Address').isEmail().trim().normalizeEmail(),
     body('password', 'Password must be at least 6 characters long and must contain numeric digit').isLength({ min: 6 }).matches(/\d/),
-    upload.single('file'),
+    body('username', 'Username is required').isLength({ min: 4 }),
     (req, res, next) => {
         logger.info('user signup post method entry point');
         logger.debug("user signup request body::" + JSON.stringify(req.body));
-        logger.info('profile image::', req.file);
         let signupData = {};
         for (let prop in req.body) {
             if (req.body[prop] != '' && prop != 'confirm_password')
@@ -64,7 +65,7 @@ exports.user_signup_post = [
                             logger.debug("error::" + err.message);
                             return next(err);
                         }
-                        let token = jwt.sign({ id: result._id }, jwtsecret, { expiresIn: 86400 });
+                        let token = jwt.sign({ id: result._id }, JWT_SECRET, { expiresIn: 86400 });
                         req.session.locallibrarytoken = token;
                         res.status(200).json({ message: 'user completed signup successfully', token: token });
                     });
@@ -83,7 +84,7 @@ exports.user_login_post = [
         logger.info('login admin post method entry point');
         logger.debug('-------login method body----------' + JSON.stringify(req.body));
         if (req.session.token) {
-            jwt.verify(req.session.locallibrarytoken, jwtsecret, (err, decoded) => {
+            jwt.verify(req.session.locallibrarytoken, JWT_SECRET, (err, decoded) => {
                 if (err) {
                     logger.debug("error occured while verifying token::" + JSON.stringify(err));
                     return next(err);
@@ -118,7 +119,7 @@ exports.user_login_post = [
                 }
                 else {
                     logger.info('in login method::user verified successfully:: sending jwt token in request');
-                    let token = jwt.sign({ id: result._id }, jwtsecret, { expiresIn: 86400 });
+                    let token = jwt.sign({ id: result._id }, JWT_SECRET, { expiresIn: 86400 });
                     req.session.locallibrarytoken = token;
                     return res.status(200).json({ token: { userId: result._id, token }, message: 'user verified successfully' });
                 }
@@ -126,130 +127,28 @@ exports.user_login_post = [
         }
     }
 ]
-exports.public_contacts_post = [
-    body("userId", 'user id must be provided while fetching public contact list').exists(),
-    (req, res, next) => {
-        logger.info('public contacts post method entry point');
-        logger.debug("public contacts post method request body::" + JSON.stringify(req.body));
-        const userId = req.body.userId;
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            let errorMsgs = [];
-            let tempErr = errors.mapped();
-            logger.debug("express validator validation error:: " + JSON.stringify(tempErr));
-            for (let prop in tempErr)
-                errorMsgs.push(tempErr[prop].msg);
-            return res.status(400).json({ message: 'error occured' });
-        }
-        else {
-            User.find({}, 'first_name last_name', (err, results) => {
-                if (err) {
-                    logger.info('error occured while fetching public contact records')
-                    logger.debug('occured error::' + err.message);
-                    return res.status(500).json({ message: 'error occured while performing database operation' });
-                }
-                else {
-                    logger.info('public contact records fetched successfully');
-                    logger.debug('===records===' + JSON.stringify(results));
-                    let filter_results = results.filter(result => result._id != userId);
-                    filter_results = filter_results.map(result => ({ name: result.first_name + ' ' + result.last_name, _id: result._id }));
-                    logger.debug('=====filter results=====' + JSON.stringify(filter_results));
-                    res.status(200).json(filter_results);
-                }
-            })
-        }
 
-    }
-]
-exports.add_to_friend_list = [
-    body('userId', 'userId is required to perform this operation'),
-    body('friendId', 'friendId is required to perform this operation'),
-    (req, res, next) => {
-        logger.info('add to friend list method entry point');
-        const userId = req.body.userId;
-        const friendId = req.body.friendId;
-        logger.info('-------------user Id-----------' + userId);
-        logger.info('------------friend Id-----------' + friendId);
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            let errorMsgs = [];
-            let tempErr = errors.mapped();
-            logger.debug("express validator validation error:: " + JSON.stringify(tempErr));
-            for (let prop in tempErr)
-                errorMsgs.push(tempErr[prop].msg);
-            return res.status(400).json({ message: 'error occured' });
-        }
-        else {
-            FriendList.findOne({ userId }).then(result => {
-                if (!result) {
-                    return {
-                        userId, friendList: [friendId]
-                    }
-                }
-                if (result.friendList.indexOf(friendId) == -1) {
-                    result.friendList.push(friendId);
-                }
-                return result;
-            }).then(result => {
-                console.log("========182=========");
-                console.log(JSON.stringify(result));
-                return FriendList.findOneAndUpdate({ userId: userId }, result, { upsert: true })
-            }).then(result => {
-                console.log("=========resp2======");
-                console.log(JSON.stringify(result));
-                res.status(200).json({ message: 'user successfully added to your friend list' });
-            }).catch(err => {
-                logger.info('error occured while updating user contact list');
-                logger.debug('====error======' + JSON.stringify(err));
-                res.status(500).json({ message: err.message });
-            })
-        }
 
-    }
-]
-async function getUserDetailFromId(contactList) {
-    let result = [];
-    for (let contactId of contactList) {
-        let res = await User.findOne({ _id: contactId }, 'first_name last_name');
-        res = { userId: res._id, name: res.first_name + ' ' + res.last_name }
-        result.push(res);
-    }
-    return result;
-
-}
-exports.friend_list_get = [
-    body('userId', 'User id is required to get list of friends'),
-    (req, res, next) => {
-        logger.info('friend list get method entry point');
-        logger.debug('--------------user id----------' + req.body.userId);
-        const userId = req.body.userId;
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            let errorMsgs = [];
-            let tempErr = errors.mapped();
-            logger.debug("express validator validation error:: " + JSON.stringify(tempErr));
-            for (let prop in tempErr)
-                errorMsgs.push(tempErr[prop].msg);
-            return res.status(400).json({ message: 'error occured', errorMsgs });
-        }
-        else {
-            FriendList.findOne({ userId }).then(result => {
-                logger.debug('-------------friendList find one result--------' + JSON.stringify(result));
-                if (!result)
-                    return res.status(200).json([]);
-                return getUserDetailFromId(result.friendList);
-            }).then(result => {
-                logger.info('-----final result---------' + JSON.stringify(result));
-                res.status(200).json(result);
-            }).catch(error => {
-                res.status(500).json({ message: error.message });
-            })
-        }
-    }
-]
 exports.user_file_upload = [upload.single('file'), (req, res) => {
+
     console.log(JSON.stringify(req.body));
-    console.log('req body user file upload', JSON.stringify(req.file));
+    if (req.body.userId) {
+        const updated_profile_image_url = `${REACT_APP_API_URL}/profileImages/${req.file.originalname}`;
+        User.findOneAndUpdate({ _id: req.body.userId }, { $set: { profile_image_url: updated_profile_image_url } }, (err, values) => {
+            if (err) {
+                logger.info('error occured while updating profile image');
+                logger.debug('occured error:', err);
+                res.status(500).json({ success: false, message: 'internal error occured while updating profile image' });
+            }
+            else {
+                logger.info('profile image updated successfully')
+                res.status(200).json({ success: true, message: 'profile image updated successfully' });
+            }
+        })
+    }
+    else {
+        res.status(400).json({ success: false, message: 'profile image failed to update.specified user id does not exist' });
+    }
     // uploadFileToS3(req.body.file,req.body.file.filename,function(err,data){
     //     if(err){
     //         logger.info('error occured while uploading file to s3 bucket');
@@ -260,9 +159,9 @@ exports.user_file_upload = [upload.single('file'), (req, res) => {
     //         logger.info('file uploaded successfully to s3 bucket');
     //     }
     // });
-    res.send('success');
-    res.end();
+
 }]
+
 exports.get_user_post = [
     body("userId", 'user id must be provided while fetching user object').exists(),
     (req, res, next) => {
@@ -285,8 +184,10 @@ exports.get_user_post = [
                     return res.status(400).json({ message: 'error occured while fetching user object' })
                 }
                 logger.debug('user object::' + JSON.stringify(result));
+                let name = result.last_name ? (result.first_name + ' ' + result.last_name) : result.first_name;
+                name = name.trim();
                 let user = {
-                    name: result.first_name + ' ' + result.last_name,
+                    name: name,
                     first_name: result.first_name,
                     last_name: result.last_name,
                     location: result.location,
@@ -294,10 +195,32 @@ exports.get_user_post = [
                     contact_no: result.contact_no,
                     userId: result._id,
                     email_id: result.email_id,
-                    creditPoints: result.credit_points || 0
+                    creditPoints: result.credit_points || 0,
+                    profile_image_url: result.profile_image_url
                 };
                 res.status(200).json(user);
             })
         }
     }
 ]
+
+exports.check_usename_exist = (req, res) => {
+    if (req.query.username) {
+
+        User.findOne({ username: req.query.username }, (err, result) => {
+            if (err) {
+                logger.info('error occured while checking username existence');
+                res.status(400).json({ checkSuccess: false, message: "error occured while checking username existence" });
+            }
+            else if (result) {
+                res.status(200).json({ checkSuccess: true, isExist: true });
+            }
+            else {
+                res.status(200).json({ checkSuccess: true, isExist: false });
+            }
+        })
+    }
+    else {
+        res.status(400).json({ checkSuccess: false, message: "username is required in request parameter" });
+    }
+}
