@@ -8,7 +8,7 @@ class TopHeader extends Component{
     render(){
         return(
             <Layout>
-                <Header>
+                <Header style={{padding:'0'}}>
                 <div className="logo">QSapien</div>
                 <Menu theme='dark' mode='horizontal' defaultSelectedKeys={['home']}
                 style={{lineHeight:'64px'}}>

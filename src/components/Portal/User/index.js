@@ -23,7 +23,7 @@ componentDidUpdate(){
         const menu = (
             <Menu>
                 <Menu.Item key="userProfile">
-                    <Link to='/portal/userprofile'>
+                    <Link to='/portal/profile_page'>
                         <Icon type='user' />&nbsp;{this.props.user.name}
                     </Link>
                 </Menu.Item>

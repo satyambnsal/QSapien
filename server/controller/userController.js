@@ -130,8 +130,6 @@ exports.user_login_post = [
 
 
 exports.user_file_upload = [upload.single('file'), (req, res) => {
-
-    console.log(JSON.stringify(req.body));
     if (req.body.userId) {
         const updated_profile_image_url = `${REACT_APP_API_URL}/profileImages/${req.file.originalname}`;
         User.findOneAndUpdate({ _id: req.body.userId }, { $set: { profile_image_url: updated_profile_image_url } }, (err, values) => {
@@ -187,7 +185,6 @@ exports.get_user_post = [
                 let name = result.last_name ? (result.first_name + ' ' + result.last_name) : result.first_name;
                 name = name.trim();
                 let user = {
-                    name: name,
                     first_name: result.first_name,
                     last_name: result.last_name,
                     location: result.location,
@@ -195,8 +192,9 @@ exports.get_user_post = [
                     contact_no: result.contact_no,
                     userId: result._id,
                     email_id: result.email_id,
-                    creditPoints: result.credit_points || 0,
-                    profile_image_url: result.profile_image_url
+                    creditPoints: result.credit_points,
+                    profile_image_url: result.profile_image_url,
+                    name
                 };
                 res.status(200).json(user);
             })
@@ -224,3 +222,34 @@ exports.check_usename_exist = (req, res) => {
         res.status(400).json({ checkSuccess: false, message: "username is required in request parameter" });
     }
 }
+exports.update_user_profile_post=[
+    body('userId','user id is required to update profile'),
+    (req,res)=>{
+        logger.info('update user profile method entry point');
+        let errors=validationResult(req);
+        if(!errors.isEmpty()){
+            logger.debug('validation error occured::'+JSON.stringify(errors));
+            res.status(500).json({profileUpdated:false,message:'error occured while updating profile'});
+        }
+        else{
+            const userId=req.body.userId;
+            const updateData={};
+            const updatableProp=['first_name','last_name','location','bio'];
+            for (let prop in req.body) {
+                if (req.body[prop] != '' &&updatableProp.includes(prop))
+                    updateData[prop] = req.body[prop];
+            }
+            logger.info('------updatable data-----',updateData);
+            User.findOneAndUpdate({_id:userId},{$set:updateData},(err,values)=>{
+                if(err){
+                    logger.info('error occured while updating user profile');
+                    res.status(500).json({profileUpdated:false,message:'error occured while updating profile'});
+                }
+                else{
+                    logger.info('user profile updated successfully');
+                    res.status(200).json({profileUpdated:true,message:'user profile updated successfully'});                    
+                }
+            })
+        }
+    }
+]
