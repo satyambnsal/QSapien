@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Row, Col } from 'antd';
+import { Card, Row, Col,Badge} from 'antd';
 import { Link } from 'react-router-dom';
 import NewChallengesToSolve from './NewChallengesToSolve';
 export default class Home extends Component {
@@ -13,7 +13,7 @@ export default class Home extends Component {
                 <Row type='flex' justify='space-around' style={{ marginTop: '20px' }}>
                     <Col span={6}>
                         <Card title='Current credit points'>
-                            <p>23</p>
+                        <Badge count={this.props.user.creditPoints} style={{ backgroundColor: '#52c41a' }} overflowCount={1000}/>
                         </Card>
                     </Col>
                     <Col span={8}>

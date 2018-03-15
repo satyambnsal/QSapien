@@ -136,9 +136,27 @@ border-right:1px solid #ddd;
     background-position: center;
 }
 .logo {
-    width: 120px;
+    width: 180px;
     height: 31px;
-    background: rgba(255,255,255,.2);  
-    margin: 16px 28px 16px 0;
+    background: transparent;
+    margin: 0 20px 0 0;
     float: left;
+    color: #fff;
+    font-size: 24px;
+    line-height: 64px;
+    text-indent: 20px;
+  }
+  .solve-challenge-card{
+      text-align: center;
+  }
+  .solve-challenge-card button{
+      width:480px;
+      margin-top: 200px;
+      margin-bottom: 0;
+      padding-bottom: 0;
+  }
+  .profile-update{
+      width: 100px;
+      height:100px;
+      border-radius: 50%;
   }

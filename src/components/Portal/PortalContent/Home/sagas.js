@@ -1,6 +1,6 @@
 import { takeLatest, put } from 'redux-saga/effects';
-import { GET_CHALLENGES, SOLVE_CHALLENGE } from './constants';
-import { setChallenges } from './actions';
+import { GET_CHALLENGES,SOLVE_CHALLENGE_REQUESTING } from './constants';
+import { setChallenges,setSolveChallengeResult} from './actions';
 
 import { handleApiErrors } from '../../../../lib/api-errors';
 
@@ -19,9 +19,9 @@ export function* solveChallengeApi({ challengeId, selectedChoice }) {
     }).then(handleApiErrors)
         .then(response => response.json())
         .catch((errors) => {
-
         });
-    console.log('result::', result);
+        console.log('result::',result);
+        yield put(setSolveChallengeResult(result));
 }
 export function* fetchChallengesApi({ userId }) {
     console.log('fetch challenges api entry point');
@@ -41,5 +41,5 @@ export function* fetchChallengesApi({ userId }) {
 }
 export default function* challengeWatcher() {
     yield takeLatest(GET_CHALLENGES, fetchChallengesApi);
-    yield takeLatest(SOLVE_CHALLENGE, solveChallengeApi);
+    yield takeLatest(SOLVE_CHALLENGE_REQUESTING, solveChallengeApi);
 }

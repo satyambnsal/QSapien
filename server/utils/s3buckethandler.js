@@ -1,40 +1,33 @@
-import s3 from 's3';
+import AWS from 'aws-sdk';
 import logger from 'winston';
-const SECRET_ACCESS_KEY=process.env.SECRET_ACCESS_KEY||"abc123";
-const ACCESS_KEY_ID=process.env.ACCESS_KEY_ID||"abc123";
+import fs from 'fs';
 
-var client = s3.createClient({
-    maxAsyncS3: 20,      
-    s3RetryCount: 3,     
-    s3RetryDelay: 1000,  
-    multipartUploadThreshold: 20971520,  
-    multipartUploadSize: 15728640,  
-    s3Options: {
-      accessKeyId:ACCESS_KEY_ID,
-      secretAccessKey:SECRET_ACCESS_KEY,
-    },
-  });
-  exports.uploadFileToS3=(filePath,fileName,callback)=>{
-    const params = {
-        localFile:filePath,
-        s3Params: {
-          Bucket: "qsapien",
-          Key: fileName,
-        },
-      };
-      logger.info('inside uploadFileToS3 function');
-      logger.info('param object::'+JSON.stringify(params));
-      const uploader = client.uploadFile(params);
-      uploader.on('error', function(err) {
-          callback(err,null)
-      });
 
-      uploader.on('progress', function() {
-        console.log("progress", uploader.progressMd5Amount,
-                  uploader.progressAmount, uploader.progressTotal);
-      });
-      uploader.on('end', function() {
-          callback(null,"done");
-      });
-  }
-  
+const SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || "abc123";
+const ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID || "abc123";
+const BUCKET_NAME = 'qsapien';
+
+
+AWS.config.update({
+sslEnabled:false,
+region:'ap-south-1'
+});
+let s3=new AWS.S3();
+exports.uploadFileToS3 = (fileBody, fileName, callback) => {
+  //let fileData=fs.readFileSync(filePath);
+  fs.writeFileSync("111",fileBody);
+  const params = {
+    Bucket: BUCKET_NAME,
+    Key: fileName || 'abc1111',
+    Body: fileBody,
+    ACL: 'public-read'
+  };
+  s3.putObject(params, (err, data) => {
+    if (err) {
+      callback(err);
+    }
+    else {
+      callback(null, data);
+    }
+  })
+}
