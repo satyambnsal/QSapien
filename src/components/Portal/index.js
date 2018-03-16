@@ -42,7 +42,8 @@ let mapStateToProps = (state) => {
         publicContacts: state.portal.userState.publicContacts,
         user: state.portal.userState.user,
         token: state.client.token,
-        friendList: state.portal.userState.friendList
+        friendList: state.portal.userState.friendList,
+        leaderboard:state.portal.userState.leaderboard
     }
 }
 let mapDispathToProps = (dispatch) => {

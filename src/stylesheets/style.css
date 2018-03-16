@@ -7,6 +7,7 @@
 
 *{
     box-sizing: border-box;
+    font-family:"Roboto",sans-serif;
 }
 textarea{
     resize: none;
@@ -137,12 +138,29 @@ text-align: center;
     letter-spacing: 1px;
 }
 .leaderboard-card{
-width:600px;
+width:500px;
 min-height: 400px;
 margin: auto;
 margin-top:30px;
-text-align:center;
+    
+
 }
 .homepage{
     padding:20px;
+}
+.leaderboard-user{
+display:flex;
+width:100%;
+}
+.leaderboard-user .user-rank{
+width:40px;
+}
+.leaderboard-user .user-profile{
+width:100px;
+}
+.leaderboard-user .user-name{
+width:200px
+}
+.leaderboard-user .credit-points{
+    float:right;
 }

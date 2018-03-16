@@ -68,7 +68,7 @@ if(this.props.solveChallengeSuccess){
             </Row>
             <Row type='flex' justify='space-between'>
                 <Col span={8}>
-                <Button style={{width:'120px',marginTop:'40px'}} ><Link to='/portal'>Go Back</Link></Button>
+                <Button style={{width:'120px',marginTop:'40px'}} ><a href='/portal'>Go Back</a></Button>
                 </Col>
             </Row>
             </div>

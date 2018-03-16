@@ -3,7 +3,17 @@ import { Card, Row, Col,Badge} from 'antd';
 import { Link } from 'react-router-dom';
 import NewChallengesToSolve from './NewChallengesToSolve';
 export default class Home extends Component {
-
+state={
+creditPoints:0
+}
+componentWillMount(){
+    if(this.props.user.creditPoints)
+    this.setState({creditPoints:this.props.user.creditPoints});
+}
+componentWillReceiveProps(props){
+if(props.user.creditPoints)
+    this.setState({creditPoints:props.user.creditPoints});
+}
     render() {
         return (
             <div className='homepage'>
@@ -13,7 +23,7 @@ export default class Home extends Component {
                 <Row type='flex' justify='space-around' style={{ marginTop: '20px' }}>
                     <Col span={6}>
                         <Card title='Current credit points'>
-                        <Badge count={this.props.user.creditPoints} style={{ backgroundColor: '#52c41a' }} overflowCount={1000}/>
+                        {this.state.creditPoints}
                         </Card>
                     </Col>
                     <Col span={8}>

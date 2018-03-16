@@ -1,31 +1,40 @@
 import React, { Component } from 'react';
-import { Card, List,Avatar} from 'antd';
+import { Card, List, Avatar, Row, Col } from 'antd';
 
 class Leaderboard extends Component {
     state = {
         data: []
     }
-    componentDidUpdate() {
-        // if (this.props.publicContacts&&this.state.data.length===0) {
-        //     this.setState({ data: this.props.publicContacts })
-        // }
+    componentWillMount() {
+        this.setState({ data: this.props.leaderboard })
     }
-    componentWillReceiveProps(props){
-        if (props.publicContacts&&this.state.data.length===0) {
-            this.setState({ data:props.publicContacts })
-        }        
+    componentWillReceiveProps(props) {
+        if (props.leaderboard && this.state.data.length === 0) {
+            this.setState({ data: props.leaderboard })
+        }
     }
 
     render() {
-        console.log('leaderboard props',this.props.publicContacts);
         return (
             <Card title="Leaderboard" className='leaderboard-card'>
                 <List
                     bordered
                     dataSource={this.state.data}
-                    renderItem={item => (<List.Item>
-                        <Avatar src={item.profile_image_url}/>{item.name}
-                        </List.Item>)}
+                    renderItem={item => (<List.Item className='leaderboard-user'>
+                        <div className='user-rank'>
+                            {item.rank}
+                        </div>
+                        <div className='user-profile'>
+                            <Avatar src={item.profile_image_url} />
+                        </div>
+                        <div className='user-name'>
+                            {item.name}
+                        </div>
+                        <div className='credit-points'>
+                            {item.credit_points}
+                        </div>
+                    </List.Item>
+                    )}
                 />
             </Card>
         )
