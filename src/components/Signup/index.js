@@ -1,72 +1,145 @@
 import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
-import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Errors from '../Notifications/Errors';
 import Messages from '../Notifications/Messages';
-
-
+import { Redirect } from 'react-router-dom';
 import { signupRequesting } from './actions';
-//import '../../stylesheets/register.css';
-
+import {checkUsernameExistApi} from '../../lib/utilities';
+import { Form, Icon, Button, Input, Row, Col, Tooltip, Card,message} from 'antd'
+const FormItem = Form.Item;
 
 class Signup extends Component {
-    static propTypes = {
-        handleSubmit: PropTypes.func,
-        signupRequesting: PropTypes.func,
-        login: PropTypes.shape({
-            successful: PropTypes.bool,
-            requesting: PropTypes.bool,
-            errors: PropTypes.array,
-            messages: PropTypes.array
-        })
-    };
-    submit = (values) => (this.props.signupRequesting(values))
+    state = { confirmDirty: false };
 
+    handleSubmit = (e,values) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('form values', values);
+                this.props.signupRequesting(values)
+            }
+        })
+
+    }
+    handleConfirmBlur = (e) => {
+        const value = e.target.value;
+        this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+    }
+    checkUsernameExist=(rule,value,callback)=>{
+    checkUsernameExistApi(value,(err,values)=>{
+        if(!err){
+        if(values.isExist)
+        callback('Username already exist');
+        else
+        callback();
+        }
+        else{
+  //          message.error('it looks like backend services are down.contact your administrator');
+            callback('error occured while checking username validation');
+        }
+    })
+    }
+    compareToFirstPassword = (rule, value, callback) => {
+        const form = this.props.form;
+        if (value && value !== form.getFieldValue('password')) {
+            callback('Two passwords that you enter is inconsistent!');
+        }
+        else {
+            callback();
+        }
+    }
+    validateToNextPassword = (rules, value, callback) => {
+        const form = this.props.form;
+        if (value && this.state.confirmDirty) {
+            form.validateFields(['confirm'], { force: true });
+        }
+        else {
+            callback();
+        }
+    }
     render() {
-        const { handleSubmit,
-            signup: {
-                requesting,
-                successful,
-                errors,
-                messages
-}
-} = this.props;
+        const { signup: {
+            requesting,
+            successful,
+            errors,
+            messages }
+         } = this.props;
+        const { handleSubmit, getFieldDecorator } = this.props.form;
         return (
-            <div className="signup container">
+            <Card title="QSapien Register" className="signup-card">
                 <div className="signup-form">
-                    <form onSubmit={handleSubmit(this.submit)}>
-                        <div className="row">
-                            <div className="col-sm-6 form-group">
-                                <label>First Name</label>
-                                <Field type="text" name="first_name" placeholder="first name" className="form-control" required component="input" />
-                            </div>
-                            <div className="col-sm-6 form-group">
-                                <label>Last Name</label>
-                                <Field type="text" name="last_name" placeholder="last name" className="form-control" component="input" />
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label>Contact No <span id="phonewarning" style={{ color: "red" }}></span></label>
-                            <Field type="text" name="contact_no" id="contact_no" placeholder="contact number" className="form-control"
-                                component="input" />
-                        </div>
-                        <div className="form-group">
-                            <label>Email Address <span id="emailwarning" style={{ color: "red" }}></span></label>
-                            <Field type="email" name="email_id" id="email_id" placeholder="email address" className="form-control"
-                                component="input" />
-                        </div>
-                        <div className="form-group">
-                            <label>Password</label>
-                            <Field type="text" name="password" placeholder="password" className="form-control" component="input" />
-                        </div>
-                        <div className="form-group">
-                            <label>Confirm Password</label>
-                            <Field type="text" name="confirm_password" placeholder="confirm password" className="form-control" component="input" />
-                        </div>
-                        <button type="submit" action="submit" className="btn btn-success btn-block">SignUp</button>
-                    </form>
+                    <Form onSubmit={(e,values)=>this.handleSubmit(e,values)}>
+                        <Row type='flex' justify='space-between'>
+                            <Col span={11}>
+                                <FormItem label="First Name">
+                                    {
+                                        getFieldDecorator('first_name', {
+                                            rules: [{
+                                                required: true, message: 'First name is required'
+                                            }]
+                                        })(<Input />)
+                                    }
+                                </FormItem>
+                            </Col>
+                            <Col span={11}>
+                                <FormItem label="Last Name">
+                                   {
+                                       getFieldDecorator('last_name')(<Input />)
+                                   }
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <FormItem label="E-mail">
+                            {
+                                getFieldDecorator('email_id', {
+                                    rules: [{
+                                        type: 'email', message: 'The input is not valid E-mail'
+                                    }, {
+                                        required: true,
+                                        message: 'Please input your E-mail'
+                                    }]
+                                })(<Input placeholder="email" />)
+                            }</FormItem>
+                        <FormItem label="Password">
+                            {
+                                getFieldDecorator('password', {
+                                    rules: [{
+                                        required: true, message: 'Please input your password!'
+                                    }, {
+                                        validator: this.validateToNextPassword
+                                    }]
+                                })(<Input type="password" />)
+                            }</FormItem>
+                        <FormItem label="Confirm Password">
+                            {
+                                getFieldDecorator('confirm_password', {
+                                    rules: [
+                                        {
+                                            required: true, message: 'Please confirm your password!'
+                                        }, {
+                                            validator: this.compareToFirstPassword
+                                        }
+                                    ]
+                                })(<Input type="password" onBlur={this.handleConfirmBlur} />)
+                            }</FormItem>
+                        <FormItem
+                            label={(
+                                <span>
+                                    Username&nbsp;
+                        <Tooltip title="What do you want others to call you?">
+                                        <Icon type="question-circle-o" />
+                                    </Tooltip>
+                                </span>
+                            )}>
+                            {getFieldDecorator('username', {
+                                rules: [{ required: true, message: 'Please input your username!' },
+                            {validator:this.checkUsernameExist}]
+                            })(<Input />)
+                            }
+                        </FormItem>
+                            <Button type="primary" htmlType="submit">Register</Button>
+                    </Form>
                 </div>
                 <div className="auth-messages">
                     {
@@ -80,18 +153,17 @@ class Signup extends Component {
                     }
                     {
                         !requesting && !successful && (<Link to="/login">Already SignUp? click here to login >></Link>)
+                    }{
+                        !!successful && (<Redirect to='/login' />)
                     }
-                </div></div>
+                </div>
+            </Card>
+
         )
     }
 }
 const mapStateToProps = (state) => ({
     signup: state.signup
 });
-const connected = connect(mapStateToProps, { signupRequesting })(Signup);
-const signupForm = reduxForm({
-    form: 'signup'
-})(connected);
-
-
-export default signupForm;
+Signup = Form.create()(Signup)
+export default connect(mapStateToProps, { signupRequesting })(Signup);

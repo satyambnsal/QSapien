@@ -1,3 +1,22 @@
+@import './../../node_modules/antd/dist/antd.css';
+
+
+.ant-avatar {
+    margin:0 !important;
+}
+
+*{
+    box-sizing: border-box;
+}
+textarea{
+    resize: none;
+}
+ul{
+    list-style-type: none
+}
+a:link,a:hover,a:active{
+    text-decoration: none;
+}
 #wrapper{
     width:100%;
 }
@@ -69,3 +88,91 @@
       color:green;
       text-align: center;
   }
+  .portalContent{
+    display:flex;
+    width:100%;
+}
+.portal-sub-content{
+flex:4;    
+}
+.contacts-panel{
+    width:300px;
+    flex:1;
+    min-height:93vh;
+    background-color:lightblue;
+}
+.contacts-panel .tabs{
+border:1px solid #ddd;
+display:flex;
+
+}
+.contacts-panel .tabs .tab{
+flex:1;
+text-align: center;
+padding:5px;
+color:#333;
+font-weight:bold;
+border-right:1px solid #ddd;
+}
+.contacts-panel .tabs .tab:hover{
+    background-color: rosybrown;
+}
+.challenge-form{
+    width:900px;
+    margin:auto;
+    margin-top:20px;
+    padding:20px;
+    border:1px solid #eee;
+}
+.accountSetting{
+    width:500px;
+    margin:auto;
+    margin-top:50px;
+}
+.profile-image{
+    width:60px;
+    height: 60px;
+    border-radius: 50%;
+    background-position: center;
+}
+.logo {
+    width: 180px;
+    height: 31px;
+    background: transparent;
+    margin: 0 20px 0 0;
+    float: left;
+    color: #fff;
+    font-size: 24px;
+    line-height: 64px;
+    text-indent: 20px;
+  }
+  .solve-challenge-card{
+      text-align: center;
+  }
+  .solve-challenge-card button{
+      width:480px;
+      margin-top: 200px;
+      margin-bottom: 0;
+      padding-bottom: 0;
+  }
+  .profile-update{
+      width: 100px;
+      height:100px;
+      border-radius: 50%;
+  }
+  .signup-card{
+      margin:auto;
+      margin-top: 30px;
+      width:600px;
+  }
+.login-card{
+    max-width: 400px;
+    margin: auto;
+    margin-top: 90px;
+}
+.login-card .login-card-forgot{
+    float:right;
+}
+.login-card .login-card-button{
+    width:100%;
+}

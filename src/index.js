@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { applyMiddleware, createStore, compose } from 'redux';
+import {Route} from 'react-router-dom';
+import { applyMiddleware, createStore} from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import { Router } from 'react-router-dom';
-import history from './history.js';
+import {BrowserRouter } from 'react-router-dom';
 import App from './components/App';
 import IndexReducer from './index-reducer.js';
 import IndexSaga from './index-saga.js';
 import { composeWithDevTools } from 'redux-devtools-extension';
-
+import './stylesheets/style.css'
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(IndexReducer, composeWithDevTools(applyMiddleware(sagaMiddleware)));
@@ -17,10 +17,10 @@ const store = createStore(IndexReducer, composeWithDevTools(applyMiddleware(saga
 
 sagaMiddleware.run(IndexSaga);
 ReactDOM.render(
-    <Provider store={store}>
-        <Router history={history}>
-            <App store={store}/>
-        </Router>
-    </Provider>,
+        <Provider store={store}>
+            <BrowserRouter>
+           <Route path='/' render={()=><App store={store} />}/>
+            </BrowserRouter>    
+        </Provider>,
     document.getElementById('root')
 );

@@ -1,16 +1,13 @@
-import { take, fork, cancel, call, put, cancelled,takeEvery} from 'redux-saga/effects';
+import {call, put,takeLatest} from 'redux-saga/effects';
 import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './constants';
-import { setClient, unsetClient } from '../Client/actions';
-import { CLIENT_UNSET } from '../Client/constants';
-import history from '../../history.js';
-//import logger from 'winston';
-//import {browserHistory} from 'react-router-dom';
-
+import { setClient} from '../Client/actions';
+import {getUserApi,getPublicContactsApi} from '../Portal/sagas';
+import {fetchChallengesApi} from '../Portal/PortalContent/Home/sagas';
 import { handleApiErrors } from '../../lib/api-errors';
+import { INITIALIZE_STATE } from '../Client/constants';
 let REACT_APP_API_URL=process.env.REACT_APP_API_URL||'http://localhost:3001';
 const LOGIN_URL = `${REACT_APP_API_URL}/user/login`;
 
-//logger.info('LOGIN URL:: '+LOGIN_URL);
 function loginAPI(email_id, password) {
     return fetch(LOGIN_URL, {
         method: 'POST',
@@ -20,52 +17,45 @@ function loginAPI(email_id, password) {
         body: JSON.stringify({email_id, password })
     })
     .then(handleApiErrors)
-    .then(response => response.json())
-    .then(json => json)
+    .then(response =>response.json())
     .catch((errors) => { throw errors })
 }
-
-export function* logout() {
-    yield put(unsetClient());
-    localStorage.removeItem('token')
-    yield call(history.push,'/login');
+function* initializeState({userId}){
+    try{
+        yield call(getUserApi,{userId});
+        yield call(getPublicContactsApi,{userId});
+        yield call(fetchChallengesApi,{userId});
+        return true;
+    }
+    catch(error){
+        yield put({ type: LOGIN_ERROR,error:"empty token error"});
+        return false;
+    }
 }
-
-function* loginFlow(email_id, password) {
+function* loginFlow({email_id, password}) {
     let token,resp;
     try {
         resp = yield call(loginAPI,email_id, password);
         token=resp.token;
-        yield put(setClient(token));
-        yield put({ type: LOGIN_SUCCESS });
-
-        localStorage.setItem('token', JSON.stringify(token));
-        //  logger.info('login successful');
-        yield call(history.push,'/portal');
+        if(token){
+            yield put(setClient(token));
+            localStorage.setItem('token', JSON.stringify(token));
+            const initializeStateSuccess=yield call(initializeState,{userId:token.userId});
+            if(initializeStateSuccess)
+            yield put({ type: LOGIN_SUCCESS });
+        }
+        else{
+            yield put({ type: LOGIN_ERROR,error:"empty token error"})         
+        }
 
     }
     catch (error) {
+        console.log('error occured:: '+JSON.stringify(error));
         yield put({ type: LOGIN_ERROR, error })
     }
-    finally {
-        console.log('inside finally block');
-        if (yield cancelled()) {
-            yield call(history.push,'/login');
-        }
-    }
-    return token;
 }
 
-export function* loginWatcher() {
-    while (true) {
-        const { email_id, password } = yield take(LOGIN_REQUESTING);
-        const task = yield fork(loginFlow,email_id, password);
-        const action = yield take([CLIENT_UNSET, LOGIN_ERROR]);
-        console.log('action::'+action.type);
-        if (action.type===CLIENT_UNSET){
-            yield cancel(task);
-            yield call(logout);
-        }
-    
-    }
+export  function* loginWatcher() {
+yield takeLatest(LOGIN_REQUESTING,loginFlow);
+yield takeLatest(INITIALIZE_STATE,initializeState);
 }

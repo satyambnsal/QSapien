@@ -1,5 +1,5 @@
 import {SIGNUP_REQUESTING,SIGNUP_SUCCESSFUL,SIGNUP_ERROR} from './constants';
-//import logger from 'winston';
+
 let initialState={
     requesting:false,
     successful:false,
@@ -7,7 +7,6 @@ let initialState={
     messages:[]
 };
 const reducer=function(state=initialState,action){
-  //  logger.info('Register reducer method entry point');
     switch(action.type){
         case SIGNUP_REQUESTING:
         return {

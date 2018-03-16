@@ -1,24 +1,25 @@
 import React,{Component} from 'react';
-// import Messages from '../Messages';
-// import Tasks from '../Tasks';
-// import Alerts from '../Alerts';
+import {Menu,Layout}from 'antd';
+import {Link} from 'react-router-dom';
 import User from '../User';
+const {Header} =Layout;
+
 class TopHeader extends Component{
     render(){
         return(
-            <nav className="navbar navbar-default navbar-static-top" role="navigation" style={{ marginBottom: 0 }}>
-            <div className="navbar-header">
-                <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                </button>
-                <a className="navbar-brand" href="/"></a>
-            </div>
-            <ul className="nav navbar-top-links navbar-right">
-            <User unsetClient={this.props.unsetClient}/>
-            </ul>
-        </nav>
+            <Layout>
+                <Header>
+                <div className="logo">QSapien</div>
+                <Menu theme='dark' mode='horizontal' defaultSelectedKeys={['home']}
+                style={{lineHeight:'64px'}}>
+                <Menu.Item key='home'><Link to='/'>Home</Link></Menu.Item>
+                <Menu.Item key='leaderboard'>Leaderboard</Menu.Item>
+                <Menu.Item key='juryRoom'>Jury Room</Menu.Item>
+                <Menu.Item key='knowledgeCenter'>Knowledge Center</Menu.Item>
+                <Menu.Item key='user' style={{float:'right'}}> <User {...this.props}/></Menu.Item>
+                </Menu>
+                </Header>
+            </Layout>
         )
     }
 };
