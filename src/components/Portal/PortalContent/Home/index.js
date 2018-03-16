@@ -6,7 +6,7 @@ export default class Home extends Component {
 
     render() {
         return (
-            <div>
+            <div className='homepage'>
                 <Card title='New challenges for you'>
                     <NewChallengesToSolve {...this.props} />
                 </Card>

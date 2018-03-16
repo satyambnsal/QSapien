@@ -5,6 +5,7 @@ import AccountSettings from './AccountSettings';
 import ChallengeForm from './Home/ChallengeForm';
 import SolveChallenge from './Home/NewChallengesToSolve/SolveChallenge';
 import Home from './Home';
+import Leaderboard from './Leaderboard';
 
 export default class PortalContent extends Component {
     render() {
@@ -15,6 +16,7 @@ export default class PortalContent extends Component {
                 <Route  exact path='/portal/accountsettings' render={()=>(<AccountSettings user={this.props.user}/>)}/>)} />
                 <Route exact path='/portal/challengeform' render={()=>(<ChallengeForm {...this.props}/>)} />
                 <Route exact path='/portal/solveChallenge/:challengeId' component={SolveChallenge}/>
+                <Route exact path='/portal/leaderboard' render={()=>(<Leaderboard user={this.props.user} publicContacts={this.props.publicContacts}/>)}/>
             </Switch>
         )
     }

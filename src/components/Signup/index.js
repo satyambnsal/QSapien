@@ -65,7 +65,7 @@ class Signup extends Component {
             errors,
             messages }
          } = this.props;
-        const { handleSubmit, getFieldDecorator } = this.props.form;
+        const {getFieldDecorator } = this.props.form;
         return (
             <Card title="QSapien Register" className="signup-card">
                 <div className="signup-form">
