@@ -2,11 +2,12 @@ import User from '../models/User';
 import logger from 'winston';
 logger.level = 'debug';
 const compareFunction = (userA, userB) => {
+    logger.info('userA::',JSON.stringify(userA));
+    logger.info('user B::',JSON.stringify(userB));
     if (userA.credit_points > userB.credit_points)
         return -1;
-    if (userA.credit_points > userB.credit_points)
+    else
         return 1;
-    return 0;
 }
 exports.leaderboard_get = (req, res) => {
     let content = [];
@@ -22,7 +23,7 @@ exports.leaderboard_get = (req, res) => {
                 name
             }
         })
-        return filteredUsers.sort(compareFunction)
+    return filteredUsers.sort(compareFunction);
     }).then(values => (values.map((value, index) => {
         let rank = index + 1;
         return { ...value, rank }
