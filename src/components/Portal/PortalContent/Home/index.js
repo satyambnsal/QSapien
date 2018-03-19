@@ -21,11 +21,6 @@ if(props.user.creditPoints)
                     <NewChallengesToSolve {...this.props} />
                 </Card>
                 <Row type='flex' justify='space-around' style={{ marginTop: '20px' }}>
-                    <Col span={6}>
-                        <Card title='Current credit points'>
-                        {this.state.creditPoints}
-                        </Card>
-                    </Col>
                     <Col span={8}>
                         <Card title='Answered questions'>
                             <Link to='/'>new questtion1</Link>

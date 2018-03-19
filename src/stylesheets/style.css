@@ -1,5 +1,5 @@
 @import './../../node_modules/antd/dist/antd.css';
-@import url('https://fonts.googleapis.com/css?family=Roboto:500');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
 
 .ant-avatar {
     margin:0 !important;
@@ -8,6 +8,8 @@
 *{
     box-sizing: border-box;
     font-family:"Roboto",sans-serif;
+    font-size:14px;
+    color:#333;
 }
 textarea{
     resize: none;
@@ -163,4 +165,9 @@ width:200px
 }
 .leaderboard-user .credit-points{
     float:right;
+}
+.show-credit-points{
+    font-family: 'Roboto',sans-serif;
+font-weight: 700 ;
+color:#ffca00 !important;
 }
