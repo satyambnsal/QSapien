@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Card} from 'antd';
+import { Card, Collapse } from 'antd';
 import NewChallengesToSolve from './NewChallengesToSolve';
 import AskedChallenges from './AskedChallenges';
 import SolvedChallenges from './SolvedChallenges';
+const Panel = Collapse.Panel;
 export default class Home extends Component {
     state = {
         creditPoints: 0
@@ -18,16 +19,27 @@ export default class Home extends Component {
     render() {
         return (
             <div className='homepage'>
-                <Card title='New challenges for you'>
-                    <NewChallengesToSolve challenges={this.props.challengeState.challenges} />
-                </Card>
-
-                <Card title='Asked questions by you' style={{marginTop:'20px'}}>
-                    <AskedChallenges askedChallenges={this.props.challengeState.askedChallenges}/>
-                </Card>
-                <Card title='Solved Challenges by you' style={{marginTop:'20px'}}>
-                    <SolvedChallenges solvedChallenges={this.props.challengeState.solvedChallenges}/>
-                </Card>
+                <Collapse defaultActiveKey={['1']}>
+                    <Panel header='New challenges for you' style={{ fontWeight: '500' }} key='1'>
+                        <Card>
+                            <NewChallengesToSolve challenges={this.props.challengeState.challenges} />
+                        </Card>
+                    </Panel>
+                </Collapse>
+                <Collapse defaultActiveKey={['1']} style={{marginTop:'20px'}}>
+                    <Panel header='Asked questions by you' style={{ fontWeight: '500' }} key='1'>
+                        <Card>
+                            <AskedChallenges askedChallenges={this.props.challengeState.askedChallenges} />
+                        </Card>
+                    </Panel>
+                </Collapse>
+                <Collapse defaultActiveKey={['1']} style={{marginTop:'20px'}}>
+                    <Panel header='Solved Challenges by you' style={{ fontWeight: '500' }} key='1'>
+                        <Card>
+                            <SolvedChallenges solvedChallenges={this.props.challengeState.solvedChallenges} />
+                        </Card>
+                    </Panel>
+                </Collapse>
             </div>
         )
     }
