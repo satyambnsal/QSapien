@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, List, Avatar, Row, Col } from 'antd';
+import { Card, List, Avatar} from 'antd';
 
 class Leaderboard extends Component {
     state = {
