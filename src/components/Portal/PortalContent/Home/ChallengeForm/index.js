@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Row, Col, Button, InputNumber, Select, Tooltip, Icon, message } from 'antd';
+import { Form, Input, Row, Col, Button, InputNumber, Select, Tooltip, Icon, message,Avatar} from 'antd';
 import { connect } from 'react-redux';
 import { sendChallenge } from '../../../actions';
 const FormItem = Form.Item;
@@ -39,7 +39,7 @@ class ChallengeForm extends Component {
                             })(<Select>
                                 {
                                     publicContacts.map((publicContact, index) => (<Option key={index} value={publicContact._id}>
-                                        {publicContact.name}
+                                        <Avatar src={publicContact.profile_image_url}/>&nbsp;&nbsp;&nbsp;{publicContact.name}
                                     </Option>))
                                 }
                             </Select>)

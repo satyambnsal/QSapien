@@ -114,6 +114,7 @@ border-right:1px solid #ddd;
       width: 100px;
       height:100px;
       border-radius: 50%;
+      cursor:pointer;
   }
   .signup-card{
       margin:auto;

@@ -6,6 +6,7 @@ import logger from 'winston';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import { uploadFileToS3 } from '../utils/s3buckethandler';
+import sendEmail from '../utils/mailHandler';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'qsapiensecret';
 const PROFILE_IMAGES_DEST = process.env.PROFILE_IMAGES_DEST || './public/profileImages';
@@ -67,6 +68,8 @@ exports.user_signup_post = [
                         }
                         let token = jwt.sign({ id: result._id }, JWT_SECRET, { expiresIn: 86400 });
                         req.session.locallibrarytoken = token;
+                        sendEmail(req.body.email_id,(err,result)=>{
+                        });
                         res.status(200).json({ message: 'user completed signup successfully', token: token });
                     });
                 }
