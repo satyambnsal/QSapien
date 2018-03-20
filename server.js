@@ -12,7 +12,7 @@ var app = express();
 let server=require('http').createServer(app);
 io=io.listen(server);
 
-var port = process.env.PORT || 3001;
+var port = process.env.SERVER_PORT || 3001;
 let MONGODB_URI=process.env.MONGODB_URI||"mongodb://localhost:27017/QSapien";
 
 app.use(bodyParser.json());
