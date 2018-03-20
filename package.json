@@ -19,6 +19,7 @@
     "aws-sdk": "^2.209.0",
     "axios": "^0.17.1",
     "connect-mongo": "^2.0.1",
+    "ejs": "^2.5.7",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "express-validator": "^5.0.1",

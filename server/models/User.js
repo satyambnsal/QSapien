@@ -12,7 +12,8 @@ let UserSchema=new Schema({
     username:{type:String,required:true},
     location:{type:String,default:'India'},
     website:String,
-    bio:{type:String,default:'A wise sapien and decent human being'}
+    bio:{type:String,default:'A wise sapien and decent human being'},
+    isVerified:{type:Boolean,default:false}
 });
 UserSchema.virtual('name').get(function(){
     return this.first_name+' '+this.last_name
