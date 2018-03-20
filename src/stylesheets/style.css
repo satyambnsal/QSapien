@@ -1,5 +1,5 @@
 @import './../../node_modules/antd/dist/antd.css';
-
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
 
 .ant-avatar {
     margin:0 !important;
@@ -7,9 +7,17 @@
 
 *{
     box-sizing: border-box;
+    font-family:"Roboto",sans-serif;
+    font-size:14px;
+    color:#333;
+    margin:0;
+    padding:0;
 }
 textarea{
     resize: none;
+}
+a.a:hover,a:selectd{
+    color:white
 }
 ul{
     list-style-type: none
@@ -20,59 +28,6 @@ a:link,a:hover,a:active{
 #wrapper{
     width:100%;
 }
-.navbar-top-links{
-    margin-right:0;
-}
-.navbar-top-links li{
-    display: inline-block;
-}
-.navbar-top-links li:last-child{
-    margin-right: 15px;
-}
-.navbar-top-links li a{
-    padding:15px;
-    min-height:50px;
-}
-.navbar-top-links .dropdown-menu li{
-    display:block;
-}
-.navbar-top-links .dropdown-menu li:last-child{
-    margin-right: 0px;
-}
-.navbar-top-links .dropdown-menu li a{
-    padding:3px 20px;
-    min-height: 0;
-}
-.navbar-top-links .dropdown-menu li a div{
-    white-space: normal;
-}
-.navbar-top-links .dropdown-tasks,
-.navbar-top-links .dropdown-messages,
-.navbar-top-links .dropdown-alerts{
-    width: 310px;
-    min-width: 0px;
-}
-
-.navbar-top-links .dropdown-messages{
-    margin-left: 5px;
-}
-.navbar-top-links .dropdown-tasks{
-    margin-left: -59px;
-}
-.navbar-top-links .dropdown-alerts {
-    margin-left: -123px;
-  }
-  .navbar-top-links .dropdown-user {
-    right: 0;
-    left: auto;
-  }
-  @media (min-width:768 px){
-      .navbar-top-links .dropdown-tasks,
-      .navbar-top-links .dropdown-messages,
-      .navbar-top-links .dropdown-alerts{
-          margin-left: auto;
-      }
-  }
   .login-body{
       height:100vh;
       background-color:floralwhite;
@@ -175,4 +130,60 @@ border-right:1px solid #ddd;
 }
 .login-card .login-card-button{
     width:100%;
+}
+.profile-card{
+width:500px;
+min-height:400px;
+margin: auto;
+margin-top: 50px;
+text-align: center;
+}
+.profile-card .user-bio{
+    font-family: "Roboto",sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+.leaderboard-card{
+width:500px;
+min-height: 400px;
+margin: auto;
+margin-top:30px;
+}
+.homepage{
+    padding:20px;
+}
+.leaderboard-user{
+display:flex;
+width:100%;
+}
+.leaderboard-user .user-rank{
+width:40px;
+}
+.leaderboard-user .user-profile{
+width:100px;
+}
+.leaderboard-user .user-name{
+width:200px
+}
+.leaderboard-user .credit-points{
+    float:right;
+}
+.show-credit-points{
+font-family: 'Roboto',sans-serif;
+font-weight: 700 ;
+color:#ffca00 !important;
+}
+.ant-menu-item-selected.no-select-background,.show-credit-points.ant-menu-item-selected{
+    background-color:transparent !important;
+}
+.side-nav-item a{
+    color:white;
+}
+.ant-menu-inline-collapsed .side-nav-item{
+display:none;
+}
+
+.ant-menu-item{
+    margin-top: 0px !important;
 }

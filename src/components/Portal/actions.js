@@ -2,7 +2,7 @@ import {ADD_CONTACT_TO_FRIEND_LIST, SEND_CHALLENGE} from './constants';
 import {SET_PUBLIC_CONTACTS,GET_PUBLIC_CONTACTS} from './constants';
 import {GET_USER,SET_USER} from './constants';
 import {GET_FRIEND_LIST,SET_FRIEND_LIST} from './constants';
-
+import {GET_LEADERBOARD,SET_LEADERBOARD} from './constants';
 export const setPublicContacts=(publicContacts)=>({
     type:SET_PUBLIC_CONTACTS,
     publicContacts
@@ -39,4 +39,11 @@ friendList
 export const sendChallenge=(values)=>({
     type:SEND_CHALLENGE,
     values
+});
+export const getLeaderboard=()=>({
+    type:GET_LEADERBOARD
+});
+export const setLeaderboard=(leaderboard)=>({
+    type:SET_LEADERBOARD,
+    leaderboard
 });

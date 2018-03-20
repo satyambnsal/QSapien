@@ -20,7 +20,7 @@ exports.public_contacts_post = [
             return res.status(400).json({ message: 'error occured' });
         }
         else {
-            User.find({}, 'first_name last_name', (err, results) => {
+            User.find({}, (err, results) => {
                 if (err) {
                     logger.info('error occured while fetching public contact records')
                     logger.debug('occured error::' + err.message);
@@ -33,7 +33,10 @@ exports.public_contacts_post = [
                     filter_results = filter_results.map(result =>{
                         let name = result.last_name ? (result.first_name + ' ' + result.last_name) : result.first_name;
                          name = name.trim();
-                        return {_id: result._id,name}
+                        return {_id: result._id,
+                            credit_points:result.credit_points,
+                            profile_image_url:result.profile_image_url,name
+                        }
                     });
                     logger.debug('=====filter results=====' + JSON.stringify(filter_results));
                     res.status(200).json(filter_results);

@@ -1,33 +1,33 @@
 import React, { Component } from 'react';
-import { Card, Row, Col,Badge} from 'antd';
-import { Link } from 'react-router-dom';
+import { Card} from 'antd';
 import NewChallengesToSolve from './NewChallengesToSolve';
+import AskedChallenges from './AskedChallenges';
+import SolvedChallenges from './SolvedChallenges';
 export default class Home extends Component {
-
+    state = {
+        creditPoints: 0
+    }
+    componentWillMount() {
+        if (this.props.user.creditPoints)
+            this.setState({ creditPoints: this.props.user.creditPoints });
+    }
+    componentWillReceiveProps(props) {
+        if (props.user.creditPoints)
+            this.setState({ creditPoints: props.user.creditPoints });
+    }
     render() {
         return (
-            <div>
+            <div className='homepage'>
                 <Card title='New challenges for you'>
-                    <NewChallengesToSolve {...this.props} />
+                    <NewChallengesToSolve challenges={this.props.challengeState.challenges} />
                 </Card>
-                <Row type='flex' justify='space-around' style={{ marginTop: '20px' }}>
-                    <Col span={6}>
-                        <Card title='Current credit points'>
-                        <Badge count={this.props.user.creditPoints} style={{ backgroundColor: '#52c41a' }} overflowCount={1000}/>
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card title='Answered questions'>
-                            <Link to='/'>new questtion1</Link>
-                            <Link to='/'>new questtion2</Link>
-                            <Link to='/'>new questtion3</Link>
-                        </Card>
-                    </Col>
-                </Row>
-                <Row>
-                    <Link to='/portal/challengeform'>Ask New Question </Link>
-                </Row>
 
+                <Card title='Asked questions by you' style={{marginTop:'20px'}}>
+                    <AskedChallenges askedChallenges={this.props.challengeState.askedChallenges}/>
+                </Card>
+                <Card title='Solved Challenges by you' style={{marginTop:'20px'}}>
+                    <SolvedChallenges solvedChallenges={this.props.challengeState.solvedChallenges}/>
+                </Card>
             </div>
         )
     }

@@ -1,4 +1,4 @@
-import { SET_PUBLIC_CONTACTS, SET_USER, SET_FRIEND_LIST } from './constants';
+import { SET_PUBLIC_CONTACTS, SET_USER, SET_FRIEND_LIST, SET_LEADERBOARD } from './constants';
 import { combineReducers } from 'redux';
 import challengeState from './PortalContent/Home/reducer';
 
@@ -8,7 +8,8 @@ const initialState = {
     notifications: [],
     publicContacts: [],
     user: {},
-    friendList: []
+    friendList: [],
+    leaderboard: []
 };
 const userState = (state = initialState, action) => {
     switch (action.type) {
@@ -18,11 +19,13 @@ const userState = (state = initialState, action) => {
             return { ...state, user: action.user };
         case SET_FRIEND_LIST:
             return { ...state, friendList: action.friendList }
+        case SET_LEADERBOARD:
+            return { ...state, leaderboard: action.leaderboard }
         default:
             return state;
     }
 }
-const indexReducer=combineReducers({
+const indexReducer = combineReducers({
     userState,
     challengeState
 })

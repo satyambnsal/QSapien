@@ -2,14 +2,14 @@ import { take, call, put } from 'redux-saga/effects';
 import { GET_PUBLIC_CONTACTS, ADD_CONTACT_TO_FRIEND_LIST, GET_FRIEND_LIST, SEND_CHALLENGE, GET_USER } from './constants';
 
 import { handleApiErrors } from '../../lib/api-errors';
-import { setPublicContacts, setFriendList, setUser } from './actions';
+import { setPublicContacts, setFriendList, setUser,setLeaderboard} from './actions';
 import { sendChallengeSocketApi } from './socketapi';
 let REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 const GET_PUBLIC_CONTACTS_URL = `${REACT_APP_API_URL}/user/publicContacts`;
 const ADD_CONTACT_TO_FRIEND_LIST_URL = `${REACT_APP_API_URL}/user/addToFriendList`
 const GET_FRIEND_LIST_URL = `${REACT_APP_API_URL}/user/getFriendList`;
 const GET_USER_URL = `${REACT_APP_API_URL}/user/getUser`;
-
+const GET_LEADERBOARD_URL = `${REACT_APP_API_URL}/user/leaderboard`;
 export function* getPublicContactsApi({ userId }) {
     console.log('-------inside get public contacts api------');
     try {
@@ -94,7 +94,20 @@ export default function* contactRequestWatcher() {
             yield call(sendChallengeSocketApi, action);
         }
         if (action.type === GET_USER) {
-            yield call(getUserApi,action)
+            yield call(getUserApi, action)
         }
+    }
+}
+export function* getLeaderboardApi() {
+    console.log('-------inside get leaderboard api------');
+    try {
+        let leaderboard = yield fetch(GET_LEADERBOARD_URL, {
+            method: 'GET'
+        }).then(handleApiErrors).then(response => response.json())
+
+        yield put(setLeaderboard(leaderboard));
+    }
+    catch (error) {
+        console.log('error occured in get leaderboard api');
     }
 }

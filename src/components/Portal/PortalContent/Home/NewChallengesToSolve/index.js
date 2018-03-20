@@ -1,21 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { getChallenges } from '../actions';
 import { Button, Table, Divider} from 'antd';
-// import { fetchChallenges } from '../utils/challengeApi';
-
 import { Link } from 'react-router-dom';
 
-class NewChallengesToSolve extends Component {
-    componentWillReceiveProps(props) {
-        /*need to find a better method to update challenge list.maybe using observer pattern */
-        // if (props.user.userId&&!this.timer) {
-        //     this.timer=setInterval(props.getChallenges(props.user.userId),60000);
-        // }
-    }
-    componentWillUnmount() {
-        clearInterval(this.timer);
-    }
+export default class NewChallengesToSolve extends Component {
     handleDelete = (challenge) => {
         console.log('inside handle delete method');
     }
@@ -44,8 +31,3 @@ class NewChallengesToSolve extends Component {
         )
     }
 }
-const mapStateToProps = (state) => ({
-    challenges: state.portal.challengeState.challenges
-})
-
-export default connect(mapStateToProps, { getChallenges })(NewChallengesToSolve);
