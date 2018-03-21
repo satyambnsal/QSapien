@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Form, Input, Button, Icon, Card, Checkbox, message } from 'antd';
+import { Form, Input, Button, Icon, Card, Checkbox, message,Spin} from 'antd';
 import loginRequest from './actions';
-import Errors from '../Notifications/Errors';
 import Messages from '../Notifications/Messages';
 import { Redirect } from 'react-router-dom';
 
@@ -22,6 +21,7 @@ class Login extends Component {
             }
         })
     }
+
     render() {
         const {
             login: {
@@ -32,6 +32,9 @@ class Login extends Component {
             }
         } = this.props;
         const { getFieldDecorator } = this.props.form;
+        const info=(msg)=>{
+            message.info(msg);
+        }
         return (
             <Card title='QSapien Login' className='login-card'>
                 <Form onSubmit={this.submit} className="login-form">
@@ -56,7 +59,7 @@ class Login extends Component {
                         })(
                             <Checkbox>Remember me</Checkbox>
                             )}
-                        <a className="login-card-forgot" href="">Forgot password</a>
+                        <a className="login-card-forgot" href="" disabled>Forgot password</a>
                         <Button type="primary" htmlType="submit" className="login-card-button">
                             Log in
                         </Button>
@@ -64,13 +67,14 @@ class Login extends Component {
                 </Form>
                 <div className="auth-messages">
                     {
-                        !requesting && !!errors.length && (<Errors message="Failure to login due to..." errors={errors} />)
+                        !requesting&&errors.length&&!errors[0].isAccountVerified&&((<Redirect to='/activateaccount' />))
+                    }
+                    
+                    {
+                      !requesting&&errors.length&&info(errors[0].message)
                     }
                     {
-                        !requesting && !!messages.length && (<Messages messages={messages} />)
-                    }
-                    {
-                        requesting && <div>Logging in...</div>
+                        !!requesting&&(<Spin />)
                     }
                     {
                         !requesting && !successful && (<Link to="/signup">Need to Register? click here ></Link>)

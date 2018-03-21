@@ -1,11 +1,14 @@
 import User from '../models/User';
 import FriendList from '../models/FriendList';
+import Token from '../models/Token';
 import { body, validationResult } from 'express-validator/check';
 import { sanitizeBody } from 'express-validator/filter';
 import logger from 'winston';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import multer from 'multer';
 import { uploadFileToS3 } from '../utils/s3buckethandler';
+import sendEmail from '../utils/mailHandler';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'qsapiensecret';
 const PROFILE_IMAGES_DEST = process.env.PROFILE_IMAGES_DEST || './public/profileImages';
@@ -67,7 +70,27 @@ exports.user_signup_post = [
                         }
                         let token = jwt.sign({ id: result._id }, JWT_SECRET, { expiresIn: 86400 });
                         req.session.locallibrarytoken = token;
-                        res.status(200).json({ message: 'user completed signup successfully', token: token });
+                        const confirm_token = new Token({ userId: result._id, token: crypto.randomBytes(16).toString('hex') });
+                        confirm_token.save((err, token_save_result) => {
+                            if (err) {
+                                logger.info('error occured while saving confirmation token');
+                                res.status(500).json({ message: 'error occured while saving confirmation token' });
+                            }
+                            else {
+                                sendEmail(req, token_save_result.token, (err,mailStatus) => {
+                                    if (err) {
+                                        logger.info('error occured while sending account activation email');
+                                        User.remove({ _id: result._id }).then(Token.remove({ userId: result._id })).
+                                        then(res.status(500).json({ message: 'error occured while sending activation mail.contact administrator' })
+                                        );
+                                    }
+                                    else {
+                                        logger.info('account activation email sent successfully');
+                                        res.status(200).json({ message: 'user completed signup successfully', token: token });
+                                    }
+                                });
+                            }
+                        })
                     });
                 }
             });
@@ -111,17 +134,20 @@ exports.user_login_post = [
                 }
                 else if (!result) {
                     logger.info('error occured email id not registered');
-                    res.status(400).json({ message: 'email id is not registered' });
+                    res.status(400).json({ success: false, message: 'email id is not registered' });
                 }
                 else if (result.password !== req.body.password) {
                     logger.info('error occured password does not match');
-                    res.status(400).json({ message: 'Password does not match with given email address' });
+                    res.status(400).json({ success: false, message: 'Password does not match with given email address' });
+                }
+                else if (result.isVerified == false) {
+                    res.status(401).json({ success: false, isAccountVerified: false, message: 'your account is not verified' });
                 }
                 else {
                     logger.info('in login method::user verified successfully:: sending jwt token in request');
                     let token = jwt.sign({ id: result._id }, JWT_SECRET, { expiresIn: 86400 });
                     req.session.locallibrarytoken = token;
-                    return res.status(200).json({ token: { userId: result._id, token }, message: 'user verified successfully' });
+                    return res.status(200).json({ success: true, token: { userId: result._id, token }, message: 'user verified successfully' });
                 }
             })
         }
@@ -222,32 +248,32 @@ exports.check_usename_exist = (req, res) => {
         res.status(400).json({ checkSuccess: false, message: "username is required in request parameter" });
     }
 }
-exports.update_user_profile_post=[
-    body('userId','user id is required to update profile'),
-    (req,res)=>{
+exports.update_user_profile_post = [
+    body('userId', 'user id is required to update profile'),
+    (req, res) => {
         logger.info('update user profile method entry point');
-        let errors=validationResult(req);
-        if(!errors.isEmpty()){
-            logger.debug('validation error occured::'+JSON.stringify(errors));
-            res.status(500).json({profileUpdated:false,message:'error occured while updating profile'});
+        let errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            logger.debug('validation error occured::' + JSON.stringify(errors));
+            res.status(500).json({ profileUpdated: false, message: 'error occured while updating profile' });
         }
-        else{
-            const userId=req.body.userId;
-            const updateData={};
-            const updatableProp=['first_name','last_name','location','bio'];
+        else {
+            const userId = req.body.userId;
+            const updateData = {};
+            const updatableProp = ['first_name', 'last_name', 'location', 'bio'];
             for (let prop in req.body) {
-                if (req.body[prop] != '' &&updatableProp.includes(prop))
+                if (req.body[prop] != '' && updatableProp.includes(prop))
                     updateData[prop] = req.body[prop];
             }
-            logger.info('------updatable data-----',updateData);
-            User.findOneAndUpdate({_id:userId},{$set:updateData},(err,values)=>{
-                if(err){
+            logger.info('------updatable data-----', updateData);
+            User.findOneAndUpdate({ _id: userId }, { $set: updateData }, (err, values) => {
+                if (err) {
                     logger.info('error occured while updating user profile');
-                    res.status(500).json({profileUpdated:false,message:'error occured while updating profile'});
+                    res.status(500).json({ profileUpdated: false, message: 'error occured while updating profile' });
                 }
-                else{
+                else {
                     logger.info('user profile updated successfully');
-                    res.status(200).json({profileUpdated:true,message:'user profile updated successfully'});                    
+                    res.status(200).json({ profileUpdated: true, message: 'user profile updated successfully' });
                 }
             })
         }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { post } from 'axios';
-import { Form, Icon, Input, Button, Row, Col, message } from 'antd';
+import { Form, Icon, Input, Button, Row, Col, message,Modal} from 'antd';
 import {updateUserProfileApi} from '../../../../lib/utilities';
 const FormItem = Form.Item;
 const FILE_UPLOAD_URL = `${process.env.REACT_APP_API_URL}/user/fileupload`;
@@ -11,7 +11,8 @@ class AccountSettings extends Component {
     state = {
         file: '',
         imagePreviewUrl: this.props.user.profile_image_url || PROFILE_FALLBACK_URL,
-        profileLoaded: false
+        profileLoaded: false,
+        previewVisible:false
     }
 
     componentDidUpdate() {
@@ -75,6 +76,8 @@ class AccountSettings extends Component {
             message.error('error occurd while updating profile image.please contact administrator');
         }
     }
+    handlePreview = () => { this.setState({ previewVisible: true }) }
+    handleCancel = () => this.setState({ previewVisible: false })
 
     render() {
         const { user } = this.props;
@@ -82,22 +85,28 @@ class AccountSettings extends Component {
         let imagePreview = null;
         const { getFieldDecorator } = this.props.form;
         if (imagePreviewUrl) {
-            imagePreview = (<img alt='Profile' src={imagePreviewUrl} className='profile-update' />)
+            imagePreview = (<img alt='Profile' src={imagePreviewUrl} className='profile-update' onClick={this.handlePreview}/>)
         }
         return (
             <div className="accountSetting">
                 <Row>
-                    <Col span={8}>
+                    <Col span={6}>
                         {imagePreview}
                     </Col>
-                    <Col span={16}>
+                    <Col span={16} style={{marginTop:'21px'}}>
                         <form onSubmit={this.handleProfileImageSubmit}>
 
-                            <Input type='file' name={this.props.user.userId} onChange={this.onChange} name='Change Profile' required />
+                            <label className="select-profile">Select Profile
+                            <Input type='file' name={this.props.user.userId} onChange={this.onChange} required />
+                            </label>
                             <Button htmlType='submit'>Save</Button>
-                        </form></Col>
+                        </form>
+                        </Col>
                 </Row>
-
+                <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel} style={{maxWidth:'400px',maxHeight:'400px'}}>
+                    <img alt="Profile Photo" style={{ width: '100%' }} src={imagePreviewUrl} />
+                </Modal>
+                <hr/>
                 <Form onSubmit={this.handleProfileSubmit} style={{ marginTop: '20px' }}>
                     <Row type='flex' justify='space-between'>
                         <Col span={10}>

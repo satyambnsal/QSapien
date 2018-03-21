@@ -16,9 +16,10 @@ function loginAPI(email_id, password) {
         },
         body: JSON.stringify({email_id, password })
     })
-    .then(handleApiErrors)
     .then(response =>response.json())
-    .catch((errors) => { throw errors })
+    .catch((errors) => {
+        console.log(errors);
+         throw errors })
 }
 function* initializeState({userId}){
     try{
@@ -31,7 +32,7 @@ function* initializeState({userId}){
         return true;
     }
     catch(error){
-        yield put({ type: LOGIN_ERROR,error:"empty token error"});
+        yield put({ type: LOGIN_ERROR,error:{message:'empty token error'}});
         return false;
     }
 }
@@ -39,6 +40,7 @@ function* loginFlow({email_id, password}) {
     let token,resp;
     try {
         resp = yield call(loginAPI,email_id, password);
+        console.log('resp',JSON.stringify(resp));
         token=resp.token;
         if(token){
             yield put(setClient(token));
@@ -47,14 +49,17 @@ function* loginFlow({email_id, password}) {
             if(initializeStateSuccess)
             yield put({ type: LOGIN_SUCCESS });
         }
+        else if(resp.success==false&&resp.isAccountVerified==false){
+            yield put({ type: LOGIN_ERROR,error:{isAccountVerified:false,success:false,message:resp.message}})            
+        }
         else{
-            yield put({ type: LOGIN_ERROR,error:"empty token error"})         
+            yield put({ type: LOGIN_ERROR,error:{message:"empty token error"}})         
         }
 
     }
     catch (error) {
         console.log('error occured:: '+JSON.stringify(error));
-        yield put({ type: LOGIN_ERROR, error })
+        yield put({ type: LOGIN_ERROR,error:{message:error.toString()}})
     }
 }
 

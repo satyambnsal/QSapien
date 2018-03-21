@@ -26,7 +26,7 @@ class Portal extends Component {
                     <TopHeader unsetClient={unsetClient} user={user} /></Header>
                 <Layout>
                     <Sider style={{ minHeight: '100vh', width: '256px' }} collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-                        <Menu theme='dark' defaultSelectedKeys={['1']} mode='inline'>
+                        <Menu theme='dark' mode='inline'>
                             <Menu.Item key="askquestion"><span><Link to='/portal/challengeform'><Icon type='question-circle-o' style={{ color: 'white' }} /></Link></span>
                                 <span className='side-nav-item'><Link to='/portal/challengeform'>Ask New Question</Link></span></Menu.Item>
                             <Menu.Item key="1"><span><Link to='/portal'><Icon type='home' style={{ color: 'white' }} /></Link></span>
