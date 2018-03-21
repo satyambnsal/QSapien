@@ -188,3 +188,19 @@ display:none;
 .ant-menu-item{
     margin-top: 0px !important;
 }
+input[type="file"] {
+    display: none;
+}
+.select-profile{
+    background: white;
+    color:#666;
+    border:1px solid #ddd;
+    padding:5px;
+    margin:10px;
+    font-weight:400;
+    cursor:pointer;
+    border-radius:3px;
+}
+.select-profile:hover{
+    border-color: #40a9ff;
+}

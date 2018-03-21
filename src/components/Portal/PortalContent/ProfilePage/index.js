@@ -16,7 +16,7 @@ export default class UserProfile extends Component {
                     <p className='user-bio'>{this.props.user.bio}</p>
                     <hr />
                 </Card>
-                <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
+                <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel} style={{maxWidth:'400px',maxHeight:'400px'}}>
                     <img alt="Profile Photo" style={{ width: '100%' }} src={this.props.user.profile_image_url} />
                 </Modal>
             </div>
