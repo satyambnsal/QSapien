@@ -5,12 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nf start",
+    "start": "react-srcipts start",
     "eject": "react-scripts eject",
-    "webpack": "./node_modules/.bin/webpack -w",
     "start-dev": "nf start",
-    "start-server": "nodemon server.js --exec babel-node",
-    "prod": "pm2 start server.js --exec babel-node --name 'QSapien'&&pm2 start node_modules/.bin/react-scripts/start.js --name 'QSapein'"
+    "start-server": "nodemon server.js --exec babel-node"
   },
   "keywords": [],
   "author": "",
