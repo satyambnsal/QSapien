@@ -3,30 +3,28 @@ const initialState = {
     requesting: false,
     successful: false,
     messages: [],
-    errors: []
+    errors:[]
 };
 const reducer = function (state = initialState, action) {
+    console.log('action:',JSON.stringify(action));
     switch (action.type) {
         case LOGIN_REQUESTING:
             return {
                 requesting: true,
                 successful: false,
                 messages: [{ body: "Login requesting....", time: new Date() }],
-                errors: []
+                errors:[]
             }
         case LOGIN_SUCCESS:
             return {
                 requesting: false,
                 successful: true,
-                errors: [],
+                errors:[],
                 messages: []
             }
         case LOGIN_ERROR:
             return {
-                errors: state.errors.concat([{
-                    body: action.error.toString(),
-                    time: new Date()
-                }]),
+                errors:[action.error],
                 requesting: false,
                 successful: false,
                 messages: []

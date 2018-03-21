@@ -4,7 +4,9 @@ import Login from './Login/index.js';
 import { connect } from 'react-redux';
 import Signup from './Signup/index.js';
 import Portal from './Portal/index.js';
+import ActivateAccount from './Login/ActivateAccount';
 import AuthorizeRoute from '../lib/AuthorizeRoute';
+
 class App extends Component {
     render() {
         const { store } = this.props;
@@ -13,6 +15,7 @@ class App extends Component {
                 <Switch>
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/signup" component={Signup} />
+                    <Route exact path='/activateaccount' component={ActivateAccount}/>
                     <AuthorizeRoute path='/portal' component={Portal} store={store} />
                     <Redirect to='/portal' />                    
                 </Switch>

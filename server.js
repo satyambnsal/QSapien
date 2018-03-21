@@ -1,6 +1,7 @@
 require('dotenv').config();
 var express = require('express');
 var chalk = require('chalk');
+var ejs=require('ejs');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 let session=require('express-session');
@@ -36,6 +37,8 @@ app.use(function (req, res, next) {
     res.setHeader('Cache-Control', 'no-cache');
     next();
 });
+app.set('views',__dirname+'/server/views');
+app.set('view engine','ejs');
 app.use('/user',userRoute);
 app.use(express.static('public'));
 

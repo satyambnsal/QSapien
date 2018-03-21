@@ -77,17 +77,18 @@ exports.user_signup_post = [
                                 res.status(500).json({ message: 'error occured while saving confirmation token' });
                             }
                             else {
-                                sendEmail(req,token_save_result.token,(err, result) => {
+                                sendEmail(req, token_save_result.token, (err,mailStatus) => {
                                     if (err) {
                                         logger.info('error occured while sending account activation email');
-                                        res.status(500).json({ message: 'error occured while sending activation mail.contact administrator' });
+                                        User.remove({ _id: result._id }).then(Token.remove({ userId: result._id })).
+                                        then(res.status(500).json({ message: 'error occured while sending activation mail.contact administrator' })
+                                        );
                                     }
                                     else {
                                         logger.info('account activation email sent successfully');
                                         res.status(200).json({ message: 'user completed signup successfully', token: token });
                                     }
                                 });
-
                             }
                         })
                     });
@@ -133,17 +134,20 @@ exports.user_login_post = [
                 }
                 else if (!result) {
                     logger.info('error occured email id not registered');
-                    res.status(400).json({ message: 'email id is not registered' });
+                    res.status(400).json({ success: false, message: 'email id is not registered' });
                 }
                 else if (result.password !== req.body.password) {
                     logger.info('error occured password does not match');
-                    res.status(400).json({ message: 'Password does not match with given email address' });
+                    res.status(400).json({ success: false, message: 'Password does not match with given email address' });
+                }
+                else if (result.isVerified == false) {
+                    res.status(401).json({ success: false, isAccountVerified: false, message: 'your account is not verified' });
                 }
                 else {
                     logger.info('in login method::user verified successfully:: sending jwt token in request');
                     let token = jwt.sign({ id: result._id }, JWT_SECRET, { expiresIn: 86400 });
                     req.session.locallibrarytoken = token;
-                    return res.status(200).json({ token: { userId: result._id, token }, message: 'user verified successfully' });
+                    return res.status(200).json({ success: true, token: { userId: result._id, token }, message: 'user verified successfully' });
                 }
             })
         }

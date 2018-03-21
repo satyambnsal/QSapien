@@ -7,7 +7,7 @@ import {
 import { get_challenges_post, solve_challenge_post, get_asked_challenges, get_solved_challenges } from '../controller/challengeController';
 import { public_contacts_post, add_to_friend_list, friend_list_get } from '../controller/contactsController';
 import { leaderboard_get } from '../controller/leaderboardController';
-import { confirm_account } from '../controller/tokenController';
+import { confirm_account, resend_token_post } from '../controller/tokenController';
 
 router.post('/login', user_login_post);
 router.post('/signup', user_signup_post);
@@ -22,6 +22,7 @@ router.post('/solveChallenge',solve_challenge_post);
 router.post('/updateUserProfile',update_user_profile_post);
 router.post('/solvedChallenges',get_solved_challenges);
 router.post('/askedChallenges',get_asked_challenges);
+router.post('/resendActivationToken',resend_token_post);
 router.get('/checkUsernameExist',check_usename_exist);
 router.get('/leaderboard',leaderboard_get);
 router.get('/confirmation',confirm_account);
