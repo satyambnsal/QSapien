@@ -5,14 +5,14 @@ import Errors from '../Notifications/Errors';
 import Messages from '../Notifications/Messages';
 import { Redirect } from 'react-router-dom';
 import { signupRequesting } from './actions';
-import {checkUsernameExistApi} from '../../lib/utilities';
-import { Form, Icon, Button, Input, Row, Col, Tooltip, Card,message} from 'antd'
+import { checkUsernameExistApi } from '../../lib/utilities';
+import { Form, Icon, Button, Input, Row, Col, Tooltip, Card, message, Spin } from 'antd'
 const FormItem = Form.Item;
 
 class Signup extends Component {
     state = { confirmDirty: false };
 
-    handleSubmit = (e,values) => {
+    handleSubmit = (e, values) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -26,19 +26,19 @@ class Signup extends Component {
         const value = e.target.value;
         this.setState({ confirmDirty: this.state.confirmDirty || !!value });
     }
-    checkUsernameExist=(rule,value,callback)=>{
-    checkUsernameExistApi(value,(err,values)=>{
-        if(!err){
-        if(values.isExist)
-        callback('Username already exist');
-        else
-        callback();
-        }
-        else{
-  //          message.error('it looks like backend services are down.contact your administrator');
-            callback('error occured while checking username validation');
-        }
-    })
+    checkUsernameExist = (rule, value, callback) => {
+        checkUsernameExistApi(value, (err, values) => {
+            if (!err) {
+                if (values.isExist)
+                    callback('Username already exist');
+                else
+                    callback();
+            }
+            else {
+                //          message.error('it looks like backend services are down.contact your administrator');
+                callback('error occured while checking username validation');
+            }
+        })
     }
     compareToFirstPassword = (rule, value, callback) => {
         const form = this.props.form;
@@ -65,11 +65,14 @@ class Signup extends Component {
             errors,
             messages }
          } = this.props;
-        const {getFieldDecorator } = this.props.form;
+        const error = (msg) => {
+            message.error(msg);
+        }
+        const { getFieldDecorator } = this.props.form;
         return (
             <Card title="QSapien Register" className="signup-card">
                 <div className="signup-form">
-                    <Form onSubmit={(e,values)=>this.handleSubmit(e,values)}>
+                    <Form onSubmit={(e, values) => this.handleSubmit(e, values)}>
                         <Row type='flex' justify='space-between'>
                             <Col span={11}>
                                 <FormItem label="First Name">
@@ -84,9 +87,9 @@ class Signup extends Component {
                             </Col>
                             <Col span={11}>
                                 <FormItem label="Last Name">
-                                   {
-                                       getFieldDecorator('last_name')(<Input />)
-                                   }
+                                    {
+                                        getFieldDecorator('last_name')(<Input />)
+                                    }
                                 </FormItem>
                             </Col>
                         </Row>
@@ -134,22 +137,22 @@ class Signup extends Component {
                             )}>
                             {getFieldDecorator('username', {
                                 rules: [{ required: true, message: 'Please input your username!' },
-                            {validator:this.checkUsernameExist}]
+                                { validator: this.checkUsernameExist }]
                             })(<Input />)
                             }
                         </FormItem>
-                            <Button type="primary" htmlType="submit">Register</Button>
+                        <Button type="primary" htmlType="submit">Register</Button>
                     </Form>
                 </div>
                 <div className="auth-messages">
                     {
-                        !requesting && !!errors.length && (<Errors message="Failure to signup due to..." errors={errors} />)
+                        (!requesting && !!errors.length) ? error(errors[0].message) : ''
                     }
                     {
-                        !requesting && !!messages.length && (<Messages messages={messages} />)
+                        (!requesting && !!messages.length) ? (<Messages messages={messages} />) : ''
                     }
                     {
-                        requesting && <div>Signup in progress ...</div>
+                        !!requesting && <Spin />
                     }
                     {
                         !requesting && !successful && (<Link to="/login">Already SignUp? click here to login >></Link>)

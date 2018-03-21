@@ -32,8 +32,8 @@ class Login extends Component {
             }
         } = this.props;
         const { getFieldDecorator } = this.props.form;
-        const info=(msg)=>{
-            message.info(msg);
+        const error=(msg)=>{
+            message.error(msg);
         }
         return (
             <Card title='QSapien Login' className='login-card'>
@@ -67,11 +67,11 @@ class Login extends Component {
                 </Form>
                 <div className="auth-messages">
                     {
-                        !requesting&&errors.length&&!errors[0].isAccountVerified&&((<Redirect to='/activateaccount' />))
+                        (!requesting&&errors.length&&!!errors[0].isUserExist&&!!errors[0].isPasswordMatch&&!errors[0].isAccountVerified)?(<Redirect to='/activateaccount' />):''
                     }
                     
                     {
-                      !requesting&&errors.length&&info(errors[0].message)
+                      (!requesting&&!successful&&errors.length)?error(errors[0].message):''                      
                     }
                     {
                         !!requesting&&(<Spin />)

@@ -49,24 +49,24 @@ exports.user_signup_post = [
             logger.debug("express validator validation error:: " + JSON.stringify(tempErr));
             for (let prop in tempErr)
                 errorMsgs.push(tempErr[prop].msg);
-            return res.status(400).json({ message: 'error occured' });
+            return res.status(400).json({success:false,message: 'error occured while validating signup fields' });
         }
         else {
             User.findOne({ email_id: req.body.email_id }, (err, result) => {
                 if (err) {
                     logger.debug("finding record in user database error::" + JSON.stringify(err));
-                    return next(err);
+                    res.status(400).json({success:false,message: 'internal error occured' });
                 }
                 else if (result) {
                     logger.info("email id already in use");
-                    return res.status(400).json({ message: 'email id already exists' });
+                    return res.status(400).json({ success:false,message: 'email id already exists' });
                 }
                 else {
                     user.save((err, result) => {
                         if (err) {
                             logger.info('error occured while saving user record');
                             logger.debug("error::" + err.message);
-                            return next(err);
+                            res.status(400).json({success:false,message: 'internal error occured' });                            
                         }
                         let token = jwt.sign({ id: result._id }, JWT_SECRET, { expiresIn: 86400 });
                         req.session.locallibrarytoken = token;
@@ -74,19 +74,19 @@ exports.user_signup_post = [
                         confirm_token.save((err, token_save_result) => {
                             if (err) {
                                 logger.info('error occured while saving confirmation token');
-                                res.status(500).json({ message: 'error occured while saving confirmation token' });
+                                res.status(500).json({success:false,message: 'error occured while saving confirmation token' });
                             }
                             else {
                                 sendEmail(req, token_save_result.token, (err,mailStatus) => {
                                     if (err) {
                                         logger.info('error occured while sending account activation email');
                                         User.remove({ _id: result._id }).then(Token.remove({ userId: result._id })).
-                                        then(res.status(500).json({ message: 'error occured while sending activation mail.contact administrator' })
+                                        then(res.status(500).json({success:false,message: 'error occured while sending activation mail.contact administrator' })
                                         );
                                     }
                                     else {
                                         logger.info('account activation email sent successfully');
-                                        res.status(200).json({ message: 'user completed signup successfully', token: token });
+                                        res.status(200).json({success:true,message: 'user completed signup successfully', token: token });
                                     }
                                 });
                             }
@@ -113,7 +113,7 @@ exports.user_login_post = [
                     return next(err);
                 }
                 logger.info("jwt token verified successfully");
-                return res.status(200).json({ message: 'user verified successfully' });
+                return res.status(200).json({success:true,message: 'user verified successfully' });
             })
         }
         let errors = validationResult(req);
@@ -123,25 +123,25 @@ exports.user_login_post = [
             logger.debug("express validator validation error:: " + JSON.stringify(tempErr));
             for (let prop in tempErr)
                 errorMsgs.push(tempErr[prop].msg);
-            return res.status(400).json({ message: 'error occured while verifying user' });
+            return res.status(400).json({success:false,message: 'error occured while verifying user' });
         }
         else {
             User.findOne({ email_id: req.body.email_id }, (err, result) => {
                 logger.info('inside find user');
                 logger.debug('login method find method result::' + JSON.stringify(result));
                 if (err) {
-                    next(err);
+                res.status(400).json({success:false,message: 'error occured while verifying user' });                    
                 }
                 else if (!result) {
                     logger.info('error occured email id not registered');
-                    res.status(400).json({ success: false, message: 'email id is not registered' });
+                    res.status(400).json({ success: false,isUserExist:false,message: 'email id is not registered' });
                 }
                 else if (result.password !== req.body.password) {
                     logger.info('error occured password does not match');
-                    res.status(400).json({ success: false, message: 'Password does not match with given email address' });
+                    res.status(400).json({ success: false, isUserExist:true,isPasswordMatch:false,message: 'Password does not match with given email address' });
                 }
                 else if (result.isVerified == false) {
-                    res.status(401).json({ success: false, isAccountVerified: false, message: 'your account is not verified' });
+                    res.status(401).json({ success: false,isUserExist:true,isPasswordMatch:true,isAccountVerified: false, message: 'your account is not verified' });
                 }
                 else {
                     logger.info('in login method::user verified successfully:: sending jwt token in request');
