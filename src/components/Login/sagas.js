@@ -18,7 +18,6 @@ function loginAPI(email_id, password) {
     })
     .then(response =>response.json())
     .catch((errors) => {
-        console.log(errors);
          throw errors })
 }
 function* initializeState({userId}){
@@ -39,7 +38,6 @@ function* initializeState({userId}){
 function* loginFlow({email_id, password}) {
     try {
         const response = yield call(loginAPI,email_id, password);
-        console.log('resp',JSON.stringify(response));
         const token=response.token;
         if(response.success&&token){
             yield put(setClient(token));
@@ -53,7 +51,6 @@ function* loginFlow({email_id, password}) {
         }
     }
     catch (error) {
-        console.log('error occured:: '+JSON.stringify(error));
         yield put({ type: LOGIN_ERROR,error:{message:error.toString()}})
     }
 }
