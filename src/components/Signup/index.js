@@ -6,7 +6,7 @@ import Messages from '../Notifications/Messages';
 import { Redirect } from 'react-router-dom';
 import { signupRequesting } from './actions';
 import { checkUsernameExistApi } from '../../lib/utilities';
-import { Form, Icon, Button, Input, Row, Col, Tooltip, Card, message, Spin } from 'antd'
+import { Form, Icon, Button, Input, Row, Col, Tooltip, Card, message, Spin,notification} from 'antd'
 const FormItem = Form.Item;
 
 class Signup extends Component {
@@ -21,6 +21,14 @@ class Signup extends Component {
             }
         })
 
+    }
+    handleErrorMessage=()=>{
+        if(this.props.signup.errors&&this.props.signup.errors.length){
+            notification['error']({
+                message: 'Error',
+                description:this.props.login.errors[0].message
+            })
+        }
     }
     handleConfirmBlur = (e) => {
         const value = e.target.value;
@@ -141,13 +149,10 @@ class Signup extends Component {
                             })(<Input />)
                             }
                         </FormItem>
-                        <Button type="primary" htmlType="submit">Register</Button>
+                        <Button type="primary" htmlType="submit" onClick={this.handleErrorMessage}>Register</Button>
                     </Form>
                 </div>
                 <div className="auth-messages">
-                    {
-                        (!requesting && !!errors.length) ? error(errors[0].message) : ''
-                    }
                     {
                         (!requesting && !!messages.length) ? (<Messages messages={messages} />) : ''
                     }
