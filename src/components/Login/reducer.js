@@ -1,4 +1,4 @@
-import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './constants';
+import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR} from './constants';
 const initialState = {
     requesting: false,
     successful: false,
@@ -6,7 +6,6 @@ const initialState = {
     errors:[]
 };
 const reducer = function (state = initialState, action) {
-    console.log('action:',JSON.stringify(action));
     switch (action.type) {
         case LOGIN_REQUESTING:
             return {

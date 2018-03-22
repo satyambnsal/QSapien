@@ -14,8 +14,7 @@ const transporter=nodemailer.createTransport({
     auth:{
         user:ADMIN_EMAIL_ID,
         pass:ADMIN_EMAIL_PASSWORD
-    },
-    proxy:process.env.HTTP_PROXY
+    }
 });
 const sendEMail=(req,token,callback)=>{
 logger.info('receiver id::',req.body.email_id);
