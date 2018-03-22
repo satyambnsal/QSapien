@@ -1,4 +1,4 @@
-import {LOGIN_REQUESTING} from './constants';
+import {LOGIN_REQUESTING, RESEND_ACTIVATION_MAIL, RESEND_ACTIVATION_MAIL_RESPONSE} from './constants';
 
 const loginRequest=function({email_id,password}){
     return{
@@ -7,4 +7,12 @@ const loginRequest=function({email_id,password}){
         password
     };
 }
+export const resendActivationMail=({email_id})=>({
+    type:RESEND_ACTIVATION_MAIL,
+    email_id
+});
+export const resendActivationMailResponse=(response)=>({
+    type:RESEND_ACTIVATION_MAIL_RESPONSE,
+    response
+});
 export default loginRequest;
