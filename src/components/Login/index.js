@@ -56,7 +56,7 @@ class Login extends Component {
                             )}
                     </FormItem>
                     <FormItem>
-                        {getFieldDecorator('re  member', {
+                        {getFieldDecorator('remember', {
                             valuePropName: 'checked',
                             initialValue: true,
                         })(
