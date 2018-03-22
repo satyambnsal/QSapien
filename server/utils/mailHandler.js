@@ -19,7 +19,7 @@ const transporter=nodemailer.createTransport({
 const sendEMail=(req,token,callback)=>{
 logger.info('receiver id::',req.body.email_id);
 const confirmation_link=`http://${req.headers.host}/user/confirmation?code=${token}`
-ejs.renderFile(__dirname+'/mailTemplate.ejs',{user_email:req.body.email_id,confirmation_link},(err,result)=>{
+ejs.renderFile(__dirname+'/../views/mailTemplate.ejs',{user_email:req.body.email_id,confirmation_link},(err,result)=>{
 if(err){
 logger.info('error occured in ejs render file method');
 logger.info(err );
