@@ -41,9 +41,12 @@ class Login extends Component {
         return (
             <div>
                  <Affix>
-                    <Alert message='Demo username: test, demo password:test123' type='info' />
+                    <Alert message='Experimental Account 1:  username: test, password:test123' type='info' />
+                </Affix> 
+                <Affix>
+                    <Alert message='Experimental Account 2:  username: sapien, password:sapien123' type='info' />
                 </Affix>
-                
+
             <Card title='QSapien Login' className='login-card'>
                 <Form onSubmit={this.submit} className="login-form">
                     <FormItem>
