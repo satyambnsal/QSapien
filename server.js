@@ -1,32 +1,33 @@
 require('dotenv').config();
+
 var express = require('express');
 var chalk = require('chalk');
-var ejs=require('ejs');
+var ejs = require('ejs');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-let session=require('express-session');
-let MongoStore=require('connect-mongo')(session);
-let userRoute=require('./server/routes/user');
-let {challengeHandler}=require('./server/sockethandler');
-let io=require('socket.io');
+let session = require('express-session');
+let MongoStore = require('connect-mongo')(session);
+let userRoute = require('./server/routes/user');
+let { challengeHandler } = require('./server/sockethandler');
+let io = require('socket.io');
 var app = express();
-let server=require('http').createServer(app);
-io=io.listen(server);
+let server = require('http').createServer(app);
+io = io.listen(server);
 
 var port = process.env.SERVER_PORT || 3001;
-let MONGODB_URI=process.env.MONGODB_URI||"mongodb://localhost:27017/QSapien";
+let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/QSapien";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.Promise = global.Promise;
-mongoose.connect(MONGODB_URI,{ useMongoClient: true });
-let db=mongoose.connection;
+mongoose.connect(MONGODB_URI, { useMongoClient: true });
+let db = mongoose.connection;
 app.use(session({
-    secret:process.env.SESSION_SECRET||'qsapien_session_secret',
-    resave:false,
-    saveUninitialized:true,
-    store:new MongoStore({mongooseConnection:db})
+    secret: process.env.SESSION_SECRET || 'qsapien_session_secret',
+    resave: false,
+    saveUninitialized: true,
+    store: new MongoStore({ mongooseConnection: db })
 }));
 
 app.use(function (req, res, next) {
@@ -37,19 +38,21 @@ app.use(function (req, res, next) {
     res.setHeader('Cache-Control', 'no-cache');
     next();
 });
-app.set('views',__dirname+'/server/views');
-app.set('view engine','ejs');
-app.use('/user',userRoute);
-app.use(express.static('public'));
 
-io.on('connection',(socket)=>{
+app.set('views', __dirname + '/server/views');
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+app.use('/user', userRoute);
+
+
+io.on('connection', (socket) => {
     console.log('connection is open');
-    console.log('socket id::'+socket.id);
-socket.on('sendChallenge',values=>{
-    challengeHandler(values,(response)=>{
-        console.log('response::'+response.message);
-    });
-})
+    console.log('socket id::' + socket.id);
+    socket.on('sendChallenge', values => {
+        challengeHandler(values, (response) => {
+            console.log('response::' + response.message);
+        });
+    })
 })
 
 server.listen(port, function () {
