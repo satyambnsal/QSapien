@@ -51,10 +51,14 @@ class ActivateAccount extends Component {
                         </Col>
                     </Row>
                 </Form>
-                <div className='nav-links'>
-                <Link to='/login'>Login</Link>
-                <Link to='/signup'>Signup</Link>
-                </div>
+                <Row type='flex' justify='center' style={{marginTop:'150px'}}>
+                <Col span={6}>
+                <Button href='/login' type='primary'>Login</Button>
+                </Col>
+                <Col span={6}>
+                <Button to='/signup' type='primary'>Signup</Button>
+                </Col>
+                </Row>
                 <div className="messages">
                 {
                     resendActivationMailRequesting&&<Spin />
