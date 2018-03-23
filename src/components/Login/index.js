@@ -84,7 +84,7 @@ class Login extends Component {
                         !!requesting && (<Spin />)
                     }
                     {
-                        !requesting && !successful && (<Link to="/signup">Need to Register? click here ></Link>)
+                        !requesting && !successful && (<a href="/signup">Need to Register? click here ></a>)
                     }
                     {
                         !!successful && (<Redirect to='/portal' />)
