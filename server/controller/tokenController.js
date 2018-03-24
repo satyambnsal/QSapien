@@ -2,6 +2,7 @@ import User from '../models/User';
 import Token from '../models/Token';
 import logger from 'winston';
 import crypto from 'crypto';
+import sendEmail from '../utils/mailHandler';
 exports.confirm_account = (req, res) => {
     Token.findOne({ token: req.query.code }, function (err, token) {
         if (!token) {
@@ -35,6 +36,7 @@ exports.confirm_account = (req, res) => {
     });
 }
 exports.resend_token_post = (req, res) => {
+    console.log('request body::',req.body)
     if (req.body.email_id) {
         User.findOne({ email_id: req.body.email_id }, (err, user) => {
             if (err) {

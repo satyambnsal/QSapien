@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Form, Input, Button, Icon, Card, Checkbox, message,Spin,notification} from 'antd';
+import { Form, Input, Button, Icon, Card, Checkbox, message, Spin, notification, Affix, Alert } from 'antd';
 import loginRequest from './actions';
 import Messages from '../Notifications/Messages';
 import { Redirect } from 'react-router-dom';
@@ -20,13 +20,13 @@ class Login extends Component {
             }
         })
     }
-    handleErrorMessage=()=>{
-        if(this.props.login.errors&&this.props.login.errors.length){
+    handleErrorMessage = () => {
+        if (this.props.login.errors && this.props.login.errors.length) {
             notification['error']({
                 message: 'Error',
-                description:this.props.login.errors[0].message
-              });
-        }            
+                description: this.props.login.errors[0].message
+            });
+        }
     }
     render() {
         const {
@@ -39,6 +39,14 @@ class Login extends Component {
         } = this.props;
         const { getFieldDecorator } = this.props.form;
         return (
+            <div>
+                 <Affix>
+                    <Alert message='Experimental Account 1:  username: test, password:test123' type='info' />
+                </Affix> 
+                <Affix>
+                    <Alert message='Experimental Account 2:  username: sapien, password:sapien123' type='info' />
+                </Affix>
+
             <Card title='QSapien Login' className='login-card'>
                 <Form onSubmit={this.submit} className="login-form">
                     <FormItem>
@@ -70,19 +78,21 @@ class Login extends Component {
                 </Form>
                 <div className="auth-messages">
                     {
-                        (!requesting&&errors.length&&!!errors[0].isUserExist&&!!errors[0].isPasswordMatch&&!errors[0].isAccountVerified)?(<Redirect to='/activateaccount' />):''
+                        (!requesting && errors.length && !!errors[0].isUserExist && !!errors[0].isPasswordMatch && !errors[0].isAccountVerified) ? (<Redirect to='/activateaccount' />) : ''
                     }
                     {
-                        !!requesting&&(<Spin />)
+                        !!requesting && (<Spin />)
                     }
                     {
-                        !requesting && !successful && (<Link to="/signup">Need to Register? click here ></Link>)
+                        !requesting && !successful && (<a href="/signup">Need to Register? click here ></a>)
                     }
                     {
                         !!successful && (<Redirect to='/portal' />)
                     }
                 </div>
             </Card>
+
+            </div>
         )
     }
 }
@@ -92,4 +102,4 @@ const mapStateToProps = (state) => ({
 });
 
 const WrappedLogin = Form.create()(Login)
-export default connect(mapStateToProps, { loginRequest})(WrappedLogin);
+export default connect(mapStateToProps, { loginRequest })(WrappedLogin);
