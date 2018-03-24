@@ -1,6 +1,6 @@
 import { takeLatest, put } from 'redux-saga/effects';
 import { GET_CHALLENGES,SOLVE_CHALLENGE_REQUESTING, GET_ASKED_CHALLENGES, GET_SOLVED_CHALLENGES } from './constants';
-import { setChallenges,setSolveChallengeResult,setAskedChallenges,setSolvedChallenges, solveChallenge} from './actions';
+import { setChallenges,setSolveChallengeResult,setAskedChallenges,setSolvedChallenges} from './actions';
 
 import { handleApiErrors } from '../../../../lib/api-errors';
 

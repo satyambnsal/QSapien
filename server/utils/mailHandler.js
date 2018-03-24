@@ -6,9 +6,6 @@ logger.level='debug';
 const ADMIN_EMAIL_ID=process.env.ADMIN_EMAIL_ID||'abc123@gmail.com';
 const ADMIN_EMAIL_PASSWORD=process.env.ADMIN_EMAIL_PASSWORD||'abc123';
 
-// const mailTemplateSource=fs.readFileSync(__dirname+'/mailTemplate.ejs');
-// const mailTemplate=Handlebars.compile(mailTemplateSource);
-console.log('admin email password',ADMIN_EMAIL_PASSWORD);
 const transporter=nodemailer.createTransport({
     service:'gmail',
     auth:{

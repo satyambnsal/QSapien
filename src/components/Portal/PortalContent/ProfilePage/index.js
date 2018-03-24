@@ -17,7 +17,7 @@ export default class UserProfile extends Component {
                     <hr />
                 </Card>
                 <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel} style={{maxWidth:'400px',maxHeight:'400px'}}>
-                    <img alt="Profile Photo" style={{ width: '100%' }} src={this.props.user.profile_image_url} />
+                    <img alt="User profile" style={{ width: '100%' }} src={this.props.user.profile_image_url} />
                 </Modal>
             </div>
         )

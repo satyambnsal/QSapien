@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Card,Select,Button,message,Row,Col,Modal} from 'antd';
 import {solveChallenge,resetSolveChallenge} from '../actions';
-import {Link} from 'react-router-dom';
 const Option=Select.Option;
 
 

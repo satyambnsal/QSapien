@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { post } from 'axios';
-import { Form, Icon, Input, Button, Row, Col, message,Modal} from 'antd';
+import { Form,Input, Button, Row, Col, message,Modal} from 'antd';
 import {updateUserProfileApi} from '../../../../lib/utilities';
 const FormItem = Form.Item;
 const FILE_UPLOAD_URL = `${process.env.REACT_APP_API_URL}/user/fileupload`;
@@ -85,7 +85,7 @@ class AccountSettings extends Component {
         let imagePreview = null;
         const { getFieldDecorator } = this.props.form;
         if (imagePreviewUrl) {
-            imagePreview = (<img alt='Profile' src={imagePreviewUrl} className='profile-update' onClick={this.handlePreview}/>)
+            imagePreview = (<img alt='User profile' src={imagePreviewUrl} className='profile-update' onClick={this.handlePreview}/>)
         }
         return (
             <div className="accountSetting">
@@ -104,7 +104,7 @@ class AccountSettings extends Component {
                         </Col>
                 </Row>
                 <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel} style={{maxWidth:'400px',maxHeight:'400px'}}>
-                    <img alt="Profile Photo" style={{ width: '100%' }} src={imagePreviewUrl} />
+                    <img alt="User profile" style={{ width: '100%' }} src={imagePreviewUrl} />
                 </Modal>
                 <hr/>
                 <Form onSubmit={this.handleProfileSubmit} style={{ marginTop: '20px' }}>

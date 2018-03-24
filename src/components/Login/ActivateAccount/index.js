@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Input, Button, Row, Col, Form, message,Spin} from 'antd';
+import { Alert, Input, Button, Row, Col, Form, message, Spin } from 'antd';
 import { connect } from 'react-redux';
-import {Link} from 'react-router-dom';
 import { resendActivationMail } from '../actions';
 const FormItem = Form.Item;
 class ActivateAccount extends Component {
@@ -17,17 +16,14 @@ class ActivateAccount extends Component {
             }
         })
     }
-    handleMessage=()=>{
-    if(this.props.resendActivationMailResponse.message){
-        message.info(this.props.resendActivationMailResponse.message);        
-    }
+    handleMessage = () => {
+        if (this.props.resendActivationMailResponse.message) {
+            message.info(this.props.resendActivationMailResponse.message);
+        }
     }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const {resendActivationMailRequesting,resendActivationMailResponse}=this.props;
-        const info=(msg)=>{
-            message.info(msg);
-        }
+        const { resendActivationMailRequesting} = this.props;
         return (
             <div className='activate-account'>
                 <Alert message='Your Account is not verified yet.please verify your account to use QSapien services' type='error' />
@@ -36,33 +32,35 @@ class ActivateAccount extends Component {
                 <Form onSubmit={this.handlSubmit}>
                     <Row type='flex' justify='center' style={{ marginTop: '30px' }}>
                         <Col span={12}>
-                            {
-                                getFieldDecorator('email_id', {
-                                    rules: [
-                                        {
-                                            required: 'true', message: 'Email id is required to resend activation mail'
-                                        }
-                                    ]
-                                })(<Input type='email' placeholder='Enter your email' />)
-                            }
+                            <FormItem>
+                                {
+                                    getFieldDecorator('email_id', {
+                                        rules: [
+                                            {
+                                                required: 'true', message: 'Email id is required to resend activation mail'
+                                            }
+                                        ]
+                                    })(<Input type='email' placeholder='Enter your email' />)
+                                }
+                            </FormItem>
                         </Col>
                         <Col span={6}>
                             <Button htmlType='submit' onClick={this.handleMessage}>SUBMIT</Button>
                         </Col>
                     </Row>
                 </Form>
-                <Row type='flex' justify='center' style={{marginTop:'150px'}}>
-                <Col span={6}>
-                <Button href='/login' type='primary'>Login</Button>
-                </Col>
-                <Col span={6}>
-                <Button to='/signup' type='primary'>Signup</Button>
-                </Col>
+                <Row type='flex' justify='center' style={{ marginTop: '150px' }}>
+                    <Col span={6}>
+                        <Button href='/login' type='primary'>Login</Button>
+                    </Col>
+                    <Col span={6}>
+                        <Button to='/signup' type='primary'>Signup</Button>
+                    </Col>
                 </Row>
                 <div className="messages">
-                {
-                    resendActivationMailRequesting&&<Spin />
-                }
+                    {
+                        resendActivationMailRequesting && <Spin />
+                    }
                 </div>
             </div>
         )

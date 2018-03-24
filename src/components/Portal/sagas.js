@@ -2,7 +2,7 @@ import { take, call, put } from 'redux-saga/effects';
 import { GET_PUBLIC_CONTACTS, ADD_CONTACT_TO_FRIEND_LIST, GET_FRIEND_LIST, SEND_CHALLENGE, GET_USER } from './constants';
 
 import { handleApiErrors } from '../../lib/api-errors';
-import { setPublicContacts, setFriendList, setUser,setLeaderboard} from './actions';
+import { setPublicContacts, setFriendList, setUser, setLeaderboard } from './actions';
 import { sendChallengeSocketApi } from './socketapi';
 let REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 const GET_PUBLIC_CONTACTS_URL = `${REACT_APP_API_URL}/user/publicContacts`;
@@ -11,7 +11,6 @@ const GET_FRIEND_LIST_URL = `${REACT_APP_API_URL}/user/getFriendList`;
 const GET_USER_URL = `${REACT_APP_API_URL}/user/getUser`;
 const GET_LEADERBOARD_URL = `${REACT_APP_API_URL}/user/leaderboard`;
 export function* getPublicContactsApi({ userId }) {
-    console.log('-------inside get public contacts api------');
     try {
         let publicContacts = yield fetch(GET_PUBLIC_CONTACTS_URL, {
             method: 'POST',
@@ -31,7 +30,6 @@ export function* getPublicContactsApi({ userId }) {
 }
 
 function* addContactToFriendListApi({ userId, friendId }) {
-    console.log("-----inside add contact to friend list api-------");
     try {
         yield fetch(ADD_CONTACT_TO_FRIEND_LIST_URL, {
             method: 'POST',
@@ -48,7 +46,6 @@ function* addContactToFriendListApi({ userId, friendId }) {
     }
 }
 function* getFriendListApi({ userId }) {
-    console.log('-------inside get friend list api------');
     try {
         let friendList = yield fetch(GET_FRIEND_LIST_URL, {
             method: 'POST',
@@ -99,7 +96,6 @@ export default function* contactRequestWatcher() {
     }
 }
 export function* getLeaderboardApi() {
-    console.log('-------inside get leaderboard api------');
     try {
         let leaderboard = yield fetch(GET_LEADERBOARD_URL, {
             method: 'GET'

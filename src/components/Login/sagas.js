@@ -3,7 +3,6 @@ import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR, RESEND_ACTIVATION_MAIL } 
 import { setClient} from '../Client/actions';
 import { getUserApi, getPublicContactsApi, getLeaderboardApi } from '../Portal/sagas';
 import { fetchChallengesApi, fetchAskedChallengesApi, fetchSolvedChallengesApi } from '../Portal/PortalContent/Home/sagas';
-import { handleApiErrors } from '../../lib/api-errors';
 import { INITIALIZE_STATE } from '../Client/constants';
 import { resendActivationMailResponse } from './actions';
 let REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';

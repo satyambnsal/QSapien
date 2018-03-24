@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { Form, Input, Button, Icon, Card, Checkbox, message, Spin, notification, Affix, Alert } from 'antd';
 import loginRequest from './actions';
-import Messages from '../Notifications/Messages';
+//import Messages from '../Notifications/Messages';
 import { Redirect } from 'react-router-dom';
 
 const FormItem = Form.Item;
