@@ -9,7 +9,7 @@ import { addContactToFriendList } from './actions';
 import { Layout, Menu, Icon } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
 
-const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+//const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 //const LOCAL_ICON_URL = `${REACT_APP_API_URL}/icons`;
 class Portal extends Component {
     state = {
@@ -22,7 +22,7 @@ class Portal extends Component {
         let { unsetClient, user } = this.props;
         return (
             <Layout>
-                <Header style={{ padding: '0'}}>
+                <Header style={{ padding: '0' }}>
                     <TopHeader unsetClient={unsetClient} user={user} /></Header>
                 <Layout>
                     <Sider style={{ minHeight: '100vh', width: '256px' }} collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>

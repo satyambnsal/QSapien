@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Errors from '../Notifications/Errors';
 import Messages from '../Notifications/Messages';
 import { Redirect } from 'react-router-dom';
 import { signupRequesting } from './actions';
 import { checkUsernameExistApi } from '../../lib/utilities';
-import { Form, Icon, Button, Input, Row, Col, Tooltip, Card, message, Spin,notification} from 'antd'
+import { Form, Icon, Button, Input, Row, Col, Tooltip, Card, Spin,notification} from 'antd'
 const FormItem = Form.Item;
 
 class Signup extends Component {
@@ -70,12 +69,8 @@ class Signup extends Component {
         const { signup: {
             requesting,
             successful,
-            errors,
             messages }
          } = this.props;
-        const error = (msg) => {
-            message.error(msg);
-        }
         const { getFieldDecorator } = this.props.form;
         return (
             <Card title="QSapien Register" className="signup-card">

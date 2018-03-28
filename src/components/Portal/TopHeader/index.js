@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Menu, Layout } from 'antd';
-import { Link } from 'react-router-dom';
 import User from '../User';
 const { Header } = Layout;
 

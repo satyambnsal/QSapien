@@ -3,40 +3,43 @@ import Token from '../models/Token';
 import logger from 'winston';
 import crypto from 'crypto';
 import sendEmail from '../utils/mailHandler';
+let REACT_APP_URL = process.env.REACT_APP_URL || 'http://localhost:3000/';
+REACT_APP_URL = REACT_APP_URL.replace(/['"]+/g, '');
 exports.confirm_account = (req, res) => {
     Token.findOne({ token: req.query.code }, function (err, token) {
         if (!token) {
             logger.info('unable to find valid token');
-            res.status(400).send({ type: 'not-verified', msg: 'We were unable to find a valid token. Your token my have expired.' });
+            return res.status(400).send({ type: 'not-verified', msg: 'We were unable to find a valid token. Your token my have expired.' });
         }
 
         User.findOne({ _id: token.userId }, function (err, user) {
             if (!user) {
                 logger.info('unable to find valid user for provided token');
-                res.status(400).send({ msg: 'We were unable to find a user for this token.' });
+                return res.status(400).send({ msg: 'We were unable to find a user for this token.' });
             }
             if (user.isVerified) {
                 logger.info('This user has already been verified');
-                res.status(400).send({ type: 'already-verified', msg: 'This user has already been verified.' });
+                return res.status(400).send({ type: 'already-verified', msg: 'This user has already been verified.' });
             }
             else {
                 user.isVerified = true;
                 user.save(function (err) {
                     if (err) {
                         logger.info('error occured while updating user activation status');
-                        res.status(500).send({ msg: err.message });
+                        return res.status(500).send({ msg: err.message });
                     }
                     else {
                         logger.info('user account has been verified successfully');
-                        res.status(200).send("The account has been verified. Please log in.");
+                        return res.render('accountVerified', { AppUrl: REACT_APP_URL })
                     }
                 });
             }
         });
     });
 }
+
 exports.resend_token_post = (req, res) => {
-    console.log('request body::',req.body)
+    console.log('request body::', req.body)
     if (req.body.email_id) {
         User.findOne({ email_id: req.body.email_id }, (err, user) => {
             if (err) {
