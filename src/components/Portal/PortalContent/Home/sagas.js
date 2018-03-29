@@ -10,6 +10,7 @@ const SOLVE_CHALLENGE_URL = `${REACT_APP_API_URL}/user/solveChallenge`;
 const GET_ASKED_CHALLENGES_URL = `${REACT_APP_API_URL}/user/askedChallenges`;
 const GET_SOLVED_CHALLENGES_URL = `${REACT_APP_API_URL}/user/solvedChallenges`;
 const SEND_CHALLENGE_URL = `${REACT_APP_API_URL}/user/sendChallenge`;
+
 export function* sendChallengeApi({ values }) {
     const result = yield fetch(SEND_CHALLENGE_URL, {
         method: 'POST',

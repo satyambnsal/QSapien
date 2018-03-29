@@ -188,7 +188,7 @@ display:none;
 .ant-menu-item{
     margin-top: 0px !important;
 }
-input[type="file"] {
+.file-input{
     display: none;
 }
 .select-profile{

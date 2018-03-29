@@ -9,6 +9,7 @@ const ADD_CONTACT_TO_FRIEND_LIST_URL = `${REACT_APP_API_URL}/user/addToFriendLis
 const GET_FRIEND_LIST_URL = `${REACT_APP_API_URL}/user/getFriendList`;
 const GET_USER_URL = `${REACT_APP_API_URL}/user/getUser`;
 const GET_LEADERBOARD_URL = `${REACT_APP_API_URL}/user/leaderboard`;
+
 export function* getPublicContactsApi({ userId }) {
     try {
         let publicContacts = yield fetch(GET_PUBLIC_CONTACTS_URL, {

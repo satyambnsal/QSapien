@@ -97,7 +97,7 @@ class AccountSettings extends Component {
                         <form onSubmit={this.handleProfileImageSubmit}>
 
                             <label className="select-profile">Select Profile
-                            <Input type='file' name={this.props.user.userId} onChange={this.onChange} required />
+                            <Input type='file' name={this.props.user.userId} onChange={this.onChange} required style={{display:'none'}}/>
                             </label>
                             <Button htmlType='submit'>Save</Button>
                         </form>
