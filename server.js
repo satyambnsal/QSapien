@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 var express = require('express');
 var chalk = require('chalk');
 var ejs = require('ejs');
@@ -8,11 +7,8 @@ var mongoose = require('mongoose');
 let session = require('express-session');
 let MongoStore = require('connect-mongo')(session);
 let userRoute = require('./server/routes/user');
-let { challengeHandler } = require('./server/sockethandler');
-let io = require('socket.io');
+
 var app = express();
-let server = require('http').createServer(app);
-io = io.listen(server);
 
 var port = process.env.SERVER_PORT || 3001;
 let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/QSapien";
@@ -44,17 +40,6 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use('/user', userRoute);
 
-
-io.on('connection', (socket) => {
-    console.log('connection is open');
-    console.log('socket id::' + socket.id);
-    socket.on('sendChallenge', values => {
-        challengeHandler(values, (response) => {
-            console.log('response::' + response.message);
-        });
-    })
-})
-
-server.listen(port, function () {
+app.listen(port, function () {
     chalk.green(console.log("server is listening at PORT: " + port));
 });

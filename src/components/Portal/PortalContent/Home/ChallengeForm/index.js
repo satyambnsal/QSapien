@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Input, Row, Col, Button, InputNumber, Select, Tooltip, Icon, message,Avatar} from 'antd';
+import { Form, Input, Row, Col, Button, InputNumber, Select, Tooltip, Icon, message, Avatar, Spin} from 'antd';
 import { connect } from 'react-redux';
-import { sendChallenge } from '../../../actions';
+import { sendChallenge } from '../actions';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
@@ -18,13 +18,13 @@ class ChallengeForm extends Component {
             if (!err) {
                 values = { ...values, senderId: this.props.user.userId };
                 this.props.sendChallenge(values);
-                message.success('your challenge had sent successfully');
-              
+                //currently we are only showing static text. this is an issue that needs to be fixed.
+                message.info('challenge sent successfully');
             }
         })
     }
     render() {
-        const { publicContacts } = this.props;
+        const { publicContacts, requestingSendChallenge, sendChallengeResult } = this.props;
         const { getFieldDecorator } = this.props.form;
         return (
             <div className='challenge-form'>
@@ -39,7 +39,7 @@ class ChallengeForm extends Component {
                             })(<Select>
                                 {
                                     publicContacts.map((publicContact, index) => (<Option key={index} value={publicContact._id}>
-                                        <Avatar src={publicContact.profile_image_url}/>&nbsp;&nbsp;&nbsp;{publicContact.name}
+                                        <Avatar src={publicContact.profile_image_url} />&nbsp;&nbsp;&nbsp;{publicContact.name}
                                     </Option>))
                                 }
                             </Select>)
@@ -107,10 +107,10 @@ class ChallengeForm extends Component {
                                     message: 'you need to provide valid nswer '
                                 }]
                             })(<Select >
-                                {(this.state.choiceA !=='') && (<Option key="choiceA" value={this.state.choiceA}>{this.state.choiceA}</Option>)}
-                                {(this.state.choiceB !=='') && (<Option key="choiceB" value={this.state.choiceB}>{this.state.choiceB}</Option>)}
-                                {(this.state.choiceC !=='') && (<Option key="choiceC" value={this.state.choiceC}>{this.state.choiceC}</Option>)}
-                                {(this.state.choiceD !=='') && (<Option key="choiceD" value={this.state.choiceD}>{this.state.choiceD}</Option>)}
+                                {(this.state.choiceA !== '') && (<Option key="choiceA" value={this.state.choiceA}>{this.state.choiceA}</Option>)}
+                                {(this.state.choiceB !== '') && (<Option key="choiceB" value={this.state.choiceB}>{this.state.choiceB}</Option>)}
+                                {(this.state.choiceC !== '') && (<Option key="choiceC" value={this.state.choiceC}>{this.state.choiceC}</Option>)}
+                                {(this.state.choiceD !== '') && (<Option key="choiceD" value={this.state.choiceD}>{this.state.choiceD}</Option>)}
                             </Select>)
                         }
                     </FormItem>
@@ -132,10 +132,19 @@ class ChallengeForm extends Component {
                         <Col span={4}><Button>Cancel</Button></Col>
                     </Row>
                 </Form>
+                <div className='messages'>
+                    {
+                        requestingSendChallenge && (<Spin />)
+                    }
+                </div>
             </div>
         )
     }
 }
 let WrappedChallengeForm = Form.create()(ChallengeForm);
-WrappedChallengeForm = connect(() => ({}), { sendChallenge })(WrappedChallengeForm);
+const mapStateToProps = (state) => ({
+    requestingSendChallenge: state.portal.challengeState.requestingSendChallenge,
+    sendChallengeResult: state.portal.challengeState.sendChallengeResult
+});
+WrappedChallengeForm = connect(mapStateToProps, { sendChallenge })(WrappedChallengeForm);
 export default WrappedChallengeForm;

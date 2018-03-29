@@ -1,4 +1,5 @@
 import {get,post} from 'axios';
+
 const REACT_APP_API_URL=process.env.REACT_APP_API_URL||'http://localhost:3001';
 const CHECK_USERNAME_EXIST_URL=`${REACT_APP_API_URL}/user/checkUsernameExist`;
 const UPDATE_USER_PROFILE_URL=`${REACT_APP_API_URL}/user/updateUserProfile`;

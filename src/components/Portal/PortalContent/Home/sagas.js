@@ -1,15 +1,29 @@
 import { takeLatest, put } from 'redux-saga/effects';
-import { GET_CHALLENGES,SOLVE_CHALLENGE_REQUESTING, GET_ASKED_CHALLENGES, GET_SOLVED_CHALLENGES } from './constants';
-import { setChallenges,setSolveChallengeResult,setAskedChallenges,setSolvedChallenges} from './actions';
+import { GET_CHALLENGES, SOLVE_CHALLENGE_REQUESTING, GET_ASKED_CHALLENGES, GET_SOLVED_CHALLENGES, SEND_CHALLENGE } from './constants';
+import { setChallenges, setSolveChallengeResult, setAskedChallenges, setSolvedChallenges, sendChallenge,setSendChallengeResult} from './actions';
 
 import { handleApiErrors } from '../../../../lib/api-errors';
 
 let REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 const GET_CHALLENGES_URL = `${REACT_APP_API_URL}/user/getChallenges`;
 const SOLVE_CHALLENGE_URL = `${REACT_APP_API_URL}/user/solveChallenge`;
-const GET_ASKED_CHALLENGES_URL=`${REACT_APP_API_URL}/user/askedChallenges`;
-const GET_SOLVED_CHALLENGES_URL=`${REACT_APP_API_URL}/user/solvedChallenges`;
+const GET_ASKED_CHALLENGES_URL = `${REACT_APP_API_URL}/user/askedChallenges`;
+const GET_SOLVED_CHALLENGES_URL = `${REACT_APP_API_URL}/user/solvedChallenges`;
+const SEND_CHALLENGE_URL = `${REACT_APP_API_URL}/user/sendChallenge`;
 
+export function* sendChallengeApi({ values }) {
+    const result = yield fetch(SEND_CHALLENGE_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ...values })
+    }).then(response => response.json())
+        .catch((errors) => {
+            console.log('error occured in send challenge api');
+        });
+    yield put(setSendChallengeResult(result));
+}
 export function* solveChallengeApi({ challengeId, selectedChoice }) {
     const result = yield fetch(SOLVE_CHALLENGE_URL, {
         method: 'POST',
@@ -21,7 +35,7 @@ export function* solveChallengeApi({ challengeId, selectedChoice }) {
         .then(response => response.json())
         .catch((errors) => {
         });
-        yield put(setSolveChallengeResult(result));
+    yield put(setSolveChallengeResult(result));
 }
 export function* fetchChallengesApi({ userId }) {
     const challenges = yield fetch(GET_CHALLENGES_URL, {
@@ -73,6 +87,7 @@ export function* fetchSolvedChallengesApi({ userId }) {
 export default function* challengeWatcher() {
     yield takeLatest(GET_CHALLENGES, fetchChallengesApi);
     yield takeLatest(SOLVE_CHALLENGE_REQUESTING, solveChallengeApi);
-    yield takeLatest(GET_ASKED_CHALLENGES,fetchAskedChallengesApi);
-    yield takeLatest(GET_SOLVED_CHALLENGES,fetchSolvedChallengesApi);
+    yield takeLatest(GET_ASKED_CHALLENGES, fetchAskedChallengesApi);
+    yield takeLatest(GET_SOLVED_CHALLENGES, fetchSolvedChallengesApi);
+    yield takeLatest(SEND_CHALLENGE,sendChallengeApi)
 }

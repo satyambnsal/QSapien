@@ -5,9 +5,11 @@ import { getUserApi, getPublicContactsApi, getLeaderboardApi } from '../Portal/s
 import { fetchChallengesApi, fetchAskedChallengesApi, fetchSolvedChallengesApi } from '../Portal/PortalContent/Home/sagas';
 import { INITIALIZE_STATE } from '../Client/constants';
 import { resendActivationMailResponse } from './actions';
+
 let REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 const LOGIN_URL = `${REACT_APP_API_URL}/user/login`;
 const RESEND_ACTIVATION_MAIL_URL = `${REACT_APP_API_URL}/user/resendActivationToken`;
+
 function loginAPI(email_id, password) {
     return fetch(LOGIN_URL, {
         method: 'POST',
