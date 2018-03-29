@@ -3,7 +3,6 @@ import { GET_PUBLIC_CONTACTS, ADD_CONTACT_TO_FRIEND_LIST, GET_FRIEND_LIST, SEND_
 
 import { handleApiErrors } from '../../lib/api-errors';
 import { setPublicContacts, setFriendList, setUser, setLeaderboard } from './actions';
-import { sendChallengeSocketApi } from './socketapi';
 let REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 const GET_PUBLIC_CONTACTS_URL = `${REACT_APP_API_URL}/user/publicContacts`;
 const ADD_CONTACT_TO_FRIEND_LIST_URL = `${REACT_APP_API_URL}/user/addToFriendList`
@@ -80,16 +79,13 @@ export function* getUserApi({ userId }) {
 }
 export default function* contactRequestWatcher() {
     while (true) {
-        const action = yield take([GET_PUBLIC_CONTACTS, ADD_CONTACT_TO_FRIEND_LIST, GET_FRIEND_LIST, SEND_CHALLENGE, GET_USER]);
+        const action = yield take([GET_PUBLIC_CONTACTS, ADD_CONTACT_TO_FRIEND_LIST, GET_FRIEND_LIST, GET_USER]);
         if (action.type === GET_PUBLIC_CONTACTS)
             yield call(getPublicContactsApi, action);
         if (action.type === ADD_CONTACT_TO_FRIEND_LIST)
             yield call(addContactToFriendListApi, action);
         if (action.type === GET_FRIEND_LIST)
             yield call(getFriendListApi, action)
-        if (action.type === SEND_CHALLENGE) {
-            yield call(sendChallengeSocketApi, action);
-        }
         if (action.type === GET_USER) {
             yield call(getUserApi, action)
         }

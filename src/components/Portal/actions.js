@@ -36,10 +36,6 @@ export const setFriendList=(friendList)=>({
 type:SET_FRIEND_LIST,
 friendList
 });
-export const sendChallenge=(values)=>({
-    type:SEND_CHALLENGE,
-    values
-});
 export const getLeaderboard=()=>({
     type:GET_LEADERBOARD
 });
