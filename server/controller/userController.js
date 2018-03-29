@@ -11,7 +11,7 @@ import { uploadFileToS3 } from '../utils/s3buckethandler';
 import sendEmail from '../utils/mailHandler';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'qsapiensecret';
-const PROFILE_IMAGES_DEST = process.env.PROFILE_IMAGES_DEST || './public/profileImages';
+const PROFILE_IMAGES_DEST = process.env.PROFILE_IMAGES_DEST || './apiPublic/profileImages';
 logger.level = 'debug';
 
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
