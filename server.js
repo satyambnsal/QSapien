@@ -37,7 +37,7 @@ app.use(function (req, res, next) {
 
 app.set('views', __dirname + '/server/views');
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static('apiPublic'));
 app.use('/user', userRoute);
 
 app.listen(port, function () {
