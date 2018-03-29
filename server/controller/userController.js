@@ -162,7 +162,7 @@ exports.user_file_upload = [upload.single('file'), (req, res) => {
 }]
 
 exports.get_user_post = [
-    body("userId", 'user id must be provided while fetching user object').exists(),
+    body("userId", 'user id must be provided while fetching user object').isLength({min:1}),
     (req, res, next) => {
         logger.info('get user object method entry point');
         logger.debug('--------------user id----------' + req.body.userId);
@@ -178,11 +178,12 @@ exports.get_user_post = [
         }
         else {
             User.findById(userId, (err, result) => {
-                if (err) {
+                if (err||!result) {
                     logger.info('error occured while fetching user object');
                     return res.status(400).json({ message: 'error occured while fetching user object' })
                 }
                 logger.debug('user object::' + JSON.stringify(result));
+
                 let name = result.last_name ? (result.first_name + ' ' + result.last_name) : result.first_name;
                 name = name.trim();
                 let user = {
