@@ -3,8 +3,8 @@ Qsapien is an App that allows people to ask questions to each other.this app int
 This app is written in React JS.
 
 # Working Demo
-<a href="http://ec2-13-126-30-156.ap-south-1.compute.amazonaws.com
-" target="_blank">http://ec2-13-126-30-156.ap-south-1.compute.amazonaws.com
+<a href="http://ec2-13-127-250-156.ap-south-1.compute.amazonaws.com
+" target="_blank">http://ec2-13-127-250-156.ap-south-1.compute.amazonaws.com
 </a>
 
 # Getting Stated
