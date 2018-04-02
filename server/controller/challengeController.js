@@ -197,12 +197,12 @@ exports.send_challenge_post = [
             let opponentName;
             let senderName;
             const {opponentId,senderId,question}=req.body;
-            User.findById(opponentId,'first_name last_name').then(
+            User.findById(opponentId).then(
                 opponent=>{
                     opponentName=opponent.last_name ? (opponent.first_name + ' ' + opponent.last_name) : opponent.first_name;
                 }
             ).then(()=>{
-                User.findById(senderId,'first_name last_name').then(sender=>{
+                User.findById(senderId).then(sender=>{
                     senderName=sender.last_name ? (sender.first_name + ' ' + sender.last_name) : sender.first_name;
                 })
             }).then(()=>{
