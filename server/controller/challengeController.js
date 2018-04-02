@@ -203,7 +203,7 @@ exports.send_challenge_post = [
                     return;
                 }
             ).then(()=>{
-                User.findById(senderId).then(sender=>{
+                return User.findById(senderId).then(sender=>{
                     senderName=sender.last_name ? (sender.first_name + ' ' + sender.last_name) : sender.first_name;
                     return;
                 })
