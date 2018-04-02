@@ -200,10 +200,12 @@ exports.send_challenge_post = [
             User.findById(opponentId).then(
                 opponent=>{
                     opponentName=opponent.last_name ? (opponent.first_name + ' ' + opponent.last_name) : opponent.first_name;
+                    return;
                 }
             ).then(()=>{
                 User.findById(senderId).then(sender=>{
                     senderName=sender.last_name ? (sender.first_name + ' ' + sender.last_name) : sender.first_name;
+                    return;
                 })
             }).then(()=>{
                 Challenge.findOne({question,opponentId,senderId}).then((challenge)=>{
